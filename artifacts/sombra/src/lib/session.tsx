@@ -81,8 +81,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => { stopped = true; window.clearTimeout(timer); };
   }, [accountId, storageAccountId, profile?.notificationsEnabled, lang]);
 
-  // Unmount account screens during a storage-mode change so their effects
-  // cannot fetch through the previous account or retain its visible data.
+  // While switching between guest and account, hide the screens so nothing
+  // loads or shows data from the previous account.
   if (storageAccountId !== accountId) {
     return <main className="shell" aria-busy="true"><p className="page">sombra</p></main>;
   }

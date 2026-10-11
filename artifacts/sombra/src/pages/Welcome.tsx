@@ -47,10 +47,10 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
   return (
     <div className="welcome">
       <div className="welcome-top">
-        <span className="brand wordmark">
+        <a href={import.meta.env.BASE_URL} className="brand wordmark" aria-label="sombra">
           <img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" />
           <span>sombra</span>
-        </span>
+        </a>
         {idx < last ? (
           <button type="button" className="btn btn-quiet" onClick={() => go(last)}>{t.skip}</button>
         ) : (

@@ -63,7 +63,7 @@ export function createCheckInRouter(dependencies: {
     const result = await ai({level,context,language:input.language,mode:input.mode,symptoms:input.symptoms,note:input.note,pastAnswers},{
       onFailure:({kind,status,code})=>req.log?.warn({kind,status,code},"Check-in personalization unavailable; used standard guidance"),
     });
-    // The model never owns the level, even with a substituted provider.
+    // The safety level always comes from our rules, never from the model.
     res.json(PersonalizeCheckinResponse.parse({...result,level,recheck_in_minutes:Math.max(15,Math.min(level === "CAUTION" ? 30 : 60,result.recheck_in_minutes))}));
   });
   return router;

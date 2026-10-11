@@ -28,7 +28,7 @@
   --body: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
-/* Compatibility names for the existing planner styles; all resolve to the reference palette above. */
+/* Older names the planner styles still use. They point at the colors above. */
 :root {
   --mesquite-soft: var(--mesquite-tint);
   --prickly-pear: var(--pear);

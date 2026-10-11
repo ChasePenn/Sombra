@@ -16,5 +16,5 @@ export const FORECAST_HOURLY_FIELDS = [
   "cloud_cover",
 ] as const;
 
-// The Argonne model's reference surface albedo is retained when no local surface data is available.
+// With no local ground data, keep the Argonne model's default ground reflectivity.
 export const DEFAULT_SURFACE_ALBEDO = 0.45;

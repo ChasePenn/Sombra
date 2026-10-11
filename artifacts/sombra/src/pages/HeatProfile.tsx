@@ -9,11 +9,14 @@ export default function HeatProfile() {
   const { lang } = useSession();
   const f = featureCopy[lang];
   const [selected, setSelected] = useState<RiskFactor[]>(getRiskFactors);
+  const [failed, setFailed] = useState(false);
 
   const toggle = (factor: RiskFactor) => {
     const next = selected.includes(factor) ? selected.filter((x) => x !== factor) : [...selected, factor];
+    // Only show the change if it was actually saved, so the plan and this screen agree.
+    if (!setRiskFactors(next)) { setFailed(true); return; }
+    setFailed(false);
     setSelected(next);
-    setRiskFactors(next);
   };
 
   return (
@@ -38,6 +41,7 @@ export default function HeatProfile() {
             );
           })}
         </div>
+        {failed && <p className="error" role="alert">{f.saveFailed}</p>}
         <p className={selected.length ? 'status-on' : 'notice'} role="status">{selected.length ? f.profileActive : f.profileNone}</p>
         <p className="fine-print">{f.profileNote}</p>
       </div>

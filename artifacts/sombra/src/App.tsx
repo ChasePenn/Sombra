@@ -15,7 +15,9 @@ import CareCheck from './pages/CareCheck';
 import HeatProfile from './pages/HeatProfile';
 import { SignInPage, SignUpPage } from './pages/Auth';
 import { useEffect } from 'react';
-import { audienceModeId, modeQuery } from './lib/copy';
+import { aboutCopy, audienceModeId, currentMode, modeQuery } from './lib/copy';
+import { featureCopy } from './lib/features-copy';
+import { noteScreenChange } from './lib/nav';
 import { ImportOffer } from './components/ImportOffer';
 import { ReminderHost } from './components/ReminderHost';
 import { CareReminderHost } from './components/CareReminderHost';
@@ -70,23 +72,57 @@ const appearance = {
 function NotFound() {
   const { t } = useSession();
   return (
-    <main className="landing">
-      <span className="brand wordmark">
-        <img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" />
-        <span>sombra</span>
-      </span>
+    <main className="landing not-found">
+      <header className="landing-top">
+        <Link href="/" className="brand wordmark" aria-label="sombra">
+          <img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" />
+          <span>sombra</span>
+        </Link>
+      </header>
       <div className="landing-hero">
+        <p className="not-found-code" aria-hidden="true">404</p>
         <h1>{t.notFoundTitle}</h1>
         <p className="landing-sub">{t.notFoundBody}</p>
-        <div className="landing-actions"><Link href="/app" className="btn btn-primary">{t.openSombra}</Link></div>
+      </div>
+      <div className="landing-actions">
+        <Link href="/app" className="btn btn-primary btn-block">{t.openSombra}</Link>
+        <Link href="/about" className="btn btn-secondary btn-block">{t.about}</Link>
       </div>
     </main>
   );
 }
 
+/** Gives every screen its own browser tab title. */
+function usePageTitle(location: string) {
+  const { t, lang } = useSession();
+  useEffect(() => {
+    const f = featureCopy[lang];
+    const titles: Record<string, string> = {
+      '/app': t.today,
+      '/app/check-in': t.checkIn,
+      '/app/crew': currentMode(lang).group,
+      '/app/tools': f.toolsTitle,
+      '/app/best-time': f.bestTitle,
+      '/app/cool-spots': f.coolTitle,
+      '/app/check-on': f.careTitle,
+      '/app/profile': f.profileTitle,
+      '/settings': t.settings,
+      '/about': aboutCopy[lang].title,
+    };
+    const path = location.replace(/\/+$/, '') || '/';
+    let name = titles[path];
+    if (path.startsWith('/sign-in')) name = t.signIn;
+    if (path.startsWith('/sign-up')) name = t.createAccount;
+    if (path === '/') document.title = `sombra · ${t.tagline}`;
+    else document.title = `${name ?? t.notFoundTitle} · sombra`;
+  }, [location, lang, t]);
+}
+
 function Routes() {
   const [location] = useLocation();
   const { profile, profileLoaded } = useSession();
+  usePageTitle(location);
+  useEffect(() => { noteScreenChange(); }, [location]);
   useEffect(() => {
     const url = new URL(window.location.href);
     if (profileLoaded && profile?.mode && profile.mode !== audienceModeId) {

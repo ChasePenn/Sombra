@@ -20,6 +20,8 @@ export default function CareCheck() {
   const [phone, setPhone] = useState('');
   const [time, setTime] = useState('10:00');
   const [heatWarning, setHeatWarning] = useState(false);
+  // Feedback after add / remove / mark, with Undo for removals.
+  const [msg, setMsg] = useState<{ text: string; error?: boolean; undo?: CareContact[] } | null>(null);
 
   useEffect(() => {
     const sync = () => setContacts(getCareContacts());
@@ -41,16 +43,30 @@ export default function CareCheck() {
     e.preventDefault();
     if (!name.trim()) return;
     const next = [...contacts, { id: crypto.randomUUID(), name: name.trim(), phone: phone.trim(), time, lastChecked: null }];
-    saveCareContacts(next);
+    if (!saveCareContacts(next)) { setMsg({ text: f.saveFailed, error: true }); return; }
     setContacts(next);
+    setMsg({ text: fill(f.careAdded, { name: name.trim(), time: clock(time, lang) }) });
     setName(''); setPhone(''); setTime('10:00'); setAdding(false);
     if ('Notification' in window && Notification.permission === 'default') void Notification.requestPermission();
   };
 
   const remove = (id: string) => {
+    const before = contacts;
+    const gone = contacts.find((c) => c.id === id);
     const next = contacts.filter((c) => c.id !== id);
-    saveCareContacts(next);
+    if (!saveCareContacts(next)) { setMsg({ text: f.saveFailed, error: true }); return; }
     setContacts(next);
+    setMsg({ text: fill(f.careRemoved, { name: gone?.name ?? '' }), undo: before });
+  };
+  const undo = (list: CareContact[]) => {
+    if (!saveCareContacts(list)) { setMsg({ text: f.saveFailed, error: true }); return; }
+    setContacts(list);
+    setMsg(null);
+  };
+  const mark = (c: CareContact) => {
+    const next = markChecked(c.id);
+    setContacts(next);
+    setMsg({ text: fill(f.careMarkedMsg, { name: c.name }) });
   };
 
   return (
@@ -63,6 +79,12 @@ export default function CareCheck() {
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
         {heatWarning && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
 
+        {msg && (
+          <p className={msg.error ? 'error' : 'notice success-msg'} role={msg.error ? 'alert' : 'status'}>
+            {msg.text}
+            {msg.undo && <button type="button" className="text-btn" onClick={() => undo(msg.undo!)}>{f.careUndo}</button>}
+          </p>
+        )}
         {contacts.length === 0 && <p className="notice">{f.careEmpty}</p>}
         <ul className="care-list">
           {contacts.map((c) => {
@@ -79,7 +101,7 @@ export default function CareCheck() {
                 </div>
                 <div className="care-actions">
                   {c.phone && <a className="btn btn-secondary" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}><Phone size={18} aria-hidden="true" />{f.careCall}</a>}
-                  <button type="button" className="btn btn-primary" disabled={Boolean(at)} onClick={() => setContacts(markChecked(c.id))}>
+                  <button type="button" className="btn btn-primary" disabled={Boolean(at)} onClick={() => mark(c)}>
                     <Check size={18} aria-hidden="true" />{at ? f.careChecked : f.careMark}
                   </button>
                 </div>

@@ -75,10 +75,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="app-layout">
     <aside className="app-context">
-      <span className="brand wordmark">
+      <Link href="/app" className="brand wordmark" aria-label="sombra">
         <img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" />
         <span>sombra</span>
-      </span>
+      </Link>
       <h2>{t.tagline}</h2>
       <p>{t.landingSub}</p>
       <Link href="/about">{t.aboutSombra}</Link>
