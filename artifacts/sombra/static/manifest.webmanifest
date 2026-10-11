@@ -1,0 +1,16 @@
+{
+  "name": "sombra · heat safety",
+  "short_name": "sombra",
+  "description": "Heat safety for every crew, team and family.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF4EF",
+  "theme_color": "#FF6A2B",
+  "icons": [
+    { "src": "/brand/sombra-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/sombra-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/sombra-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -30,7 +30,8 @@ export default defineConfig({
   base: basePath,
   plugins: [react()],
   root: publicDir,
-  publicDir: false,
+  // Static files (logo, icons, manifest, service worker) are copied as-is.
+  publicDir: path.resolve(import.meta.dirname, 'static'),
   build: {
     outDir: path.resolve(import.meta.dirname, 'dist/public'),
     emptyOutDir: true,
