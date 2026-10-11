@@ -39,7 +39,7 @@ jobs:
           # GitHub merges identical annotation lines, so each line gets its line number.
           grep -n -E "try [0-9] failed|Unable to load|failed with" live.log | head -20 | sed -E 's/^([0-9]+):/::warning::L\1 /'
           grep -n -E -A12 "not ok|✖" live.log | grep -vE "^--$" | head -45 | sed -E 's/^([0-9]+)[:-]/::error::L\1 /'
-          tail -n 15 live.log | nl -ba | sed -E 's/^ *([0-9]+)\t/::error::tail\1 /'
+          if [ "$status" -ne 0 ]; then tail -n 15 live.log | nl -ba | sed -E 's/^ *([0-9]+)\t/::error::tail\1 /'; fi
           exit $status
       - name: Map server status
         if: always()
