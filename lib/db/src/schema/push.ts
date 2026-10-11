@@ -56,5 +56,12 @@ export const pushSentTable = pgTable(
   (table) => [uniqueIndex("push_sent_unique_idx").on(table.subscriptionId, table.dedupeKey)],
 );
 
+/** Small server settings, such as the push signing keys the server makes for itself on first run. */
+export const appSettingsTable = pgTable("app_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type PushSubscriptionRow = typeof pushSubscriptionsTable.$inferSelect;
 export type PushReminderRow = typeof pushRemindersTable.$inferSelect;

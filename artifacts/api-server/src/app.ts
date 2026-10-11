@@ -57,6 +57,7 @@ app.use("/api", securityHeaders);
 // and AI services. Check-ins also keep their own 5-second AI limit per person.
 app.use("/api/check-in", rateLimit({ limit: 60, windowMs: 60_000 }));
 app.use(["/api/weather", "/api/conditions", "/api/places"], rateLimit({ limit: 120, windowMs: 60_000 }));
+app.use("/api/push/run", rateLimit({ limit: 6, windowMs: 60_000 }));
 app.use("/api/push", rateLimit({ limit: 60, windowMs: 60_000 }));
 app.use("/api", rateLimit({ limit: 600, windowMs: 60_000 }));
 app.use("/api", router);

@@ -2,8 +2,10 @@ name: Send due reminders
 
 # Wakes sombra's server every 5 minutes so push reminders go out even when nobody has the
 # app open (the Replit deployment sleeps between visits). GitHub may run scheduled jobs a
-# few minutes late, so reminders can arrive up to roughly 5-15 minutes after their time.
-# Does nothing until the PUSH_RUN_URL and PUSH_CRON_SECRET repository secrets are added.
+# few minutes late, so a reminder can arrive roughly 5-15 minutes after its time.
+#
+# The only setting: the deployed site's address, in .github/sombra-url (one line, e.g.
+# https://sombra.example.app). Until it's filled in, this job does nothing.
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -14,14 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
       - name: Ask the server to send what's due
         env:
-          PUSH_RUN_URL: ${{ secrets.PUSH_RUN_URL }}
           PUSH_CRON_SECRET: ${{ secrets.PUSH_CRON_SECRET }}
         run: |
-          if [ -z "$PUSH_RUN_URL" ] || [ -z "$PUSH_CRON_SECRET" ]; then
-            echo "::notice::Push reminders aren't connected yet. Add the PUSH_RUN_URL and PUSH_CRON_SECRET repository secrets."
+          site="$(tr -d '[:space:]' < .github/sombra-url 2>/dev/null || true)"
+          if [ -z "$site" ]; then
+            echo "::notice::Add the deployed site's address to .github/sombra-url to turn on scheduled reminders."
             exit 0
           fi
-          curl -fsS --max-time 90 -X POST "$PUSH_RUN_URL" -H "x-push-cron: $PUSH_CRON_SECRET"
+          # The secret header is optional; the endpoint is safe to call without it.
+          curl -fsS --max-time 90 -X POST "${site%/}/api/push/run" ${PUSH_CRON_SECRET:+-H "x-push-cron: $PUSH_CRON_SECRET"}
           echo

@@ -43,9 +43,9 @@ pnpm --filter @workspace/api-server run dev      # API (needs DATABASE_URL)
 PORT=25823 BASE_PATH=/ pnpm --filter @workspace/sombra run dev
 ```
 
-Environment: `DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`. For push reminders also `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` (make a pair with `pnpm --filter @workspace/api-server exec web-push generate-vapid-keys`), optional `VAPID_SUBJECT`, and `PUSH_CRON_SECRET`. Secrets stay on the server and are never sent to the browser.
+Environment: `DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`. Secrets stay on the server and are never sent to the browser.
 
-Push reminders go out every minute while the server is awake. The `Send due reminders` GitHub workflow wakes it every 5 minutes; give it the repository secrets `PUSH_RUN_URL` (`https://<your-domain>/api/push/run`) and `PUSH_CRON_SECRET`.
+Push reminders need no setup: on first use the server creates its push tables and its own signing keys and keeps them in the database. They go out every minute while the server is awake; the `Send due reminders` GitHub workflow wakes it every 5 minutes once the deployed address is in `.github/sombra-url`. (Optional overrides: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `PUSH_CRON_SECRET`.)
 
 Tests: `pnpm run release-check` runs everything that works offline (add `DATABASE_URL` for a test database and `CHROME_BIN` for the browser tests, `-- --live` to call the real weather services).
 
