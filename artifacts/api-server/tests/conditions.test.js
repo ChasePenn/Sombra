@@ -105,3 +105,11 @@ test("expired alerts and impossible readings are dropped", () => {
   assert.equal(air.uv.peak, null);
   assert.equal(air.aqi.peak, 60);
 });
+
+test("cool spots query uses a box about 3 km around the point", async () => {
+  const q = mod.placesQuery(33.45, -112.07);
+  const box = q.match(/bbox:([^\]]+)/)[1].split(",").map(Number);
+  assert.ok(Math.abs(box[0] - 33.423) < 0.002 && Math.abs(box[2] - 33.477) < 0.002, q);
+  assert.ok(Math.abs(box[1] - -112.102) < 0.003 && Math.abs(box[3] - -112.038) < 0.003, q);
+  assert.match(q, /drinking_water/);
+});
