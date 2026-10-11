@@ -49,7 +49,8 @@ async function waitForHttp(url, child, logs) {
 }
 
 async function waitForJson(url) {
-  const deadline = Date.now() + 10000;
+  // Shared CI machines can take a while to start a browser.
+  const deadline = Date.now() + 30000;
   while (Date.now() < deadline) {
     try {
       const response = await fetch(url);
