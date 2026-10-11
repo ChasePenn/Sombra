@@ -9,6 +9,7 @@ import { audienceModeId, fill, modeRules } from '../lib/copy';
 import { activityIntensity, featureCopy } from '../lib/features-copy';
 import { getRiskFactors, getWindowReminders, saveWindowReminders } from '../lib/local';
 import { clock, nextDate, phoenixNow } from '../lib/time';
+import { pushIsOn } from '../lib/push';
 import { findBestWindows } from '../../lib/best-window.js';
 import table from '../../config/work_rest_table.json';
 
@@ -158,7 +159,7 @@ export default function BestTime() {
                   <Link href={planHref(result.best)} className="btn btn-primary btn-block">{f.planThis}</Link>
                   {reminder === `${result.best.date}T${result.best.start}` ? (
                     <>
-                      <p className="notice" role="status">{fill(f.reminderSet, { when: span(result.best) })}</p>
+                      <p className="notice" role="status">{fill(pushIsOn() ? f.reminderSetPush : f.reminderSet, { when: span(result.best) })}</p>
                       <button type="button" className="btn btn-quiet btn-block" onClick={() => cancelReminder(`${result.best!.date}T${result.best!.start}`)}>{f.reminderCancel}</button>
                     </>
                   ) : (
