@@ -40,7 +40,10 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Install a test browser
+        run: npx -y playwright@1.56.1 install --with-deps chromium
       - name: Release check
         run: |
-          export CHROME_BIN="$(command -v google-chrome || command -v chromium || true)"
+          export CHROME_BIN="$(ls -d "$HOME"/.cache/ms-playwright/chromium-*/chrome-linux*/chrome | head -1)"
+          echo "Browser: $CHROME_BIN"
           pnpm run release-check
