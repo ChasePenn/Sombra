@@ -1,3 +1,4 @@
+import { showReminder } from './pwa';
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { useAuth } from '@clerk/react';
 import * as store from '../../public/js/store.js';
@@ -72,14 +73,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       const hourMs = 60 * 60 * 1000;
       timer = window.setTimeout(() => {
         if (stopped) return;
-        try {
-          if (Notification.permission === 'granted') {
-            new Notification('Sombra', { body: copy[lang].reminderBody, tag: 'sombra-hourly-check-in' });
-          }
-        } catch {
-          // Some mobile browsers require installed-app push notifications.
-          // The Settings test reports this limitation to the user.
-        }
+        void showReminder(copy[lang].reminderBody, 'sombra-hourly-check-in');
         schedule();
       }, hourMs - (Date.now() % hourMs));
     };

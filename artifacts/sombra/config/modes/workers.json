@@ -467,7 +467,9 @@
         "previewLevel": "Very high heat",
         "previewAdvice": "Work 20 min, then rest 40 in the shade.",
         "previewCheck": "Ana checked in: feeling fine",
-        "previewWater": "5 of 8 cups"
+        "previewWater": "5 of 8 cups",
+        "installTitle": "Get reminders on your iPhone",
+        "installBody": "Tap Share, then \"Add to Home Screen\". Open sombra from your home screen to turn on reminders."
       },
       "about": {
         "title": "About Sombra",
@@ -944,7 +946,9 @@
         "previewLevel": "Calor muy alto",
         "previewAdvice": "Trabaja 20 min y descansa 40 en la sombra.",
         "previewCheck": "Ana se registró: se siente bien",
-        "previewWater": "5 de 8 vasos"
+        "previewWater": "5 de 8 vasos",
+        "installTitle": "Recibe recordatorios en tu iPhone",
+        "installBody": "Toca Compartir y luego \"Agregar a inicio\". Abre sombra desde tu pantalla de inicio para activar los recordatorios."
       },
       "about": {
         "title": "Acerca de Sombra",

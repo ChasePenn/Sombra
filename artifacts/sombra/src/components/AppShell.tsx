@@ -6,6 +6,7 @@ import { audienceModeId, currentMode, modeUi, navigateToMode, type AudienceModeI
 import { useSession } from '../lib/session';
 import { Sheet } from './Sheet';
 import { ModePicker } from './ModePicker';
+import { InstallTip } from './InstallTip';
 
 function Glyph({ name, size = 24 }: { name: string; size?: number }) {
   return <Icon name={name} size={size} strokeWidth={name === 'check' ? 3 : 2.2} />;
@@ -82,6 +83,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     </aside>
     <div className="shell">
       <TopBar />
+      <InstallTip />
       <main>{children}</main>
       <nav className="tabs" aria-label="Sombra">
         <div className="tabs-inner">

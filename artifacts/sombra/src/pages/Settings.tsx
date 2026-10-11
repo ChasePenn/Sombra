@@ -1,3 +1,4 @@
+import { showReminder } from '../lib/pwa';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -66,8 +67,7 @@ export default function Settings() {
   const test = () => {
     if (!('Notification' in window)) return setNotifMsg(t.unsupported);
     if (Notification.permission !== 'granted') return setNotifMsg(t.blocked);
-    try { new Notification('Sombra', { body: t.testBody }); }
-    catch { setNotifMsg(t.unsupported); }
+    void showReminder(t.testBody, 'sombra-test').then((shown) => { if (!shown) setNotifMsg(t.unsupported); });
   };
 
   const doDelete = async () => {
