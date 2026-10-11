@@ -21,6 +21,7 @@ import { noteScreenChange } from './lib/nav';
 import { ImportOffer } from './components/ImportOffer';
 import { ReminderHost } from './components/ReminderHost';
 import { CareReminderHost } from './components/CareReminderHost';
+import { PushHost } from './components/PushHost';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -175,6 +176,7 @@ function ClerkWithRoutes() {
         <ImportOffer />
         <ReminderHost />
         <CareReminderHost />
+        <PushHost />
       </SessionProvider>
     </ClerkProvider>
   );

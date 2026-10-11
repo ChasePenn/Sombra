@@ -7,6 +7,7 @@ import { getCareContacts, getWindowReminders, saveWindowReminders, type CareCont
 import { ESCALATE_AFTER_MIN, isDue, markChecked, needsAfternoonCheck, overdueMinutes } from '../lib/care';
 import { getLastPlace } from '../lib/local';
 import { showReminder } from '../lib/pwa';
+import { pushIsOn } from '../lib/push';
 import { phoenixNow } from '../lib/time';
 import { Sheet } from './Sheet';
 
@@ -57,7 +58,8 @@ export function CareReminderHost() {
         saveWindowReminders(windows.filter((w) => w.id !== startedWindow.id));
         const late = `${startedWindow.date}T${startedWindow.start}` < phoenixNow(new Date(Date.now() - 30 * 60 * 1000));
         if (!late) {
-          void showReminder(`${fill(f.reminderDue, { activity: startedWindow.activity })}. ${fill(f.reminderDueBody, { hours: startedWindow.hours })}`, `sombra-window-${startedWindow.id}`);
+          // With push on, the server already sent this as a notification; just show it in the app.
+          if (!pushIsOn()) void showReminder(`${fill(f.reminderDue, { activity: startedWindow.activity })}. ${fill(f.reminderDueBody, { hours: startedWindow.hours })}`, `sombra-window-${startedWindow.id}`);
           setWindowDue(startedWindow);
         }
       }
@@ -74,7 +76,7 @@ export function CareReminderHost() {
       setDueKind(kind);
       const title = kind === 'overdue' ? fill(f.careOverdueTitle, { name: next.name }) : fill(f.careDue, { name: next.name });
       const body = kind === 'overdue' ? f.careOverdueBody : f.careDueBody;
-      void showReminder(`${title}. ${body}`, `sombra-care-${next.id}-${kind}`);
+      if (!pushIsOn()) void showReminder(`${title}. ${body}`, `sombra-care-${next.id}-${kind}`);
     };
     tick();
     const id = window.setInterval(tick, 60_000);

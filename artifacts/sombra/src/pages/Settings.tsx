@@ -9,6 +9,7 @@ import { useSession } from '../lib/session';
 import { goBack } from '../lib/nav';
 import { IntensityPicker, LanguagePicker, Switch } from '../components/Controls';
 import { Sheet } from '../components/Sheet';
+import { PushControl } from '../components/PushControl';
 import { ModePicker } from '../components/ModePicker';
 import { audienceModeId, currentMode, navigateToMode } from '../lib/copy';
 import type { AudienceModeId } from '../lib/copy';
@@ -120,6 +121,7 @@ export default function Settings() {
 
         <h2 className="group-label">{t.notifications}</h2>
         <div className="group">
+          <PushControl variant="settings" />
           <div className="row">
             <span className="row-main">{t.reminders}<small>{t.remindersHint}</small></span>
             <Switch label={t.reminders} checked={draft.notificationsEnabled} onChange={toggleNotif} />

@@ -35,14 +35,14 @@ step "Web app build" env PORT=1 BASE_PATH=/ pnpm --filter @workspace/sombra run 
 step "Safety rules tests" pnpm --filter @workspace/heat-safety test
 step "Web app tests" pnpm --filter @workspace/sombra test
 
-api_tests=$(cd artifacts/api-server && ls tests/*.test.js | grep -v account-isolation | tr '\n' ' ')
+api_tests=$(cd artifacts/api-server && ls tests/*.test.js | grep -v -e account-isolation -e '\.db\.test\.js$' | tr '\n' ' ')
 step "API tests" bash -c "cd artifacts/api-server && node --test $api_tests"
 
 if [ -n "${DATABASE_URL:-}" ]; then
   step "Database schema" pnpm --filter @workspace/db run push
-  step "Account and data isolation tests" bash -c "cd artifacts/api-server && node --test tests/account-isolation.test.js"
+  step "Database tests (account isolation, push store)" bash -c "cd artifacts/api-server && node --test --test-concurrency=1 tests/account-isolation.test.js tests/*.db.test.js"
 else
-  skip "Account and data isolation tests" "set DATABASE_URL to a TEST database"
+  skip "Database tests (account isolation, push store)" "set DATABASE_URL to a TEST database"
 fi
 
 if $live; then

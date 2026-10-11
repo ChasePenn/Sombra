@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { BellOff, Check, Lock, Phone, Plus, Trash2, TriangleAlert } from 'lucide-react';
+import { Check, Lock, Phone, Plus, Trash2, TriangleAlert } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { Sheet } from '../components/Sheet';
+import { PushControl } from '../components/PushControl';
 import { useSession } from '../lib/session';
 import { fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
@@ -77,7 +78,7 @@ export default function CareCheck() {
           <p>{f.careSub}</p>
         </header>
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
-        <p className="privacy-note"><BellOff size={16} aria-hidden="true" />{f.careReminderLimit}</p>
+        <PushControl variant="inline" />
         {heatWarning && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
 
         {msg && (

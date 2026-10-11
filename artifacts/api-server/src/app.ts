@@ -57,7 +57,17 @@ app.use("/api", securityHeaders);
 // and AI services. Check-ins also keep their own 5-second AI limit per person.
 app.use("/api/check-in", rateLimit({ limit: 60, windowMs: 60_000 }));
 app.use(["/api/weather", "/api/conditions", "/api/places"], rateLimit({ limit: 120, windowMs: 60_000 }));
+app.use("/api/push", rateLimit({ limit: 60, windowMs: 60_000 }));
 app.use("/api", rateLimit({ limit: 600, windowMs: 60_000 }));
 app.use("/api", router);
+
+// Errors answer in plain JSON and never include stack traces or file paths.
+app.use((err: { status?: number; statusCode?: number; type?: string }, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  if (err.type === "entity.parse.failed") return void res.status(400).json({ error: "That request wasn't valid JSON." });
+  if (err.type === "entity.too.large") return void res.status(413).json({ error: "That request was too large." });
+  req.log?.error({ err }, "Unhandled error");
+  const status = err.status ?? err.statusCode ?? 500;
+  res.status(status >= 400 && status < 600 ? status : 500).json({ error: "Something went wrong. Try again." });
+});
 
 export default app;

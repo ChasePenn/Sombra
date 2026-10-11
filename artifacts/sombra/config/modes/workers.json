@@ -418,8 +418,8 @@
         "close": "Close",
         "profile": "Profile",
         "notifications": "Notifications",
-        "reminders": "Check-in reminders",
-        "remindersHint": "Reminders only arrive while sombra is open in your browser.",
+        "reminders": "Shift check-in reminders",
+        "remindersHint": "While sombra is open during a shift, it reminds you to check in, rest and drink water.",
         "testReminder": "Send a test reminder",
         "testBody": "Time to check in. How are you feeling?",
         "blocked": "Notifications are blocked. Turn them on in your browser settings.",
@@ -484,7 +484,7 @@
         "privacy": "Privacy",
         "priv1": "Your heat profile and the people you check on stay on this phone. They are never sent anywhere.",
         "priv2": "Site photos are analyzed on your phone and never uploaded or stored.",
-        "priv3": "For alerts, air quality and cool spots, your location is rounded to about 1 km first.",
+        "priv3": "For alerts, air quality and cool spots, your location is rounded to about 1 km first. If you turn on reminders when sombra is closed, the server keeps your phone's push address, the reminder times and that rounded area for heat warnings. It never gets names.",
         "p2": "Guest plans and check-ins stay in this browser. If you make an account, they're stored privately on our server. For non-emergency check-ins, your name, symptoms, notes and activity are sent to our server and Google Gemini to word the reply. Delete saved data anytime in Settings."
       },
       "extras": {
@@ -959,8 +959,8 @@
         "close": "Cerrar",
         "profile": "Perfil",
         "notifications": "Notificaciones",
-        "reminders": "Recordatorios de registro",
-        "remindersHint": "Los recordatorios solo llegan mientras sombra está abierta en tu navegador.",
+        "reminders": "Recordatorios durante el turno",
+        "remindersHint": "Mientras sombra está abierto durante un turno, te recuerda registrarte, descansar y tomar agua.",
         "testReminder": "Enviar un recordatorio de prueba",
         "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
         "blocked": "Las notificaciones están bloqueadas. Actívalas en los ajustes del navegador.",
@@ -1025,7 +1025,7 @@
         "privacy": "Privacidad",
         "priv1": "Tu perfil de calor y las personas que revisas se quedan en este teléfono. Nunca se envían a ningún lado.",
         "priv2": "Las fotos del lugar se analizan en tu teléfono y nunca se suben ni se guardan.",
-        "priv3": "Para alertas, calidad del aire y lugares frescos, tu ubicación se redondea a aproximadamente 1 km.",
+        "priv3": "Para alertas, calidad del aire y lugares frescos, tu ubicación se redondea a aproximadamente 1 km. Si activas los recordatorios con sombra cerrado, el servidor guarda la dirección de notificaciones de tu teléfono, las horas de los recordatorios y esa zona redondeada para las alertas de calor. Nunca recibe nombres.",
         "p2": "Los planes y registros como invitado se quedan en este navegador. Si creas una cuenta, se guardan de forma privada en nuestro servidor. Para registros que no son emergencias, tu nombre, síntomas, notas y actividad se envían a nuestro servidor y a Google Gemini para redactar la respuesta. Borra tus datos cuando quieras en Ajustes."
       },
       "extras": {

@@ -188,6 +188,14 @@ async function loadAirQuality(lat: number, lon: number) {
   return summarizeAirQuality(data.hourly, phoenixNowIso());
 }
 
+/** The current official heat alert for a point (rounded to about 1 km), or null. Used by push reminders. */
+export async function heatAlertFor(lat: number, lon: number) {
+  const point = { lat: Math.round(lat * 100) / 100, lon: Math.round(lon * 100) / 100 };
+  const alerts = await cached(`alerts:${point.lat},${point.lon}`, () => loadAlerts(point.lat, point.lon));
+  const heat = alerts.find((alert) => alert.kind === "heat");
+  return heat ? { event: heat.event, ends: heat.ends } : null;
+}
+
 router.get("/conditions", async (req, res): Promise<void> => {
   const point = parseCoordinates(req);
   if (!point) {
