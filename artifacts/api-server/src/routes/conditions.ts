@@ -91,13 +91,23 @@ export function summarizeAlerts(features: NwsFeature[], now = Date.now()) {
 async function loadAlerts(lat: number, lon: number) {
   const url = new URL(NWS_ALERTS_URL);
   url.searchParams.set("point", `${lat},${lon}`);
-  const response = await fetch(url, {
-    headers: { "User-Agent": NWS_USER_AGENT, Accept: "application/geo+json" },
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-  });
-  if (!response.ok) throw new Error(`NWS alerts failed with ${response.status}`);
-  const data = (await response.json()) as { features?: NwsFeature[] };
-  return summarizeAlerts(data.features ?? []);
+  // The weather.gov API has short hiccups; one retry two seconds later covers most of them.
+  let lastError: unknown = null;
+  for (const delay of [0, 2_000]) {
+    if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
+    try {
+      const response = await fetch(url, {
+        headers: { "User-Agent": NWS_USER_AGENT, Accept: "application/geo+json" },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+      });
+      if (!response.ok) throw new Error(`NWS alerts failed with ${response.status}`);
+      const data = (await response.json()) as { features?: NwsFeature[] };
+      return summarizeAlerts(data.features ?? []);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
 }
 
 // --- UV and air quality ----------------------------------------------------

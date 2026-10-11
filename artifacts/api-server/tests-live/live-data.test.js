@@ -40,6 +40,22 @@ after(async () => {
   await Promise.all(bundles.map((file) => unlink(file).catch(() => {})));
 });
 
+/*
+  Outside services have brief outages that aren't sombra's fault. Each check gets three
+  tries a little apart; only a problem that lasts across all three fails the run.
+*/
+async function withRetries(check, tries = 3, gapMs = 15_000) {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await check();
+    } catch (error) {
+      if (attempt >= tries) throw error;
+      console.error(`try ${attempt} failed: ${error.message.split("\n")[0]}`);
+      await new Promise((resolve) => setTimeout(resolve, gapMs));
+    }
+  }
+}
+
 function phoenixToday() {
   return new Date(Date.now() - 7 * 3600 * 1000).toISOString().slice(0, 10);
 }
@@ -71,7 +87,7 @@ test("today's heat forecast is complete and physically plausible", async () => {
   }
 });
 
-test("official alerts and UV / air quality come back", async () => {
+test("official alerts and UV / air quality come back", () => withRetries(async () => {
   const res = await fetch(`${base}/conditions?lat=${PHOENIX.lat}&lon=${PHOENIX.lon}`);
   assert.equal(res.status, 200);
   const data = await res.json();
@@ -79,13 +95,13 @@ test("official alerts and UV / air quality come back", async () => {
   assert.ok(data.air, "air quality should load");
   assert.ok(data.air.uv.peak != null && data.air.uv.peak >= 0 && data.air.uv.peak <= 20, `UV peak ${data.air.uv.peak}`);
   assert.ok(data.air.aqi.peak != null && data.air.aqi.peak >= 0 && data.air.aqi.peak <= 500, `AQI peak ${data.air.aqi.peak}`);
-});
+}));
 
-test("cool spots near downtown Phoenix include real libraries or water", async () => {
+test("cool spots near downtown Phoenix include real libraries or water", () => withRetries(async () => {
   const res = await fetch(`${base}/places/cool?lat=${PHOENIX.lat}&lon=${PHOENIX.lon}`);
   assert.equal(res.status, 200);
   const { places } = await res.json();
   assert.ok(places.length >= 3, `expected several places downtown, got ${places.length}`);
   assert.ok(places.every((p) => p.distanceM <= 3600), "every place should be within 3.6 km");
   assert.ok(places.some((p) => p.kind === "library" || p.kind === "water"), `expected a library or water spot downtown, got kinds: ${[...new Set(places.map((p) => p.kind))].join(", ")}`);
-});
+}));
