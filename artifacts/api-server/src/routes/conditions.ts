@@ -56,10 +56,15 @@ interface NwsFeature {
 const HEAT_EVENTS = /heat/i;
 const AIR_EVENTS = /dust|air quality|smoke|ozone/i;
 
-export function summarizeAlerts(features: NwsFeature[]) {
+export function summarizeAlerts(features: NwsFeature[], now = Date.now()) {
   return features
     .map((feature) => feature.properties ?? {})
     .filter((p) => typeof p.event === "string" && p.event.length > 0)
+    // Never show an alert that has already ended.
+    .filter((p) => {
+      const end = Date.parse(p.ends ?? p.expires ?? "");
+      return Number.isNaN(end) || end > now;
+    })
     .map((p) => ({
       event: p.event as string,
       kind: HEAT_EVENTS.test(p.event as string) ? "heat" : AIR_EVENTS.test(p.event as string) ? "air" : "other",
@@ -117,14 +122,15 @@ export function uvLevel(uv: number | null) {
 export function summarizeAirQuality(hourly: AirQualityHourly, nowIso: string) {
   const today = nowIso.slice(0, 10);
   const nowHour = nowIso.slice(0, 13);
-  const pick = (values: Array<number | null> | undefined) => {
+  const pick = (values: Array<number | null> | undefined, [min, max]: [number, number]) => {
     if (!values) return { now: null, peak: null, peakTime: null };
     let now: number | null = null;
     let peak: number | null = null;
     let peakTime: string | null = null;
     hourly.time.forEach((time, index) => {
       const value = values[index];
-      if (value == null || !Number.isFinite(value)) return;
+      // Drop readings outside physically possible ranges instead of showing bad data.
+      if (value == null || !Number.isFinite(value) || value < min || value > max) return;
       if (time.slice(0, 13) === nowHour) now = value;
       if (time.slice(0, 10) === today && (peak == null || value > peak)) {
         peak = value;
@@ -133,9 +139,9 @@ export function summarizeAirQuality(hourly: AirQualityHourly, nowIso: string) {
     });
     return { now, peak, peakTime };
   };
-  const uv = pick(hourly.uv_index);
-  const aqi = pick(hourly.us_aqi);
-  const dust = pick(hourly.dust);
+  const uv = pick(hourly.uv_index, [0, 20]);
+  const aqi = pick(hourly.us_aqi, [0, 500]);
+  const dust = pick(hourly.dust, [0, 5000]);
   return {
     uv: { ...uv, level: uvLevel(uv.peak) },
     aqi: { ...aqi, level: aqiLevel(aqi.peak) },
@@ -229,6 +235,8 @@ export function summarizePlaces(elements: OverpassElement[], origin: { lat: numb
       };
     })
     .filter((place): place is NonNullable<typeof place> => place !== null)
+    // Overpass "around" is a radius search; anything far outside it is bad data.
+    .filter((place) => Number.isFinite(place.distanceM) && place.distanceM <= 3600)
     // Unnamed water fountains and shade shelters are still useful; unnamed buildings are not.
     .filter((place) => place.name || place.kind === "water" || place.kind === "shade")
     .filter((place) => {
