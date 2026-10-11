@@ -49,3 +49,7 @@ jobs:
             r=$(curl -s -o /tmp/o.json -w "%{http_code} %{time_total}s" -A "sombra-heat-safety (https://github.com/ChasePenn/sombra)" --max-time 20 --data-urlencode "data=$q" "$u" || echo "curl-failed")
             echo "::notice::$u -> $r $(head -c 120 /tmp/o.json 2>/dev/null | tr -d '\n')"
           done
+          a='(around:3000,33.45,-112.07)'
+          full="[out:json][timeout:15];(node[\"amenity\"=\"drinking_water\"]$a;nwr[\"amenity\"=\"library\"]$a;nwr[\"amenity\"=\"community_centre\"]$a;nwr[\"shop\"=\"mall\"]$a;node[\"amenity\"=\"shelter\"]$a;);out center 80;"
+          r=$(curl -s -o /tmp/f.json -w "%{http_code} %{time_total}s" -A "sombra-heat-safety (https://github.com/ChasePenn/sombra)" --max-time 30 --data-urlencode "data=$full" https://overpass-api.de/api/interpreter || echo "curl-failed")
+          echo "::notice::full query on main -> $r $(head -c 200 /tmp/f.json | tr -d '\n')"
