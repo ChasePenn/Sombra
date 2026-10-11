@@ -23,5 +23,5 @@ app.listen(port, (err) => {
   }
 
   logger.info({ port }, "Server listening");
-  if (startPushTimer(logger)) logger.info("Push reminders are on");
+  startPushTimer(logger);
 });

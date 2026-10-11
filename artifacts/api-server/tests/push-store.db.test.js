@@ -10,12 +10,43 @@ import test, { after } from "node:test";
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const bundle = path.join(dir, ".push-store.db-test.mjs");
 await build({
-  stdin: { contents: 'export { pushStore, hashToken } from "../src/lib/push-store.ts"; export { pool } from "@workspace/db";', resolveDir: dir, loader: "ts" },
+  stdin: { contents: 'export { pushStore, hashToken } from "../src/lib/push-store.ts"; export { ensurePushSchema, getPushConfig, resetPushSetupForTests } from "../src/lib/push-setup.ts"; export { pool } from "@workspace/db";', resolveDir: dir, loader: "ts" },
   bundle: true, platform: "node", format: "esm", outfile: bundle, logLevel: "silent",
   banner: { js: 'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);' },
 });
-const { pushStore, hashToken, pool } = await import(pathToFileURL(bundle).href);
+const { pushStore, hashToken, pool, ensurePushSchema, getPushConfig, resetPushSetupForTests } = await import(pathToFileURL(bundle).href);
 after(async () => { await pool.end(); await unlink(bundle).catch(() => {}); });
+
+test("zero setup: on a database without push tables, the server creates them and its own keys once", async () => {
+  delete process.env.VAPID_PUBLIC_KEY;
+  delete process.env.VAPID_PRIVATE_KEY;
+  await pool.query("DROP TABLE IF EXISTS push_sent, push_reminders, push_subscriptions, app_settings CASCADE");
+  resetPushSetupForTests();
+  // Two servers starting at once.
+  await Promise.all([ensurePushSchema(), ensurePushSchema()]);
+  const [a, b] = await Promise.all([getPushConfig(), getPushConfig()]);
+  assert.equal(a.publicKey, b.publicKey);
+  assert.match(a.publicKey, /^[A-Za-z0-9_-]{80,90}$/, "a real P-256 public key");
+  // A restart (fresh process state) keeps the same keys, so existing subscriptions keep working.
+  resetPushSetupForTests();
+  assert.equal((await getPushConfig()).publicKey, a.publicKey);
+  const { rows } = await pool.query("select count(*)::int as n from app_settings where key = 'vapid'");
+  assert.equal(rows[0].n, 1);
+  // Running the setup again changes nothing.
+  resetPushSetupForTests();
+  await ensurePushSchema();
+});
+
+test("keys from the environment take priority over saved ones", async () => {
+  process.env.VAPID_PUBLIC_KEY = "BEnvPublicKeyForTest";
+  process.env.VAPID_PRIVATE_KEY = "envPrivateKeyForTest";
+  try {
+    assert.equal((await getPushConfig()).publicKey, "BEnvPublicKeyForTest");
+  } finally {
+    delete process.env.VAPID_PUBLIC_KEY;
+    delete process.env.VAPID_PRIVATE_KEY;
+  }
+});
 
 const endpoint = () => `https://push.example/${randomBytes(8).toString("hex")}`;
 const keys = { p256dh: "B".repeat(87), auth: "A".repeat(22) };

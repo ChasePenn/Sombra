@@ -150,6 +150,20 @@ test("the scheduler endpoint is hidden without the secret, sends each reminder o
   } finally { server.close(); }
 });
 
+test("with no secret configured, the scheduler endpoint is open but can't send anything twice", async () => {
+  const store = memoryStore();
+  let sends = 0;
+  const now = () => new Date("2026-10-12T09:05:00-07:00");
+  const { server, call } = await serve(createPushRouter({ store, config, send: async () => { sends += 1; return "sent"; }, cronSecret: null, now, heatAlertFor: async () => null }));
+  try {
+    const { keys } = phoneKeys();
+    const { id, token } = (await call("POST", "/push/subscribe", { subscription: { endpoint: "https://push.example/open", keys } })).body;
+    await call("PUT", "/push/schedule", { id, token, reminders: [{ kind: "care", key: "c-1", time: "09:00" }] });
+    for (let i = 0; i < 5; i += 1) assert.equal((await call("POST", "/push/run")).status, 200);
+    assert.equal(sends, 1, "five calls, one notification");
+  } finally { server.close(); }
+});
+
 test("a failed send is retried next round instead of being lost", async () => {
   const store = memoryStore();
   let reply = "failed";

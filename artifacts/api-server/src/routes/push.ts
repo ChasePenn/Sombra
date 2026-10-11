@@ -2,7 +2,8 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import { Router, type Request, type Response } from "express";
 import { parseReminders } from "../lib/push-schedule";
 import { hashToken, pushStore, tokenMatches, type PushStore } from "../lib/push-store";
-import { createWebPushSender, pushConfigFromEnv, runPushRound, type PushConfig, type Sender } from "../lib/push-send";
+import { createWebPushSender, runPushRound, type PushConfig, type Sender } from "../lib/push-send";
+import { ensurePushSchema, getPushConfig } from "../lib/push-setup";
 import { heatAlertFor as liveHeatAlertFor } from "./conditions";
 
 /*
@@ -13,7 +14,11 @@ import { heatAlertFor as liveHeatAlertFor } from "./conditions";
   PUT    /push/schedule    { id, token, language, lat, lon, reminders }
   DELETE /push/subscribe   { id, token }
   POST   /push/test        { id, token }                          sends a test notification now
-  POST   /push/run         header x-push-cron: <PUSH_CRON_SECRET>  sends everything that's due
+  POST   /push/run         sends everything that's due. Safe for anyone to call: each reminder
+                            is claimed once, so extra calls only cost a database read. If
+                            PUSH_CRON_SECRET is set, the x-push-cron header must match it.
+
+  No setup: the server makes its own push keys and tables on first use (see push-setup.ts).
 */
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -40,6 +45,8 @@ const roundCoord = (value: unknown, limit: number) =>
 export function createPushRouter(dependencies: {
   store?: Pick<PushStore, keyof PushStore>;
   config?: PushConfig | null;
+  getConfig?: () => Promise<PushConfig | null>;
+  ensureSchema?: () => Promise<void>;
   send?: Sender;
   heatAlertFor?: typeof liveHeatAlertFor;
   cronSecret?: string | null;
@@ -47,14 +54,36 @@ export function createPushRouter(dependencies: {
 } = {}) {
   const router = Router();
   const store = dependencies.store ?? pushStore;
-  const config = dependencies.config === undefined ? pushConfigFromEnv() : dependencies.config;
-  const send = dependencies.send ?? (config ? createWebPushSender(config) : null);
+  const getConfig = dependencies.config !== undefined
+    ? async () => dependencies.config ?? null
+    : dependencies.getConfig ?? getPushConfig;
+  const ensureSchema = dependencies.ensureSchema ?? (dependencies.store ? async () => {} : ensurePushSchema);
   const heatAlertFor = dependencies.heatAlertFor ?? liveHeatAlertFor;
   const cronSecret = dependencies.cronSecret === undefined ? process.env.PUSH_CRON_SECRET?.trim() || null : dependencies.cronSecret;
   const now = dependencies.now ?? (() => new Date());
 
+  // One sender per signing key (keys never change while running, but tests swap them).
+  const senders = new Map<string, Sender>();
+  const senderFor = (config: PushConfig) => {
+    if (dependencies.send) return dependencies.send;
+    if (!senders.has(config.publicKey)) senders.set(config.publicKey, createWebPushSender(config));
+    return senders.get(config.publicKey)!;
+  };
+  const currentConfig = async () => {
+    try {
+      return await getConfig();
+    } catch {
+      return null;
+    }
+  };
+
   const notConfigured = (res: Response) =>
-    res.status(503).json({ error: "Reminders when sombra is closed aren't set up on this server yet." });
+    res.status(503).json({ error: "Reminders when sombra is closed aren't available right now. Try again later." });
+
+  // Make sure the push tables exist before any push request touches them.
+  router.use("/push", (req, res, next) => {
+    ensureSchema().then(() => next(), () => notConfigured(res));
+  });
 
   /** Checks the id and secret token; answers for the caller if they're wrong. */
   async function authorized(req: Request, res: Response): Promise<string | null> {
@@ -76,13 +105,14 @@ export function createPushRouter(dependencies: {
     return id;
   }
 
-  router.get("/push/key", (_req, res) => {
+  router.get("/push/key", async (_req, res) => {
+    const config = await currentConfig();
     if (!config) return void notConfigured(res);
     res.json({ publicKey: config.publicKey });
   });
 
   router.post("/push/subscribe", async (req, res) => {
-    if (!config) return void notConfigured(res);
+    if (!(await currentConfig())) return void notConfigured(res);
     const subscription = validSubscription(req.body?.subscription);
     if (!subscription) return void res.status(400).json({ error: "That browser's push details weren't valid." });
     const token = randomBytes(32).toString("base64url");
@@ -112,12 +142,13 @@ export function createPushRouter(dependencies: {
   });
 
   router.post("/push/test", async (req, res) => {
-    if (!config || !send) return void notConfigured(res);
+    const config = await currentConfig();
+    if (!config) return void notConfigured(res);
     const id = await authorized(req, res);
     if (!id) return;
     const subscription = await store.getSubscription(id);
     if (!subscription) return void res.status(404).json({ error: "These reminders were turned off. Turn them on again." });
-    const result = await send(subscription, { type: "test", lang: subscription.language }, { ttlSeconds: 300, urgency: "high" });
+    const result = await senderFor(config)(subscription, { type: "test", lang: subscription.language }, { ttlSeconds: 300, urgency: "high" });
     if (result === "gone") {
       await store.deleteSubscription(id);
       return void res.status(404).json({ error: "This phone stopped accepting notifications. Turn them on again." });
@@ -127,13 +158,15 @@ export function createPushRouter(dependencies: {
   });
 
   router.post("/push/run", async (req, res) => {
-    const given = req.get("x-push-cron") ?? "";
-    // Without a configured secret this endpoint doesn't exist from the outside.
-    if (!cronSecret || given.length !== cronSecret.length || !timingSafeEqual(Buffer.from(given), Buffer.from(cronSecret))) {
-      return void res.status(404).json({ error: "Not found." });
+    if (cronSecret) {
+      const given = req.get("x-push-cron") ?? "";
+      if (given.length !== cronSecret.length || !timingSafeEqual(Buffer.from(given), Buffer.from(cronSecret))) {
+        return void res.status(404).json({ error: "Not found." });
+      }
     }
-    if (!config || !send) return void notConfigured(res);
-    const summary = await runPushRound({ store, send, heatAlertFor, now: now() });
+    const config = await currentConfig();
+    if (!config) return void notConfigured(res);
+    const summary = await runPushRound({ store, send: senderFor(config), heatAlertFor, now: now() });
     res.json(summary);
   });
 
@@ -142,14 +175,14 @@ export function createPushRouter(dependencies: {
 
 /** Runs a round every minute while this server is awake (it may sleep between requests). */
 export function startPushTimer(log: { info: (o: object, m: string) => void; error: (o: object, m: string) => void }) {
-  const config = pushConfigFromEnv();
-  if (!config) return null;
-  const send = createWebPushSender(config);
   let running = false;
+  let send: Sender | null = null;
   const tick = async () => {
     if (running) return;
     running = true;
     try {
+      const config = await getPushConfig();
+      send ??= createWebPushSender(config);
       const summary = await runPushRound({ store: pushStore, send, heatAlertFor: liveHeatAlertFor });
       if (summary.sent || summary.failed || summary.removed) log.info(summary, "Push round");
     } catch (err) {
@@ -158,6 +191,7 @@ export function startPushTimer(log: { info: (o: object, m: string) => void; erro
       running = false;
     }
   };
+  setTimeout(tick, 5_000);
   return setInterval(tick, 60_000);
 }
 

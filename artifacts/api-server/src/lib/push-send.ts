@@ -12,13 +12,6 @@ export type PushConfig = { publicKey: string; privateKey: string; subject: strin
 export type SendResult = "sent" | "gone" | "failed";
 export type Sender = (sub: StoredSubscription, payload: PushPayload & { lang: string }, options: { ttlSeconds: number; urgency: "normal" | "high" }) => Promise<SendResult>;
 
-export function pushConfigFromEnv(env = process.env): PushConfig | null {
-  const publicKey = env.VAPID_PUBLIC_KEY?.trim();
-  const privateKey = env.VAPID_PRIVATE_KEY?.trim();
-  if (!publicKey || !privateKey) return null;
-  return { publicKey, privateKey, subject: env.VAPID_SUBJECT?.trim() || "https://github.com/ChasePenn/sombra" };
-}
-
 export function createWebPushSender(config: PushConfig, extra: { agent?: import("node:https").Agent } = {}): Sender {
   return async (sub, payload, { ttlSeconds, urgency }) => {
     try {
