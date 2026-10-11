@@ -15,6 +15,12 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 export const NWS_ALERTS_URL = "https://api.weather.gov/alerts/active";
 export const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
+// Public Overpass servers are busy and sometimes refuse requests; try mirrors in order.
+export const OVERPASS_MIRRORS = [
+  OVERPASS_URL,
+  "https://overpass.kumi.systems/api/interpreter",
+  "https://overpass.private.coffee/api/interpreter",
+];
 // NWS asks every client to identify itself.
 const NWS_USER_AGENT = "sombra-heat-safety (https://github.com/ChasePenn/sombra)";
 
@@ -259,15 +265,23 @@ async function loadPlaces(lat: number, lon: number) {
     nwr["shop"="mall"]${around};
     node["amenity"="shelter"]${around};
   );out center 80;`;
-  const response = await fetch(OVERPASS_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": NWS_USER_AGENT },
-    body: new URLSearchParams({ data: query }),
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!response.ok) throw new Error(`Overpass failed with ${response.status}`);
-  const data = (await response.json()) as { elements?: OverpassElement[] };
-  return summarizePlaces(data.elements ?? [], { lat, lon });
+  let lastError: unknown = null;
+  for (const url of OVERPASS_MIRRORS) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": NWS_USER_AGENT },
+        body: new URLSearchParams({ data: query }),
+        signal: AbortSignal.timeout(20_000),
+      });
+      if (!response.ok) throw new Error(`Overpass ${url} failed with ${response.status}`);
+      const data = (await response.json()) as { elements?: OverpassElement[] };
+      return summarizePlaces(data.elements ?? [], { lat, lon });
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
 }
 
 router.get("/places/cool", async (req, res): Promise<void> => {
