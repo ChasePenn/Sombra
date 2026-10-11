@@ -15,23 +15,27 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 export const NWS_ALERTS_URL = "https://api.weather.gov/alerts/active";
 export const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-// Public Overpass servers are busy and sometimes refuse requests; try mirrors in order.
+// The main Overpass server has been overloaded since spring 2026 and turns away busy
+// clients, so start with community servers that have no rate limit and use it last.
+// List from https://wiki.openstreetmap.org/wiki/Overpass_API (public instances).
 export const OVERPASS_MIRRORS = [
-  OVERPASS_URL,
-  "https://overpass.kumi.systems/api/interpreter",
   "https://overpass.private.coffee/api/interpreter",
+  "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  OVERPASS_URL,
 ];
+// Places barely change day to day; keeping them a day spares the shared servers.
+const PLACES_TTL_MS = 24 * 60 * 60 * 1000;
 // NWS asks every client to identify itself.
 const NWS_USER_AGENT = "sombra-heat-safety (https://github.com/ChasePenn/sombra)";
 
 type CacheEntry = { expires: number; value: unknown };
 const cache = new Map<string, CacheEntry>();
 
-async function cached<T>(key: string, load: () => Promise<T>): Promise<T> {
+async function cached<T>(key: string, load: () => Promise<T>, ttl = CACHE_TTL_MS): Promise<T> {
   const hit = cache.get(key);
   if (hit && hit.expires > Date.now()) return hit.value as T;
   const value = await load();
-  cache.set(key, { expires: Date.now() + CACHE_TTL_MS, value });
+  cache.set(key, { expires: Date.now() + ttl, value });
   if (cache.size > 500) cache.delete(cache.keys().next().value as string);
   return value;
 }
@@ -272,7 +276,7 @@ async function loadPlaces(lat: number, lon: number) {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": NWS_USER_AGENT },
         body: new URLSearchParams({ data: query }),
-        signal: AbortSignal.timeout(20_000),
+        signal: AbortSignal.timeout(15_000),
       });
       if (!response.ok) throw new Error(`Overpass ${url} failed with ${response.status}`);
       const data = (await response.json()) as { elements?: OverpassElement[] };
@@ -291,7 +295,7 @@ router.get("/places/cool", async (req, res): Promise<void> => {
     return;
   }
   try {
-    const places = await cached(`places:${point.lat},${point.lon}`, () => loadPlaces(point.lat, point.lon));
+    const places = await cached(`places:${point.lat},${point.lon}`, () => loadPlaces(point.lat, point.lon), PLACES_TTL_MS);
     res.json({ places });
   } catch (error) {
     req.log.error({ err: error }, "Unable to load nearby cool spots");
