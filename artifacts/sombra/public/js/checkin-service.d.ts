@@ -1,0 +1,10 @@
+import type { WorkerSession, SessionContext } from "@workspace/heat-safety/session";
+import type { SafetyLevel } from "@workspace/heat-safety/safety";
+import type { Personalization } from "@workspace/heat-safety/templates";
+import type { Checkin } from "./store.js";
+export type CheckinResult = Personalization & {level:SafetyLevel;source:"ai"|"template"};
+export function getWorkerSession(workerName:string):Promise<WorkerSession>;
+export function trackWorkerSession(workerName:string,action:"start"|"start-break"|"end-break"|"end"|"water"):Promise<WorkerSession>;
+export function localCheckinResult(session:WorkerSession,symptoms:string[],language:"en"|"es",mode?:string):CheckinResult;
+export function submitCheckin(input:{session:WorkerSession;symptoms:string[];note?:string;language:"en"|"es";mode?:string;signal?:AbortSignal}):Promise<{result:CheckinResult;checkin:Checkin|null;saveError?:string}>;
+export function getResultContext(session:WorkerSession):SessionContext;

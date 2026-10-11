@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#FBF4EF">
+    <meta name="description" data-mode-meta="metaDescription" content="">
+    <title>sombra</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Rubik:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/tokens.css">
+    <link rel="stylesheet" href="./styles.css">
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body class="embedded-planner">
+    <aside class="desktop-context" data-mode-aria="aboutLabel">
+      <p class="desktop-context-title" data-mode-copy="desktopTitle"></p>
+      <p data-mode-copy="desktopDescription"></p>
+    </aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="/" data-mode-aria="brandHome">
+          <img class="brand-icon" src="./brand/sombra-icon.svg" alt="">
+          <span class="brand-name">sombra</span>
+        </a>
+        <div class="language-switch" role="group" data-mode-aria="languageControl">
+          <button type="button" data-locale="en" lang="en" data-mode-aria="englishLanguage" aria-pressed="true">EN</button>
+          <button type="button" data-locale="es" lang="es" data-mode-aria="spanishLanguage" aria-pressed="false">ES</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <h1 id="page-title" data-mode-copy="pageTitle"></h1>
+          <p class="intro-lede" data-mode-copy="introDescription"></p>
+        </section>
+
+        <section class="planner" data-mode-aria="plannerLabel">
+          <div class="form-panel">
+            <div class="section-heading">
+              <h2 data-mode-copy="shiftDetails"></h2>
+            </div>
+            <p class="section-hint" data-mode-copy="shiftDetailsHelp"></p>
+
+            <form id="shift-form" novalidate>
+              <div class="settings-group location-group">
+              <div class="field-block location-field">
+                <label for="location-search"><span data-mode-copy="locationLabel"></span> <span class="required-mark" data-mode-copy="required"></span></label>
+                <div class="location-row">
+                  <div class="input-wrap location-input-wrap">
+                    <span class="field-icon pin-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="M19 10.2c0 5-7 11.3-7 11.3S5 15.2 5 10.2a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.2"/></svg>
+                    </span>
+                    <input id="location-search" type="search" autocomplete="off" data-mode-placeholder="locationPlaceholder" aria-describedby="location-help location-status" aria-controls="location-options" aria-autocomplete="list" required>
+                    <button id="clear-location" class="clear-location" type="button" data-mode-aria="clearLocation" hidden>×</button>
+                    <input id="latitude" type="hidden">
+                    <input id="longitude" type="hidden">
+                    <input id="location-name" type="hidden">
+                    <ul id="location-options" class="suggestions" role="listbox" data-mode-aria="locationSuggestions" hidden></ul>
+                  </div>
+                  <button id="use-location" class="button button-outline location-button" type="button">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/></svg>
+                    <span data-mode-copy="useLocation"></span>
+                  </button>
+                </div>
+                <p class="field-help" id="location-help" data-mode-copy="locationHelp"></p>
+                <p class="inline-status" id="location-status" role="status" aria-live="polite"></p>
+              </div>
+
+              <div class="field-block worker-field">
+                <label for="worker-name"><span data-mode-copy="workerName"></span> <span class="required-mark" data-mode-copy="required"></span></label>
+                <input id="worker-name" name="workerName" type="text" maxlength="80" autocomplete="name" data-mode-placeholder="workerNamePlaceholder" required>
+              </div>
+              </div>
+
+              <div class="settings-group intensity-group">
+              <fieldset class="field-block intensity-field">
+                  <legend><span data-mode-copy="intensity"></span> <span class="required-mark" data-mode-copy="required"></span></legend>
+                <div id="intensity-options" class="intensity-options"></div>
+              </fieldset>
+              </div>
+
+              <div class="settings-group schedule-group">
+              <fieldset class="field-block shift-date-field">
+                <legend><span data-mode-copy="shiftDate"></span> <span class="required-mark" data-mode-copy="required"></span></legend>
+                <div class="date-toggle">
+                  <label class="date-toggle-option">
+                    <input id="shift-date-today" type="radio" name="date" value="" required checked>
+                    <span><strong data-mode-copy="today"></strong><small id="shift-date-today-label"></small></span>
+                  </label>
+                  <label class="date-toggle-option">
+                    <input id="shift-date-tomorrow" type="radio" name="date" value="" required>
+                    <span><strong data-mode-copy="tomorrow"></strong><small id="shift-date-tomorrow-label"></small></span>
+                  </label>
+                </div>
+                <p class="field-help" id="shift-date-help" data-mode-copy="dateHelp"></p>
+              </fieldset>
+              <fieldset class="field-block shift-time-field">
+                <legend><span data-mode-copy="shiftHours"></span> <span class="required-mark" data-mode-copy="required"></span></legend>
+                <p class="field-help shift-time-help" data-mode-copy="localTimeHelp"></p>
+                <div class="time-row">
+                  <div class="time-input">
+                    <label for="start-time" data-mode-copy="start"></label>
+                    <input id="start-time" name="startTime" type="time" value="07:00" required>
+                  </div>
+                  <span class="time-connector" aria-hidden="true"></span>
+                  <div class="time-input">
+                    <label for="end-time" data-mode-copy="end"></label>
+                    <input id="end-time" name="endTime" type="time" value="15:00" required>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="field-block acclimation-field">
+                <legend data-mode-copy="newToHeatQuestion"></legend>
+                <div class="yes-no-options">
+                  <label class="choice-pill"><input type="radio" name="newToHeat" value="yes" required><span data-mode-copy="yes"></span></label>
+                  <label class="choice-pill"><input type="radio" name="newToHeat" value="no"><span data-mode-copy="no"></span></label>
+                </div>
+                <p class="field-help" data-mode-copy="newToHeatHelp"></p>
+              </fieldset>
+              </div>
+
+              <div id="form-error" class="form-error" role="alert" hidden></div>
+              <button id="submit-shift" class="button submit-button" type="submit">
+                <span class="button-label" data-mode-copy="submit"></span>
+                <span class="button-arrow" aria-hidden="true"></span>
+                <span class="button-spinner" aria-hidden="true"></span>
+              </button>
+            </form>
+          </div>
+        </section>
+
+        <section id="results" class="results" aria-labelledby="results-title" hidden>
+          <section id="crew-status" class="crew-status" data-mode-aria="crewStatus" aria-live="polite" hidden></section>
+          <section id="shift-summary" class="shift-summary" aria-labelledby="shift-summary-title" hidden>
+            <h3 id="shift-summary-title" class="visually-hidden" data-i18n="results.today"></h3>
+            <p id="summary-greeting" class="summary-greeting"></p>
+            <p class="summary-heat-label" data-i18n="results.currentHeat"></p>
+            <div class="summary-reading"><strong id="summary-wbgt"></strong></div>
+            <p class="summary-level"><span id="summary-risk-label" class="visually-hidden" data-i18n="results.heatLevel"></span><strong id="summary-risk" class="summary-risk"></strong></p>
+            <p id="today-meta" class="summary-meta"></p>
+            <div id="heat-gauge" class="heat-gauge" role="img" aria-label="">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <p id="summary-advice" class="summary-advice"></p>
+            <p id="summary-hottest" class="summary-hottest"></p>
+            <div class="forecast-meta visually-hidden">
+              <div class="forecast-location">
+                <span class="meta-symbol" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M19 10.2c0 5-7 11.3-7 11.3S5 15.2 5 10.2a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.2"/></svg>
+                </span>
+                <div>
+                  <strong id="forecast-location-name"></strong>
+                  <span id="forecast-date"></span>
+                  <span id="forecast-shift-hours"></span>
+                </div>
+              </div>
+              <div class="forecast-tags"><span id="forecast-intensity" class="meta-tag"></span><span id="forecast-acclimation" class="meta-tag"></span></div>
+            </div>
+          </section>
+          <div class="results-top">
+            <div class="section-heading">
+              <h2 id="results-title" data-i18n="results.hourlyConditions"></h2>
+            </div>
+            <div class="results-actions">
+              <button id="print-brief" class="button button-outline print-button" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5"/><path d="M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7z"/></svg>
+                <span data-i18n="results.printBrief"></span>
+              </button>
+              <button id="edit-shift" class="button button-outline edit-button" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="m16.5 3.5 4 4L9 19l-5 1 1-5Z"/></svg>
+                <span data-i18n="results.editDetails"></span>
+              </button>
+            </div>
+          </div>
+          <section class="hour-strip-panel" aria-labelledby="hour-strip-title">
+            <div class="hour-strip-heading">
+              <h2 id="hour-strip-title" data-i18n="results.restOfToday"></h2>
+              <button id="full-plan-link" class="text-link" type="button" data-i18n="results.fullPlan"></button>
+            </div>
+            <div id="hour-strip" class="hour-strip" role="group" data-i18n-aria-label="results.restOfToday"></div>
+          </section>
+          <section id="site-check" class="site-check" aria-labelledby="site-check-title" hidden>
+            <div class="site-check-heading">
+              <div>
+                <h3 id="site-check-title" data-i18n="results.siteHeading"></h3>
+                <p data-i18n="results.sitePrivacy"></p>
+              </div>
+            </div>
+            <div class="site-check-actions">
+              <button id="site-photo-open" class="button site-photo-button" type="button" data-testid="button-site-photo" data-i18n="results.sitePhoto"></button>
+              <button id="site-manual-open" class="button button-outline site-manual-button" type="button" data-testid="button-site-manual" data-i18n="results.siteManual"></button>
+            </div>
+            <div id="site-photo-panel" class="site-photo-panel" hidden>
+              <label for="site-photo-input" data-i18n="results.sitePhotoLabel"></label>
+              <input id="site-photo-input" type="file" accept="image/*" capture="environment" data-testid="input-site-photo">
+              <p class="site-model-note" data-i18n="results.siteModelNote"></p>
+              <progress id="site-model-progress" class="site-model-progress" max="100" value="0" data-i18n-aria-label="results.modelProgress" hidden></progress>
+              <p id="site-model-status" class="site-model-status" role="status" aria-live="polite" hidden></p>
+            </div>
+            <div id="site-adjustment-panel" class="site-adjustment-panel" hidden>
+              <p id="site-prediction-note" class="site-prediction-note" role="status" aria-live="polite"></p>
+              <div id="site-prediction-chips" class="site-prediction-chips" data-i18n-aria-label="results.photoEstimates"></div>
+              <fieldset class="site-choice-field">
+                  <legend data-i18n="results.siteSurfaceQuestion"></legend>
+                <div id="site-surface-options" class="site-choice-options">
+                  <label class="site-choice"><input type="radio" name="site-surface" value="dark_roof"><span data-i18n="surface.dark_roof"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="light_roof"><span data-i18n="surface.light_roof"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="asphalt"><span data-i18n="surface.asphalt"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="concrete"><span data-i18n="surface.concrete"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="gravel_dirt"><span data-i18n="surface.gravel_dirt"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="grass"><span data-i18n="surface.grass"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-surface" value="other"><span data-i18n="surface.other"></span></label>
+                </div>
+              </fieldset>
+              <fieldset class="site-choice-field">
+                  <legend data-i18n="results.siteShadeQuestion"></legend>
+                <div id="site-shade-options" class="site-choice-options site-shade-options">
+                  <label class="site-choice"><input type="radio" name="site-shade" value="full_sun"><span data-i18n="shadeChoice.full_sun"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-shade" value="partial"><span data-i18n="shadeChoice.partial"></span></label>
+                  <label class="site-choice"><input type="radio" name="site-shade" value="full_shade"><span data-i18n="shadeChoice.full_shade"></span></label>
+                </div>
+              </fieldset>
+              <p id="site-hot-surface-warning" class="site-hot-surface-warning" role="note" hidden data-i18n="results.siteHotWarning"></p>
+              <button id="site-apply-adjustment" class="button site-apply-button" type="button" disabled data-testid="button-apply-site-adjustment" data-i18n="results.siteApply"></button>
+              <p id="site-adjustment-status" class="site-adjustment-status" role="status" aria-live="polite" hidden></p>
+            </div>
+          </section>
+          <section id="site-adjusted-results" class="site-adjusted-results" aria-labelledby="site-adjusted-title" hidden>
+            <div class="site-adjusted-heading">
+              <h3 id="site-adjusted-title" class="visually-hidden" data-i18n="results.siteBeforeAfterTitle"></h3>
+              <span id="site-adjusted-badge" class="site-adjusted-badge" data-i18n="results.siteAdjusted"></span>
+            </div>
+            <p id="site-adjustment-description" class="site-adjustment-description"></p>
+            <button id="site-edit-adjustment" class="site-edit-link" type="button" data-i18n="results.siteEdit"></button>
+            <details id="site-comparison-details" class="technical-details">
+              <summary data-i18n="results.details"></summary>
+              <p data-i18n="results.detailsHint"></p>
+              <div class="site-comparison-wrap">
+                <table class="site-comparison">
+                  <caption class="visually-hidden" data-i18n="results.siteComparisonCaption"></caption>
+                  <thead>
+                    <tr><th scope="col" data-i18n="results.siteCompareHour"></th><th scope="col" data-i18n="results.siteBefore"></th><th scope="col" data-i18n="results.siteAtWorkArea"></th></tr>
+                  </thead>
+                  <tbody id="site-comparison-rows"></tbody>
+                </table>
+              </div>
+            </details>
+          </section>
+          <section id="work-rest-schedule" class="work-rest-schedule" aria-labelledby="work-rest-title" hidden>
+            <div class="schedule-heading">
+              <div>
+                <h3 id="work-rest-title" data-i18n="results.schedule"></h3>
+              </div>
+              <span id="schedule-site-badge" class="site-adjusted-badge" hidden data-i18n="results.siteAdjusted"></span>
+            </div>
+            <div id="stop-work-banner" class="stop-work-banner" role="alert" hidden data-i18n="results.stopWork"></div>
+            <ol id="schedule-cards" class="schedule-cards" data-i18n-aria-label="results.scheduleAria"></ol>
+            <p id="schedule-status" class="forecast-status" role="status" aria-live="polite" hidden></p>
+            <p id="schedule-policy-notes" class="schedule-policy-notes">
+              <span id="schedule-policy-copy" data-i18n="results.schedulePolicy"></span>
+              <a id="work-rest-source" href="https://armypubs.army.mil/epubs/DR_pubs/DR_a/ARN43608-TB_MED_507-001-WEB-2.pdf" target="_blank" rel="noreferrer" data-mode-aria="sourceLink" data-i18n="results.sources"></a>
+            </p>
+          </section>
+          <div id="forecast-status" class="forecast-status" role="status" aria-live="polite" hidden></div>
+          <p id="forecast-partial-notice" class="forecast-status forecast-partial-notice" role="status" aria-live="polite" hidden></p>
+          <details id="forecast-details" class="technical-details">
+            <summary data-i18n="results.details"></summary>
+            <p data-i18n="results.detailsHint"></p>
+            <p id="schedule-technical-policy"></p>
+            <div class="forecast-table-wrap">
+              <table class="forecast-table">
+                <caption class="visually-hidden" data-i18n="results.forecastCaption"></caption>
+                <thead>
+                  <tr>
+                    <th scope="col" data-i18n="results.hour"></th>
+                    <th scope="col" data-i18n="results.airTemperature"></th>
+                    <th scope="col" data-i18n="results.humidity"></th>
+                    <th scope="col" data-i18n="results.forecastSun"></th>
+                    <th scope="col" data-i18n="results.forecastShade"></th>
+                  </tr>
+                </thead>
+                <tbody id="forecast-rows"></tbody>
+              </table>
+            </div>
+            <p class="forecast-footnote" data-i18n="results.forecastFootnote"></p>
+          </details>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p><span data-mode-copy="footerDisclaimer"></span> <span data-mode-copy="footerEmergency"></span></p>
+        <p class="weather-attribution"><span data-mode-copy="footerWeather"></span> <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

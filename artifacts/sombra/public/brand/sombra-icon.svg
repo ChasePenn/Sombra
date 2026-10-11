@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sombra logo: the sun with a shade circle holding a worker's hard hat">
+  <rect width="512" height="512" rx="120" fill="#FF6A2B"/>
+  <circle cx="222" cy="222" r="150" fill="#FFF6EE"/>
+  <circle cx="346" cy="346" r="140" fill="#3A1607"/>
+  <g transform="translate(350 384) scale(0.56)" fill="#FFF6EE">
+    <path d="M-120 0 A120 112 0 0 1 120 0 Z"/>
+    <rect x="-160" y="-6" width="320" height="38" rx="19"/>
+    <rect x="-18" y="-112" width="36" height="100" rx="12" fill="#3A1607"/>
+  </g>
+</svg>

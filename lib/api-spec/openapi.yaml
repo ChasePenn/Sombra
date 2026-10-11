@@ -1,0 +1,845 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: weather
+    description: Geocoding and shift heat-stress forecast
+paths:
+  /check-in:
+    post:
+      operationId: personalizeCheckin
+      tags: [checkin]
+      summary: Re-run fixed safety rules and personalize a non-emergency check-in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SafetyCheckinInput"
+      responses:
+        "200":
+          description: Fixed safety level and validated AI or template guidance
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SafetyCheckinResult"
+        "400":
+          description: Invalid check-in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/sessions:
+    get:
+      operationId: getMyWorkerSessions
+      tags: [account]
+      summary: Read recorded work, breaks, and water
+      responses:
+        "200":
+          description: Worker sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkerSession"
+    put:
+      operationId: saveMyWorkerSession
+      tags: [account]
+      summary: Save a worker's recorded activity for one day
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkerSession"
+      responses:
+        "200":
+          description: Saved worker session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WorkerSession"
+        "400":
+          description: Invalid activity data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /weather/geocode:
+    get:
+      operationId: searchWeatherLocations
+      tags: [weather]
+      summary: Search for work locations
+      parameters:
+        - in: query
+          name: name
+          required: true
+          schema:
+            type: string
+            minLength: 2
+      responses:
+        "200":
+          description: Matching locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeatherLocation"
+        "400":
+          description: Invalid search
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "502":
+          description: Location search is temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /weather/shift:
+    post:
+      operationId: getShiftHeatForecast
+      tags: [weather]
+      summary: Calculate the hourly heat forecast for a work shift
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ShiftInput"
+      responses:
+        "200":
+          description: Hourly shift forecast and heat safety context
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ShiftForecast"
+        "400":
+          description: Invalid or unavailable shift date and details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "502":
+          description: Weather data is temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/session:
+    get:
+      operationId: getMySession
+      tags: [account]
+      summary: Check whether the current browser session is signed in
+      responses:
+        "200":
+          description: Signed-in session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStatus"
+        "401":
+          description: No signed-in session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/profile:
+    get:
+      operationId: getMyProfile
+      tags: [account]
+      summary: Read the signed-in user's profile
+      responses:
+        "200":
+          description: Profile, or null before setup
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    put:
+      operationId: saveMyProfile
+      tags: [account]
+      summary: Save the signed-in user's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileInput"
+      responses:
+        "200":
+          description: Saved profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileRecord"
+        "400":
+          description: Invalid profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/crew:
+    get:
+      operationId: getMyCrew
+      tags: [account]
+      summary: Read the signed-in user's crew
+      responses:
+        "200":
+          description: Crew members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrewMember"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    put:
+      operationId: saveMyCrew
+      tags: [account]
+      summary: Replace the signed-in user's crew list
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CrewInput"
+      responses:
+        "200":
+          description: Saved crew members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CrewMember"
+        "400":
+          description: Invalid crew list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/shifts:
+    get:
+      operationId: getMyShifts
+      tags: [account]
+      summary: Read the signed-in user's saved shifts
+      responses:
+        "200":
+          description: Saved shifts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SavedShift"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      operationId: saveMyShift
+      tags: [account]
+      summary: Save a shift for the signed-in user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavedShiftInput"
+      responses:
+        "201":
+          description: Saved shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedShift"
+        "400":
+          description: Invalid shift
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/checkins:
+    get:
+      operationId: getMyCheckins
+      tags: [account]
+      summary: Read the signed-in user's check-ins
+      responses:
+        "200":
+          description: Saved check-ins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CheckinRecord"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+    post:
+      operationId: saveMyCheckin
+      tags: [account]
+      summary: Save a check-in for the signed-in user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckinInput"
+      responses:
+        "201":
+          description: Saved check-in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckinRecord"
+        "400":
+          description: Invalid check-in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/import:
+    post:
+      operationId: importMyGuestData
+      tags: [account]
+      summary: Import local guest data into the signed-in account once
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuestDataInput"
+      responses:
+        "200":
+          description: Import result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImportResult"
+        "400":
+          description: Invalid guest data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /me/account:
+    delete:
+      operationId: deleteMyAccount
+      tags: [account]
+      summary: Delete the signed-in user's Sombra data and account
+      responses:
+        "200":
+          description: Account and data deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResult"
+        "401":
+          description: Sign in required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    ApiError:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+    WeatherLocation:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        admin1:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        latitude:
+          type: number
+        longitude:
+          type: number
+      required: [name, latitude, longitude]
+    ShiftInput:
+      type: object
+      properties:
+        workerName:
+          type: string
+          maxLength: 80
+        locationName:
+          type: string
+          maxLength: 160
+        latitude:
+          type: number
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          minimum: -180
+          maximum: 180
+        intensity:
+          type: string
+          enum: [easy, moderate, hard]
+        startTime:
+          type: string
+          pattern: '^\d{2}:\d{2}$'
+        endTime:
+          type: string
+          pattern: '^\d{2}:\d{2}$'
+        date:
+          type: string
+          format: date
+        newToHeat:
+          type: boolean
+        siteAlbedo:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Optional site-surface albedo used by the on-site WBGT estimate. No photo data is accepted.
+        solarMultiplier:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Optional site shade multiplier applied to forecast solar radiation.
+      required:
+        - workerName
+        - locationName
+        - latitude
+        - longitude
+        - intensity
+        - startTime
+        - endTime
+        - date
+        - newToHeat
+    ShiftHour:
+      type: object
+      properties:
+        time:
+          type: string
+        airTempF:
+          type: number
+        humidity:
+          type: number
+        wbgtSunF:
+          type: number
+        wbgtShadeF:
+          type: number
+        wbgtSiteF:
+          type: number
+      required: [time, airTempF, humidity, wbgtSunF, wbgtShadeF, wbgtSiteF]
+    ShiftForecast:
+      type: object
+      properties:
+        locationName:
+          type: string
+        timezone:
+          type: string
+        date:
+          type: string
+        intensity:
+          type: string
+          enum: [easy, moderate, hard]
+        newToHeat:
+          type: boolean
+        missingHours:
+          type: array
+          description: Requested local forecast hours without usable weather readings.
+          items:
+            type: string
+        hours:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShiftHour"
+      required: [locationName, timezone, date, intensity, newToHeat, missingHours, hours]
+    SessionStatus:
+      type: object
+      properties:
+        authenticated:
+          type: boolean
+        userId:
+          type: string
+      required: [authenticated, userId]
+    ProfileRecord:
+      type: object
+      properties:
+        name:
+          type: string
+        language:
+          type: string
+          enum: [en, es]
+        mode:
+          type: string
+          minLength: 1
+          maxLength: 40
+          pattern: '^[a-z][a-z0-9-]*$'
+        usualIntensity:
+          type: string
+          enum: [easy, moderate, hard]
+        newToHeat:
+          type: boolean
+        notificationsEnabled:
+          type: boolean
+      required: [name, language, mode, usualIntensity, newToHeat, notificationsEnabled]
+    ProfileResponse:
+      type: object
+      properties:
+        profile:
+          anyOf:
+            - $ref: "#/components/schemas/ProfileRecord"
+            - type: "null"
+      required: [profile]
+    ProfileInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 80
+        language:
+          type: string
+          enum: [en, es]
+        mode:
+          type: string
+          minLength: 1
+          maxLength: 40
+          pattern: '^[a-z][a-z0-9-]*$'
+        usualIntensity:
+          type: string
+          enum: [easy, moderate, hard]
+        newToHeat:
+          type: boolean
+        notificationsEnabled:
+          type: boolean
+      required: [name, language, usualIntensity, newToHeat, notificationsEnabled]
+    CrewMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        intensity:
+          type: string
+          enum: [easy, moderate, hard]
+        newToHeat:
+          type: boolean
+      required: [id, name, intensity, newToHeat]
+    CrewMemberInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 80
+        intensity:
+          type: string
+          enum: [easy, moderate, hard]
+        newToHeat:
+          type: boolean
+      required: [name, intensity, newToHeat]
+    CrewInput:
+      type: object
+      properties:
+        crew:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/CrewMemberInput"
+      required: [crew]
+    SavedShift:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+        location:
+          type: string
+        planJson:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+      required: [id, date, location, planJson, createdAt]
+    SavedShiftInput:
+      type: object
+      properties:
+        date:
+          type: string
+          pattern: '^\d{4}-\d{2}-\d{2}$'
+        location:
+          type: string
+          minLength: 1
+          maxLength: 160
+        planJson:
+          type: object
+          additionalProperties: true
+      required: [date, location, planJson]
+    CheckinRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        workerName:
+          type: string
+        time:
+          type: string
+        level:
+          type: string
+        symptomsJson:
+          type: array
+          items:
+            type: string
+        detailsJson:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+      required: [id, workerName, time, level, symptomsJson, createdAt]
+    CheckinInput:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        workerName:
+          type: string
+          minLength: 1
+          maxLength: 80
+        time:
+          type: string
+          minLength: 1
+        level:
+          type: string
+          minLength: 1
+          maxLength: 40
+        symptomsJson:
+          type: array
+          maxItems: 20
+          items:
+            type: string
+            maxLength: 80
+        detailsJson:
+          type: object
+          additionalProperties: true
+      required: [workerName, time, level, symptomsJson]
+    WorkerSession:
+      type: object
+      required: [workerName, date, startedAt, endedAt, breaks, waterLogs, planHours, siteType, remindersShown]
+      properties:
+        workerName: { type: string, minLength: 1, maxLength: 80 }
+        date: { type: string, pattern: '^\d{4}-\d{2}-\d{2}$' }
+        startedAt: { type: [string, "null"] }
+        endedAt: { type: [string, "null"] }
+        siteType: { type: string, maxLength: 200 }
+        breaks:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/RecordedBreak"
+        waterLogs:
+          type: array
+          maxItems: 200
+          items:
+            $ref: "#/components/schemas/WaterLog"
+        planHours:
+          type: array
+          maxItems: 24
+          items:
+            $ref: "#/components/schemas/SessionPlanHour"
+        remindersShown:
+          type: array
+          maxItems: 500
+          items: { type: string, maxLength: 160 }
+    RecordedBreak:
+      type: object
+      required: [start, end]
+      properties:
+        start: { type: string }
+        end: { type: [string, "null"] }
+    WaterLog:
+      type: object
+      required: [time, cups]
+      properties:
+        time: { type: string }
+        cups: { type: number, minimum: 0, maximum: 8 }
+    SessionPlanHour:
+      type: object
+      required: [at, time, wbgtF, category, workMinutes, restMinutes, waterCups]
+      properties:
+        at: { type: number }
+        time: { type: string, maxLength: 5 }
+        wbgtF: { type: number, minimum: -50, maximum: 200 }
+        category: { type: integer, minimum: 0, maximum: 5 }
+        workMinutes: { type: number, minimum: 0, maximum: 60 }
+        restMinutes: { type: number, minimum: 0, maximum: 60 }
+        waterCups: { type: number, minimum: 0, maximum: 6 }
+    PastCheckinAnswer:
+      type: object
+      required: [time, level, symptoms]
+      properties:
+        time: { type: string }
+        level: { type: string, maxLength: 40 }
+        symptoms:
+          type: array
+          maxItems: 7
+          items: { type: string, maxLength: 80 }
+        note: { type: string, maxLength: 1000 }
+    SafetyCheckinInput:
+      type: object
+      required: [workerName, symptoms, language, session]
+      properties:
+        workerName: { type: string, minLength: 1, maxLength: 80 }
+        symptoms:
+          type: array
+          maxItems: 7
+          items:
+            type: string
+            enum: [dizzy, headache, nausea, weak, hot_dry, confused, fainted]
+        note: { type: string, maxLength: 1000 }
+        language: { type: string, enum: [en, es] }
+        mode: { type: string, minLength: 1, maxLength: 40, pattern: '^[a-z][a-z0-9-]*$' }
+        session:
+          $ref: "#/components/schemas/WorkerSession"
+        pastAnswers:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/PastCheckinAnswer"
+    SafetyCheckinResult:
+      type: object
+      required: [level, message, follow_up_question, actions, recheck_in_minutes, source]
+      properties:
+        level: { type: string, enum: [OK, CAUTION, DANGER] }
+        message: { type: string }
+        follow_up_question: { type: string }
+        actions:
+          type: array
+          maxItems: 3
+          items: { type: string }
+        recheck_in_minutes: { type: integer, minimum: 15, maximum: 60 }
+        source: { type: string, enum: [ai, template] }
+    GuestDataInput:
+      type: object
+      properties:
+        profile:
+          $ref: "#/components/schemas/ProfileInput"
+        crew:
+          type: array
+          maxItems: 100
+          items:
+            $ref: "#/components/schemas/CrewMemberInput"
+        shifts:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: "#/components/schemas/SavedShiftInput"
+        checkins:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: "#/components/schemas/CheckinInput"
+        sessions:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: "#/components/schemas/WorkerSession"
+      required: [profile, crew, shifts, checkins]
+    ImportResult:
+      type: object
+      properties:
+        imported:
+          type: boolean
+        reason:
+          type: ["string", "null"]
+      required: [imported, reason]
+    DeleteResult:
+      type: object
+      properties:
+        deleted:
+          type: boolean
+      required: [deleted]

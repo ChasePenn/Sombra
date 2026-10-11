@@ -1,0 +1,35 @@
+{
+  "surface": {
+    "dark_roof": [
+      "a photo of a dark shingle roof",
+      "a photo of a black roof"
+    ],
+    "light_roof": [
+      "a photo of a white or light colored roof"
+    ],
+    "asphalt": [
+      "a photo of an asphalt road or parking lot"
+    ],
+    "concrete": [
+      "a photo of a concrete slab or sidewalk"
+    ],
+    "gravel_dirt": [
+      "a photo of gravel or desert landscaping",
+      "a photo of bare dirt"
+    ],
+    "grass": [
+      "a photo of a green lawn or grass"
+    ]
+  },
+  "shade": {
+    "full_sun": [
+      "an outdoor area in full direct sunlight with no shade"
+    ],
+    "partial": [
+      "an outdoor area that is partly shaded by trees or buildings"
+    ],
+    "full_shade": [
+      "an outdoor area that is completely shaded"
+    ]
+  }
+}

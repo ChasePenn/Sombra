@@ -1,0 +1,41 @@
+:root {
+  --ink: #2A1206;
+  --ink-soft: #7A5B4B;
+  --line: #F0E2D8;
+  --canvas: #FBF4EF;
+  --card: #FFFFFF;
+  --mesquite: #FF6A2B;
+  --mesquite-dark: #D94E14;
+  --mesquite-tint: #FFE6D9;
+  --pear: #3A1607;
+  --pear-dark: #1A0902;
+  --monsoon: #2F86C9;
+  --monsoon-dark: #1D669F;
+  --monsoon-tint: #E4F0FA;
+  --shadow-soft: 0 8px 24px rgba(58, 22, 7, .14);
+
+  --r-low: #2FA36B;
+  --r-caution: #9BC53D;
+  --r-elevated: #F2C230;
+  --r-high: #F28C28;
+  --r-high-dark: #C96A12;
+  --r-veryhigh: #E5484D;
+  --r-extreme: #2A2A2A;
+
+  --brand: var(--mesquite);
+  --brown: #3A1607;
+  --head: 'Rubik', system-ui, sans-serif;
+  --body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+}
+
+/* Compatibility names for the existing planner styles; all resolve to the reference palette above. */
+:root {
+  --mesquite-soft: var(--mesquite-tint);
+  --prickly-pear: var(--pear);
+  --risk-low: var(--r-low);
+  --risk-caution: var(--r-caution);
+  --risk-elevated: var(--r-elevated);
+  --risk-high: var(--r-high);
+  --risk-very-high: var(--r-veryhigh);
+  --risk-extreme: var(--r-extreme);
+}

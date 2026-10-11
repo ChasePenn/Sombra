@@ -1,0 +1,18 @@
+{
+  "note": "Approximate surface albedo values (fraction of sunlight reflected) from common urban heat island references. Lower albedo = more reflected heat absorbed nearby. Solar multipliers scale the forecast sunlight for shade.",
+  "albedo": {
+    "dark_roof": 0.1,
+    "light_roof": 0.65,
+    "asphalt": 0.08,
+    "concrete": 0.3,
+    "gravel_dirt": 0.25,
+    "grass": 0.25,
+    "default": 0.2
+  },
+  "solar_multiplier": {
+    "full_sun": 1,
+    "partial": 0.5,
+    "full_shade": 0
+  },
+  "hot_surface_warning": ["dark_roof", "asphalt"]
+}
