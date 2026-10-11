@@ -2,8 +2,8 @@
   "id": "school",
   "icon": "student",
   "welcomeQuestions": {
-    "en": "Who's Sombra for today?",
-    "es": "¿Para quién es Sombra hoy?"
+    "en": "What are you planning for?",
+    "es": "¿Qué vas a planear?"
   },
   "taglines": {
     "en": "Heat safety for every crew, team and family.",
@@ -39,17 +39,14 @@
         "newToHeatHint": "Started outdoor activity in the last 2 weeks",
         "testBody": "Time to check in. How are you feeling?",
         "signInPrompt": "Sign in to save your plans and team across devices.",
-        "deleteBody": "This removes your profile, team, saved plans, and check-ins from Sombra, then signs you out. It cannot be undone.",
+        "deleteBody": "This removes your profile, team, saved plans, and check-ins from sombra, then signs you out. It cannot be undone.",
         "importBody": "You have a profile, team, plans, or check-ins saved on this device. Copy them into your account so they show up everywhere.",
         "signInTitle": "Sign in to save your plans and team",
         "signInSub": "Your account keeps your profile, team, and saved plans on every device.",
         "signUpSub": "Save your plans and team. Guest mode still works without an account."
       },
-      "about": {
-        "what": "Sombra helps school teams plan outdoor activities around heat, shade breaks, and water. It is free and works without an account."
-      },
       "ui": {
-        "documentTitle": "Sombra — School heat safety",
+        "documentTitle": "sombra — School heat safety",
         "metaDescription": "Heat safety guidance for school activities, sports, and band.",
         "desktopTitle": "Heat guidance for your team",
         "desktopDescription": "Plan practice, shade breaks, and water around the hourly conditions.",
@@ -154,17 +151,14 @@
         "newToHeatHint": "Comenzó actividad al aire libre en las últimas 2 semanas",
         "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
         "signInPrompt": "Inicia sesión para guardar tus planes y equipo en varios dispositivos.",
-        "deleteBody": "Esto elimina tu perfil, equipo, planes y registros de Sombra, y cierra tu sesión. No se puede deshacer.",
+        "deleteBody": "Esto elimina tu perfil, equipo, planes y registros de sombra, y cierra tu sesión. No se puede deshacer.",
         "importBody": "Tienes un perfil, equipo, planes o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.",
         "signInTitle": "Inicia sesión para guardar tus planes y equipo",
         "signInSub": "Tu cuenta guarda tu perfil, equipo y planes en todos tus dispositivos.",
-        "signUpSub": "Guarda tus planes y equipo. También puedes usar Sombra sin cuenta."
-      },
-      "about": {
-        "what": "Sombra ayuda a los equipos escolares a planear actividades al aire libre según el calor, la sombra y el agua. Es gratis y funciona sin cuenta."
+        "signUpSub": "Guarda tus planes y equipo. También puedes usar sombra sin cuenta."
       },
       "ui": {
-        "documentTitle": "Sombra — Seguridad escolar contra el calor",
+        "documentTitle": "sombra — Seguridad escolar contra el calor",
         "metaDescription": "Orientación contra el calor para actividades escolares, deportes y banda.",
         "desktopTitle": "Orientación para tu equipo",
         "desktopDescription": "Planea la práctica, los descansos a la sombra y el agua según las condiciones por hora.",

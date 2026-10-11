@@ -943,3 +943,8 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 .bring-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .bring-head .text-link { min-height: 44px; }
 .bring-status { margin-top: 8px; color: var(--ink-soft); font-size: .9rem; font-weight: 700; }
+
+/* Success messages for location are for screen readers; errors stay visible. */
+#location-status[data-error="false"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+.worker-field[hidden] { display: none; }
+.schedule-action.schedule-action-stop { font-weight: 800; color: var(--ink, #2A1206); }

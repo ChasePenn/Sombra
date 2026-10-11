@@ -99,11 +99,9 @@
                     <span><strong data-mode-copy="tomorrow"></strong><small id="shift-date-tomorrow-label"></small></span>
                   </label>
                 </div>
-                <p class="field-help" id="shift-date-help" data-mode-copy="dateHelp"></p>
               </fieldset>
               <fieldset class="field-block shift-time-field">
                 <legend><span data-mode-copy="shiftHours"></span> <span class="required-mark" data-mode-copy="required"></span></legend>
-                <p class="field-help shift-time-help" data-mode-copy="localTimeHelp"></p>
                 <div class="time-row">
                   <div class="time-input">
                     <label for="start-time" data-mode-copy="start"></label>
@@ -165,17 +163,6 @@
               <div class="forecast-tags"><span id="forecast-intensity" class="meta-tag"></span><span id="forecast-acclimation" class="meta-tag"></span></div>
             </div>
           </section>
-          <section id="conditions-panel" class="conditions-panel" aria-labelledby="conditions-title" hidden>
-            <h2 id="conditions-title" data-i18n="extras.conditionsTitle"></h2>
-            <div id="conditions-alerts" class="conditions-alerts"></div>
-            <div class="conditions-grid">
-              <button type="button" class="condition-tile" id="uv-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.uvTitle"></span><strong id="uv-level"></strong><small id="uv-peak"></small></button>
-              <button type="button" class="condition-tile" id="aqi-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.aqiTitle"></span><strong id="aqi-level"></strong><small id="aqi-peak"></small></button>
-            </div>
-            <p id="condition-meaning" class="condition-meaning" role="status" hidden></p>
-            <p id="condition-hint" class="condition-hint" data-i18n="extras.tapToLearn" hidden></p>
-            <p id="conditions-dust" class="conditions-dust" hidden data-i18n="extras.dust"></p>
-          </section>
           <div class="results-top">
             <div class="section-heading">
               <h2 id="results-title" data-i18n="results.hourlyConditions"></h2>
@@ -194,9 +181,24 @@
           <section class="hour-strip-panel" aria-labelledby="hour-strip-title">
             <div class="hour-strip-heading">
               <h2 id="hour-strip-title" data-i18n="results.restOfToday"></h2>
-              <button id="full-plan-link" class="text-link" type="button" data-i18n="results.fullPlan"></button>
             </div>
             <div id="hour-strip" class="hour-strip" role="group" data-i18n-aria-label="results.restOfToday"></div>
+          </section>
+          <section id="work-rest-schedule" class="work-rest-schedule" aria-labelledby="work-rest-title" hidden>
+            <div class="schedule-heading">
+              <div>
+                <h3 id="work-rest-title" data-i18n="results.schedule"></h3>
+              </div>
+              <span id="schedule-site-badge" class="site-adjusted-badge" hidden data-i18n="results.siteAdjusted"></span>
+            </div>
+            <div id="stop-work-banner" class="stop-work-banner" role="alert" hidden data-i18n="results.stopWork"></div>
+            <p id="profile-caution" class="profile-caution" hidden data-i18n="extras.profileNote"></p>
+            <ol id="schedule-cards" class="schedule-cards" data-i18n-aria-label="results.scheduleAria"></ol>
+            <p id="schedule-status" class="forecast-status" role="status" aria-live="polite" hidden></p>
+            <p id="schedule-policy-notes" class="schedule-policy-notes">
+              <span id="schedule-policy-copy" data-i18n="results.schedulePolicy"></span>
+              <a id="work-rest-source" href="https://armypubs.army.mil/epubs/DR_pubs/DR_a/ARN43608-TB_MED_507-001-WEB-2.pdf" target="_blank" rel="noreferrer" data-mode-aria="sourceLink" data-i18n="results.sources"></a>
+            </p>
           </section>
           <section id="bring-panel" class="bring-panel" aria-labelledby="bring-title" hidden>
             <div class="bring-head">
@@ -205,6 +207,17 @@
             </div>
             <ul id="bring-list" class="bring-list"></ul>
             <p id="bring-status" class="bring-status" role="status" hidden></p>
+          </section>
+          <section id="conditions-panel" class="conditions-panel" aria-labelledby="conditions-title" hidden>
+            <h2 id="conditions-title" data-i18n="extras.conditionsTitle"></h2>
+            <div id="conditions-alerts" class="conditions-alerts"></div>
+            <div class="conditions-grid">
+              <button type="button" class="condition-tile" id="uv-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.uvTitle"></span><strong id="uv-level"></strong><small id="uv-peak"></small></button>
+              <button type="button" class="condition-tile" id="aqi-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.aqiTitle"></span><strong id="aqi-level"></strong><small id="aqi-peak"></small></button>
+            </div>
+            <p id="condition-meaning" class="condition-meaning" role="status" hidden></p>
+            <p id="condition-hint" class="condition-hint" data-i18n="extras.tapToLearn" hidden></p>
+            <p id="conditions-dust" class="conditions-dust" hidden data-i18n="extras.dust"></p>
           </section>
           <section id="site-check" class="site-check" aria-labelledby="site-check-title" hidden>
             <div class="site-check-heading">
@@ -260,7 +273,7 @@
             <p id="site-adjustment-description" class="site-adjustment-description"></p>
             <button id="site-edit-adjustment" class="site-edit-link" type="button" data-i18n="results.siteEdit"></button>
             <details id="site-comparison-details" class="technical-details">
-              <summary data-i18n="results.details"></summary>
+              <summary data-i18n="extras.hourlyNumbers"></summary>
               <p data-i18n="results.detailsHint"></p>
               <div class="site-comparison-wrap">
                 <table class="site-comparison">
@@ -273,26 +286,10 @@
               </div>
             </details>
           </section>
-          <section id="work-rest-schedule" class="work-rest-schedule" aria-labelledby="work-rest-title" hidden>
-            <div class="schedule-heading">
-              <div>
-                <h3 id="work-rest-title" data-i18n="results.schedule"></h3>
-              </div>
-              <span id="schedule-site-badge" class="site-adjusted-badge" hidden data-i18n="results.siteAdjusted"></span>
-            </div>
-            <div id="stop-work-banner" class="stop-work-banner" role="alert" hidden data-i18n="results.stopWork"></div>
-            <p id="profile-caution" class="profile-caution" hidden data-i18n="extras.profileNote"></p>
-            <ol id="schedule-cards" class="schedule-cards" data-i18n-aria-label="results.scheduleAria"></ol>
-            <p id="schedule-status" class="forecast-status" role="status" aria-live="polite" hidden></p>
-            <p id="schedule-policy-notes" class="schedule-policy-notes">
-              <span id="schedule-policy-copy" data-i18n="results.schedulePolicy"></span>
-              <a id="work-rest-source" href="https://armypubs.army.mil/epubs/DR_pubs/DR_a/ARN43608-TB_MED_507-001-WEB-2.pdf" target="_blank" rel="noreferrer" data-mode-aria="sourceLink" data-i18n="results.sources"></a>
-            </p>
-          </section>
           <div id="forecast-status" class="forecast-status" role="status" aria-live="polite" hidden></div>
           <p id="forecast-partial-notice" class="forecast-status forecast-partial-notice" role="status" aria-live="polite" hidden></p>
           <details id="forecast-details" class="technical-details">
-            <summary data-i18n="results.details"></summary>
+            <summary data-i18n="extras.hourlyNumbers"></summary>
             <p data-i18n="results.detailsHint"></p>
             <p id="schedule-technical-policy"></p>
             <div class="forecast-table-wrap">

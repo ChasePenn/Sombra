@@ -32,7 +32,7 @@ async function request(path, options = {}) {
       ...options,
     });
   } catch {
-    const error = new Error("Could not reach Sombra. Check your connection and try again.");
+    const error = new Error("Could not reach sombra. Check your connection and try again.");
     error.code = "OFFLINE";
     throw error;
   }
@@ -50,7 +50,7 @@ async function request(path, options = {}) {
     body = null;
   }
   if (!response.ok) {
-    const error = new Error(body?.error || "Sombra could not save that yet. Try again.");
+    const error = new Error(body?.error || "sombra could not save that yet. Try again.");
     error.code = response.status >= 500 ? "OFFLINE" : "REJECTED";
     throw error;
   }
@@ -74,7 +74,7 @@ function localWrite(key, value) {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch {
-    throw new Error("Sombra could not save on this device. Check available storage and try again.");
+    throw new Error("sombra could not save on this device. Check available storage and try again.");
   }
 }
 
@@ -82,7 +82,7 @@ function localRemove(key) {
   try {
     window.localStorage.removeItem(key);
   } catch {
-    throw new Error("Sombra could not remove saved information from this device.");
+    throw new Error("sombra could not remove saved information from this device.");
   }
 }
 
@@ -426,7 +426,7 @@ export function clearLocalData() {
       }
     }
   } catch {
-    throw new Error("Sombra could not remove saved information from this device.");
+    throw new Error("sombra could not remove saved information from this device.");
   }
 }
 

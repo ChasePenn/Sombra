@@ -41,17 +41,18 @@ export function TopBar({ title }: { title?: string }) {
   return (
     <>
     <header className="topbar">
-      <Link href="/app" className="brand wordmark" aria-label="Sombra">
+      <Link href="/app" className="brand wordmark" aria-label="sombra">
         <img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" />
         <span>sombra</span>
       </Link>
       {title && <span className="vh">{title}</span>}
       <div className="topbar-actions">
-        <div className="lang-switch" role="group" aria-label={t.language}>
-          <button lang="en" aria-label={ui.englishLanguage} aria-pressed={lang === 'en'} onClick={() => selectLanguage('en')}>EN</button>
-          <span aria-hidden="true">|</span>
-          <button lang="es" aria-label={ui.spanishLanguage} aria-pressed={lang === 'es'} onClick={() => selectLanguage('es')}>ES</button>
-        </div>
+        {/* One tap to switch: the button names the other language in that language. */}
+        {lang === 'en' ? (
+          <button type="button" className="lang-toggle" lang="es" aria-label={ui.spanishLanguage} onClick={() => selectLanguage('es')}>Español</button>
+        ) : (
+          <button type="button" className="lang-toggle" lang="en" aria-label={ui.englishLanguage} onClick={() => selectLanguage('en')}>English</button>
+        )}
         <button type="button" className="mode-chip" aria-label={currentMode(lang).name} aria-haspopup="dialog" onClick={() => setModeOpen(true)}>{currentMode(lang).shortName}</button>
         <Link href="/settings" className="icon-btn" aria-label={t.settings}><Glyph name="gear" /></Link>
       </div>
@@ -86,7 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <TopBar />
       <InstallTip />
       <main>{children}</main>
-      <nav className="tabs" aria-label="Sombra">
+      <nav className="tabs" aria-label="sombra">
         <div className="tabs-inner">
           <Link href={tabs[0].href} className="tab" aria-current={tabs[0].active ? 'page' : undefined}>
             <Glyph name={tabs[0].icon} />

@@ -1,6 +1,5 @@
 import { Icon as ModeIcon } from '../components/Icon';
 import { useRef, useState, type FormEvent } from 'react';
-import { Camera, ClipboardCheck, Thermometer } from 'lucide-react';
 import * as store from '../../public/js/store.js';
 import { useSession } from '../lib/session';
 import { IntensityPicker, LanguagePicker } from '../components/Controls';
@@ -14,11 +13,10 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
   const track = useRef<HTMLDivElement>(null);
+  // Two steps only: what you're planning for, then your name. The app explains itself once it's open.
   const slides = [
-    { Icon: ClipboardCheck, title: currentMode(previewLang).welcomeQuestion ?? '', body: '' },
-    { Icon: Thermometer, title: t.w1, body: t.w1s },
-    { Icon: Camera, title: t.w2, body: t.w2s },
-    { Icon: ClipboardCheck, title: t.w3, body: t.w3s },
+    { title: currentMode(previewLang).welcomeQuestion ?? '' },
+    { title: t.aboutYou },
   ];
   const last = slides.length - 1;
   const go = (i: number) => {
@@ -60,7 +58,7 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
         )}
       </div>
       <div className="slides" ref={track} onScroll={onScroll}>
-        {slides.map(({ Icon, title, body }, i) => (
+        {slides.map(({ title }, i) => (
           <section key={title} className="slide" aria-hidden={idx !== i} aria-label={`${i + 1} / ${slides.length}`}>
             {i === 0 ? (
               <div className="mode-welcome">
@@ -81,17 +79,9 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
                   ))}
                 </div>
               </div>
-            ) : i < last ? (
-              <>
-                <div className="slide-icon" aria-hidden="true"><Icon size={48} strokeWidth={1.75} /></div>
-                <h1>{title}</h1>
-                <p>{body}</p>
-              </>
             ) : (
               <form onSubmit={submit} className="form-slide-inner">
-                <div className="slide-icon" aria-hidden="true" style={{ width: 64, height: 64, borderRadius: 18 }}><Icon size={32} strokeWidth={1.75} /></div>
-                <h1 style={{ marginTop: 20 }}>{title}</h1>
-                <p style={{ marginBottom: 22 }}>{body}</p>
+                <h1 style={{ marginBottom: 22 }}>{title}</h1>
                 <div className="field">
                   <label htmlFor="w-name">{t.name}</label>
                   <input id="w-name" className="input" value={name} onChange={(e) => setName(e.target.value)} autoComplete="given-name" required tabIndex={idx === i ? 0 : -1} />

@@ -75,7 +75,6 @@ export default function CoolSpots() {
       <div className="page">
         <header className="page-head">
           <h1>{f.coolTitle}</h1>
-          <p>{f.coolSub}</p>
         </header>
         <LocationPicker value={place} onChange={setPlace} />
 

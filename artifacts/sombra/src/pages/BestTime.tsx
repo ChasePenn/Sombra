@@ -3,10 +3,10 @@ import { Link } from 'wouter';
 import { BellRing, CalendarClock, Droplet, Ban } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
-import { IntensityPicker, Segmented } from '../components/Controls';
+import { Segmented } from '../components/Controls';
 import { useSession } from '../lib/session';
-import { audienceModeId, fill, modeRules, type Intensity } from '../lib/copy';
-import { featureCopy } from '../lib/features-copy';
+import { audienceModeId, fill, modeRules } from '../lib/copy';
+import { activityIntensity, featureCopy } from '../lib/features-copy';
 import { getRiskFactors, getWindowReminders, saveWindowReminders } from '../lib/local';
 import { clock, nextDate, phoenixNow } from '../lib/time';
 import { findBestWindows } from '../../lib/best-window.js';
@@ -21,10 +21,13 @@ export default function BestTime() {
   const { lang, profile } = useSession();
   const f = featureCopy[lang];
   const [place, setPlace] = useInitialPlace();
-  const presets = f.activities[audienceModeId] ?? f.activities.everyday;
-  const [activity, setActivity] = useState(presets[0]);
+  const modeKey = f.activities[audienceModeId] ? audienceModeId : 'everyday';
+  const presets = f.activities[modeKey];
+  // The activity decides how hard it is, so people don't have to answer the same question twice.
+  const [activityIndex, setActivityIndex] = useState(0);
+  const activity = presets[activityIndex] ?? presets[0];
+  const intensity = activityIntensity[modeKey]?.[activityIndex] ?? profile?.usualIntensity ?? 'moderate';
   const [duration, setDuration] = useState(2);
-  const [intensity, setIntensity] = useState<Intensity>(profile?.usualIntensity ?? 'moderate');
   const [state, setState] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
   const [result, setResult] = useState<ReturnType<typeof findBestWindows> | null>(null);
   const caution = getRiskFactors().length > 0 || (modeRules().categoryIncrease ?? 0) > 0;
@@ -104,19 +107,16 @@ export default function BestTime() {
         <div className="field">
           <span className="label">{f.activity}</span>
           <div className="chips" role="group" aria-label={f.activity}>
-            {presets.map((p) => (
-              <button key={p} type="button" className="chip" aria-pressed={activity === p} onClick={() => setActivity(p)}>{p}</button>
+            {presets.map((p, i) => (
+              <button key={p} type="button" className="chip" aria-pressed={activityIndex === i} onClick={() => setActivityIndex(i)}>{p}</button>
             ))}
           </div>
+          <p className="seg-hint">{fill(f.countsAs, { level: f.effortWord[intensity] })}</p>
         </div>
         <div className="field">
           <span className="label">{f.howLong}</span>
           <Segmented label={f.howLong} value={String(duration)} onChange={(v) => setDuration(Number(v))}
             options={[1, 2, 3, 4, 6].map((n) => ({ value: String(n), label: fill(f.hours, { n }) }))} />
-        </div>
-        <div className="field">
-          <span className="label">{f.howHard}</span>
-          <IntensityPicker lang={lang} label={f.howHard} value={intensity} onChange={setIntensity} />
         </div>
         <button type="button" className="btn btn-primary btn-block" disabled={!place || state === 'loading'} onClick={find}>
           {state === 'loading' ? f.finding : f.find}
