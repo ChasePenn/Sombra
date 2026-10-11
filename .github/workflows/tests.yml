@@ -1,0 +1,46 @@
+name: Release gate
+
+# Everything that can run without the internet: type check, build, all unit tests,
+# the account and data isolation tests against a throwaway Postgres, and the planner
+# browser test. The live-data workflow covers the real outside services.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: sombra
+          POSTGRES_PASSWORD: sombra
+          POSTGRES_DB: sombra_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sombra"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # A test-only database that exists for the length of this job.
+      DATABASE_URL: postgres://sombra:sombra@localhost:5432/sombra_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Release check
+        run: |
+          export CHROME_BIN="$(command -v google-chrome || command -v chromium || true)"
+          pnpm run release-check

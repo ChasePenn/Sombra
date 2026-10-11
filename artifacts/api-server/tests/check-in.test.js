@@ -9,6 +9,10 @@ import { build } from "esbuild";
 import { personalize, validatePersonalization } from "../lib/ai.js";
 import { emptySession, phoenixDate, sessionContext } from "@workspace/heat-safety/session";
 
+// This file swaps in a fake store, so no database is used. The database module still checks
+// for a connection string when it loads (it is bundled and imported further down); a placeholder satisfies that without connecting.
+process.env.DATABASE_URL ??= "postgres://unused:unused@127.0.0.1:1/unused";
+
 const context = {...sessionContext(emptySession("Luis")),hoursWorked:2,waterCups:3,recommendedCups:6};
 const output = {message:"Luis, you've worked 2 hours and logged 3 cups. Stop work and cool down in the shade.",follow_up_question:"Are you feeling better?",actions:["Rest in the shade","Drink water","Cool down","Ask for help"],recheck_in_minutes:90};
 test("personalization validates structure, caps actions and clamps caution followup",()=>{
