@@ -36,6 +36,7 @@ jobs:
           pnpm --filter @workspace/api-server run test:live 2>&1 | tee live.log
           status=${PIPESTATUS[0]}
           # Surface failures as annotations so they show up on the run page and in the API.
-          # GitHub merges identical annotation lines, so put each failing test and its message on one line.
-          grep -E -A1 "^ *(not ok|error:)" live.log | grep -v '^--$' | sed -E 's/^ +//' | paste -sd ' ' - | sed 's/^/::error::/'
+          # GitHub merges identical annotation lines, so each line gets its line number.
+          grep -n -E -A12 "not ok" live.log | grep -vE "^--$" | head -45 | sed -E 's/^([0-9]+)[:-]/::error::L\1 /'
+          tail -n 15 live.log | nl -ba | sed -E 's/^ *([0-9]+)\t/::error::tail\1 /'
           exit $status
