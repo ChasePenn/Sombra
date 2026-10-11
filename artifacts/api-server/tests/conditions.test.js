@@ -36,7 +36,7 @@ test("heat alerts are listed before other alerts", () => {
   const alerts = mod.summarizeAlerts([
     { properties: { event: "Dust Storm Warning", severity: "Severe" } },
     { properties: { event: "Wind Advisory" } },
-    { properties: { event: "Extreme Heat Warning", severity: "Extreme", ends: "2026-07-10T20:00:00-07:00" } },
+    { properties: { event: "Extreme Heat Warning", severity: "Extreme", ends: "2999-07-10T20:00:00-07:00" } },
   ]);
   assert.deepEqual(alerts.map((a) => a.kind), ["heat", "air", "other"]);
   assert.equal(alerts[0].event, "Extreme Heat Warning");
@@ -93,4 +93,15 @@ test("cool spots are sorted by distance and unnamed buildings are dropped", () =
   assert.deepEqual(places.map((p) => p.id), [2, 1, 4]);
   assert.equal(places[0].kind, "water");
   assert.ok(places[0].distanceM > 100 && places[0].distanceM < 120);
+});
+
+test("expired alerts and impossible readings are dropped", () => {
+  const alerts = mod.summarizeAlerts([
+    { properties: { event: "Extreme Heat Warning", ends: "2020-01-01T00:00:00Z" } },
+    { properties: { event: "Heat Advisory", ends: "2999-01-01T00:00:00Z" } },
+  ]);
+  assert.deepEqual(alerts.map((a) => a.event), ["Heat Advisory"]);
+  const air = mod.summarizeAirQuality({ time: ["2026-07-10T12:00", "2026-07-10T13:00"], uv_index: [-3, 99], us_aqi: [900, 60] }, "2026-07-10T12:10");
+  assert.equal(air.uv.peak, null);
+  assert.equal(air.aqi.peak, 60);
 });
