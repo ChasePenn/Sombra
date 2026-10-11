@@ -1,54 +1,250 @@
 {
   "id": "work",
   "icon": "hard-hat",
-  "welcomeQuestions": { "en": "Who's Sombra for today?", "es": "¿Para quién es Sombra hoy?" },
-  "taglines": { "en": "Heat safety for every crew, team and family.", "es": "Seguridad contra el calor para cuadrillas, equipos y familias." },
-  "rules": { "categoryIncrease": 0, "stopAtExtreme": false, "planKind": "shift" },
+  "welcomeQuestions": {
+    "en": "Who's Sombra for today?",
+    "es": "¿Para quién es Sombra hoy?"
+  },
+  "taglines": {
+    "en": "Heat safety for every crew, team and family.",
+    "es": "Seguridad contra el calor para cuadrillas, equipos y familias."
+  },
+  "rules": {
+    "categoryIncrease": 0,
+    "stopAtExtreme": false,
+    "planKind": "shift"
+  },
   "locales": {
     "en": {
-      "mode": { "name": "Work crew", "shortName": "Work", "description": "Outdoor work, from job sites to deliveries.", "group": "Crew", "member": "Worker", "leader": "Supervisor", "greetingStyle": "personal", "siteLabel": "Work site", "emptyState": "Your crew will show up here.", "stopBanner": "Stop work and move to a cool place." },
-      "app": { "tagline": "Heat safety for every crew, team and family.", "landingSub": "Plan for heat, shade, breaks, and water before heading outside.", "crew": "Crew", "crewSub": "People you plan work and check-ins for.", "noCrew": "No crew added yet", "noCrewSub": "Add the people you work with.", "usualWork": "Usual work type", "newToHeat": "New to working in heat", "newToHeatHint": "Started outdoor work in the last 2 weeks", "testBody": "Time to check in with your crew.", "signInPrompt": "Sign in to save your plans and crew across devices.", "deleteBody": "This removes your profile, crew, saved shifts, and check-ins from Sombra, then signs you out. It cannot be undone.", "importBody": "You have a profile, crew, shifts, or check-ins saved on this device. Copy them into your account so they show up everywhere.", "signInTitle": "Sign in to save your plans and crew", "signInSub": "Your account keeps your profile, crew, and saved shifts on every device.", "signUpSub": "Save your plans and crew. Guest mode still works without one." },
-      "about": { "what": "Sombra helps outdoor crews plan for heat, shade breaks, and water. It is free and works without an account." },
-      "ui": { "documentTitle": "Sombra — Heat plan for work", "metaDescription": "Hourly heat guidance for outdoor work.", "desktopTitle": "Heat guidance for your work site", "desktopDescription": "Choose a place and shift hours to plan work, shade breaks, and water.", "crewStatus": "Your crew", "crewStatusUnavailable": "Crew information is temporarily unavailable.", "pageTitle": "Plan your shift", "introDescription": "See hourly conditions for your work site.", "locationLabel": "Work location", "locationHelp": "Choose the jobsite or delivery area, not your home address.", "workerName": "Worker name", "workerNamePlaceholder": "Name for this shift", "newToHeatQuestion": "New to working in heat in the last 2 weeks?", "stopBanner": "Stop work and move to a cool place." },
+      "mode": {
+        "name": "Work crew",
+        "shortName": "Work",
+        "description": "Outdoor work, from job sites to deliveries.",
+        "group": "Crew",
+        "member": "Worker",
+        "leader": "Supervisor",
+        "greetingStyle": "personal",
+        "siteLabel": "Work site",
+        "emptyState": "Your crew will show up here.",
+        "stopBanner": "Stop work and move to a cool place."
+      },
+      "app": {
+        "tagline": "Heat safety for every crew, team and family.",
+        "landingSub": "Plan for heat, shade, breaks, and water before heading outside.",
+        "crew": "Crew",
+        "crewSub": "People you plan work and check-ins for.",
+        "noCrew": "No crew added yet",
+        "noCrewSub": "Add the people you work with.",
+        "usualWork": "Usual work type",
+        "newToHeat": "New to working in heat",
+        "newToHeatHint": "Started outdoor work in the last 2 weeks",
+        "testBody": "Time to check in. How are you feeling?",
+        "signInPrompt": "Sign in to save your plans and crew across devices.",
+        "deleteBody": "This removes your profile, crew, saved shifts, and check-ins from Sombra, then signs you out. It cannot be undone.",
+        "importBody": "You have a profile, crew, shifts, or check-ins saved on this device. Copy them into your account so they show up everywhere.",
+        "signInTitle": "Sign in to save your plans and crew",
+        "signInSub": "Your account keeps your profile, crew, and saved shifts on every device.",
+        "signUpSub": "Save your plans and crew. Guest mode still works without one."
+      },
+      "about": {
+        "what": "Sombra helps outdoor crews plan for heat, shade breaks, and water. It is free and works without an account."
+      },
+      "ui": {
+        "documentTitle": "Sombra — Heat plan for work",
+        "metaDescription": "Hourly heat guidance for outdoor work.",
+        "desktopTitle": "Heat guidance for your work site",
+        "desktopDescription": "Choose a place and shift hours to plan work, shade breaks, and water.",
+        "crewStatus": "Your crew",
+        "crewStatusUnavailable": "Crew information is temporarily unavailable.",
+        "pageTitle": "Plan your shift",
+        "introDescription": "See hourly conditions for your work site.",
+        "locationLabel": "Work location",
+        "locationHelp": "Choose the jobsite or delivery area, not your home address.",
+        "workerName": "Worker name",
+        "workerNamePlaceholder": "Name for this shift",
+        "newToHeatQuestion": "New to working in heat in the last 2 weeks?",
+        "stopBanner": "Stop work and move to a cool place."
+      },
       "taskIntensities": [
-        { "value": "easy", "label": "Easy", "forecastLabel": "Easy work", "example": "Driving equipment, inspecting, light tools" },
-        { "value": "moderate", "label": "Moderate", "forecastLabel": "Moderate work", "example": "Raking, weeding, light carpentry" },
-        { "value": "hard", "label": "Hard", "forecastLabel": "Hard work", "example": "Digging, carrying shingles, laying sod or concrete" }
+        {
+          "value": "easy",
+          "label": "Easy",
+          "forecastLabel": "Easy work",
+          "example": "Driving equipment, inspecting, light tools"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate",
+          "forecastLabel": "Moderate work",
+          "example": "Raking, weeding, light carpentry"
+        },
+        {
+          "value": "hard",
+          "label": "Hard",
+          "forecastLabel": "Hard work",
+          "example": "Digging, carrying shingles, laying sod or concrete"
+        }
       ],
       "checkIn": {
         "questions": [
-          { "id": "dizzy", "label": "Dizzy or lightheaded" },
-          { "id": "headache", "label": "Headache" },
-          { "id": "nausea", "label": "Nausea, vomiting, or muscle cramps" },
-          { "id": "weak", "label": "Very tired or weak" },
-          { "id": "hot_dry", "label": "Stopped sweating, or skin hot and dry" },
-          { "id": "confused", "label": "Confused or slurred speech" },
-          { "id": "fainted", "label": "Fainted, passed out, or had a seizure" }
+          {
+            "id": "dizzy",
+            "label": "Dizzy or lightheaded"
+          },
+          {
+            "id": "headache",
+            "label": "Headache"
+          },
+          {
+            "id": "nausea",
+            "label": "Nausea, vomiting, or muscle cramps"
+          },
+          {
+            "id": "weak",
+            "label": "Very tired or weak"
+          },
+          {
+            "id": "hot_dry",
+            "label": "Stopped sweating, or skin hot and dry"
+          },
+          {
+            "id": "confused",
+            "label": "Confused or slurred speech"
+          },
+          {
+            "id": "fainted",
+            "label": "Fainted, passed out, or had a seizure"
+          }
         ],
-        "pickWorker": "Who is checking in?", "pickWorkerSub": "Choose a person, or type a name.", "changeWorker": "Change person", "noWorkers": "Add your name in Settings or add crew to check in quickly.", "pageSub": "Track work, breaks, and water. Check in on how you feel.", "startWork": "Start work", "finishWork": "Finish work", "working": "Working", "worked": "Worked", "numbers": "{hours} worked, {water}, {breaks} breaks", "crewToday": "Today", "crewTap": "Tap a person to check them in.", "editCrew": "Manage crew"
+        "pickWorker": "Who is checking in?",
+        "pickWorkerSub": "Choose a person, or type a name.",
+        "changeWorker": "Change person",
+        "noWorkers": "Add your name in Settings or add crew to check in quickly.",
+        "pageSub": "Track work, breaks, and water. Check in on how you feel.",
+        "startWork": "Start work",
+        "finishWork": "Finish work",
+        "working": "Working",
+        "worked": "Worked",
+        "numbers": "{hours} worked, {water}, {breaks} breaks",
+        "crewToday": "Today",
+        "crewTap": "Tap a person to check them in.",
+        "editCrew": "Manage crew"
       }
     },
     "es": {
-      "mode": { "name": "Cuadrilla", "shortName": "Trabajo", "description": "Trabajo al aire libre, desde obras hasta entregas.", "group": "Cuadrilla", "member": "Trabajador", "leader": "Supervisor", "greetingStyle": "personal", "siteLabel": "Lugar de trabajo", "emptyState": "Tu cuadrilla aparecerá aquí.", "stopBanner": "Deja de trabajar y ve a un lugar fresco." },
-      "app": { "tagline": "Seguridad contra el calor para cuadrillas, equipos y familias.", "landingSub": "Prepárate para el calor, la sombra, los descansos y el agua antes de salir.", "crew": "Cuadrilla", "crewSub": "Personas para quienes planeas trabajo y registros.", "noCrew": "Aún no hay personas", "noCrewSub": "Agrega a las personas con quienes trabajas.", "usualWork": "Tipo de trabajo habitual", "newToHeat": "Nuevo en el trabajo con calor", "newToHeatHint": "Comenzó a trabajar al aire libre en las últimas 2 semanas", "testBody": "Es hora de consultar a tu cuadrilla.", "signInPrompt": "Inicia sesión para guardar tus planes y cuadrilla en varios dispositivos.", "deleteBody": "Esto elimina tu perfil, cuadrilla, turnos y registros de Sombra, y cierra tu sesión. No se puede deshacer.", "importBody": "Tienes un perfil, cuadrilla, turnos o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.", "signInTitle": "Inicia sesión para guardar tus planes y cuadrilla", "signInSub": "Tu cuenta guarda tu perfil, cuadrilla y turnos en todos tus dispositivos.", "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar Sombra sin una cuenta." },
-      "about": { "what": "Sombra ayuda a las cuadrillas al aire libre a planear el calor, los descansos a la sombra y el agua. Es gratis y funciona sin cuenta." },
-      "ui": { "documentTitle": "Sombra — Plan de calor para el trabajo", "metaDescription": "Orientación por hora para trabajar al aire libre con calor.", "desktopTitle": "Orientación para tu lugar de trabajo", "desktopDescription": "Elige un lugar y horario para planear el trabajo, los descansos a la sombra y el agua.", "crewStatus": "Tu cuadrilla", "crewStatusUnavailable": "La información de la cuadrilla no está disponible ahora.", "pageTitle": "Planea tu turno", "introDescription": "Consulta las condiciones por hora en tu lugar de trabajo.", "locationLabel": "Lugar de trabajo", "locationHelp": "Elige la obra o el área de entrega, no tu domicilio.", "workerName": "Nombre del trabajador", "workerNamePlaceholder": "Nombre para este turno", "newToHeatQuestion": "¿Es nuevo en el trabajo con calor durante las últimas 2 semanas?", "stopBanner": "Deja de trabajar y ve a un lugar fresco." },
+      "mode": {
+        "name": "Cuadrilla",
+        "shortName": "Trabajo",
+        "description": "Trabajo al aire libre, desde obras hasta entregas.",
+        "group": "Cuadrilla",
+        "member": "Trabajador",
+        "leader": "Supervisor",
+        "greetingStyle": "personal",
+        "siteLabel": "Lugar de trabajo",
+        "emptyState": "Tu cuadrilla aparecerá aquí.",
+        "stopBanner": "Deja de trabajar y ve a un lugar fresco."
+      },
+      "app": {
+        "tagline": "Seguridad contra el calor para cuadrillas, equipos y familias.",
+        "landingSub": "Prepárate para el calor, la sombra, los descansos y el agua antes de salir.",
+        "crew": "Cuadrilla",
+        "crewSub": "Personas para quienes planeas trabajo y registros.",
+        "noCrew": "Aún no hay personas",
+        "noCrewSub": "Agrega a las personas con quienes trabajas.",
+        "usualWork": "Tipo de trabajo habitual",
+        "newToHeat": "Nuevo en el trabajo con calor",
+        "newToHeatHint": "Comenzó a trabajar al aire libre en las últimas 2 semanas",
+        "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
+        "signInPrompt": "Inicia sesión para guardar tus planes y cuadrilla en varios dispositivos.",
+        "deleteBody": "Esto elimina tu perfil, cuadrilla, turnos y registros de Sombra, y cierra tu sesión. No se puede deshacer.",
+        "importBody": "Tienes un perfil, cuadrilla, turnos o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.",
+        "signInTitle": "Inicia sesión para guardar tus planes y cuadrilla",
+        "signInSub": "Tu cuenta guarda tu perfil, cuadrilla y turnos en todos tus dispositivos.",
+        "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar Sombra sin una cuenta."
+      },
+      "about": {
+        "what": "Sombra ayuda a las cuadrillas al aire libre a planear el calor, los descansos a la sombra y el agua. Es gratis y funciona sin cuenta."
+      },
+      "ui": {
+        "documentTitle": "Sombra — Plan de calor para el trabajo",
+        "metaDescription": "Orientación por hora para trabajar al aire libre con calor.",
+        "desktopTitle": "Orientación para tu lugar de trabajo",
+        "desktopDescription": "Elige un lugar y horario para planear el trabajo, los descansos a la sombra y el agua.",
+        "crewStatus": "Tu cuadrilla",
+        "crewStatusUnavailable": "La información de la cuadrilla no está disponible ahora.",
+        "pageTitle": "Planea tu turno",
+        "introDescription": "Consulta las condiciones por hora en tu lugar de trabajo.",
+        "locationLabel": "Lugar de trabajo",
+        "locationHelp": "Elige la obra o el área de entrega, no tu domicilio.",
+        "workerName": "Nombre del trabajador",
+        "workerNamePlaceholder": "Nombre para este turno",
+        "newToHeatQuestion": "¿Es nuevo en el trabajo con calor durante las últimas 2 semanas?",
+        "stopBanner": "Deja de trabajar y ve a un lugar fresco."
+      },
       "taskIntensities": [
-        { "value": "easy", "label": "Fácil", "forecastLabel": "Trabajo fácil", "example": "Conducir equipo, inspeccionar, usar herramientas ligeras" },
-        { "value": "moderate", "label": "Moderado", "forecastLabel": "Trabajo moderado", "example": "Rastrillar, quitar maleza, carpintería ligera" },
-        { "value": "hard", "label": "Intenso", "forecastLabel": "Trabajo intenso", "example": "Cavar, cargar tejas, colocar césped o concreto" }
+        {
+          "value": "easy",
+          "label": "Fácil",
+          "forecastLabel": "Trabajo fácil",
+          "example": "Conducir equipo, inspeccionar, usar herramientas ligeras"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderado",
+          "forecastLabel": "Trabajo moderado",
+          "example": "Rastrillar, quitar maleza, carpintería ligera"
+        },
+        {
+          "value": "hard",
+          "label": "Intenso",
+          "forecastLabel": "Trabajo intenso",
+          "example": "Cavar, cargar tejas, colocar césped o concreto"
+        }
       ],
       "checkIn": {
         "questions": [
-          { "id": "dizzy", "label": "Mareo o aturdimiento" },
-          { "id": "headache", "label": "Dolor de cabeza" },
-          { "id": "nausea", "label": "Náuseas, vómitos o calambres musculares" },
-          { "id": "weak", "label": "Mucho cansancio o debilidad" },
-          { "id": "hot_dry", "label": "Dejó de sudar o tiene la piel caliente y seca" },
-          { "id": "confused", "label": "Confusión o dificultad para hablar" },
-          { "id": "fainted", "label": "Se desmayó, perdió el conocimiento o tuvo convulsiones" }
+          {
+            "id": "dizzy",
+            "label": "Mareo o aturdimiento"
+          },
+          {
+            "id": "headache",
+            "label": "Dolor de cabeza"
+          },
+          {
+            "id": "nausea",
+            "label": "Náuseas, vómitos o calambres musculares"
+          },
+          {
+            "id": "weak",
+            "label": "Mucho cansancio o debilidad"
+          },
+          {
+            "id": "hot_dry",
+            "label": "Dejó de sudar o tiene la piel caliente y seca"
+          },
+          {
+            "id": "confused",
+            "label": "Confusión o dificultad para hablar"
+          },
+          {
+            "id": "fainted",
+            "label": "Se desmayó, perdió el conocimiento o tuvo convulsiones"
+          }
         ],
-        "pickWorker": "¿Quién va a hacer el registro?", "pickWorkerSub": "Elige a una persona o escribe un nombre.", "changeWorker": "Cambiar persona", "noWorkers": "Agrega tu nombre en Configuración o agrega personas para hacer registros rápidamente.", "pageSub": "Registra el trabajo, los descansos y el agua. Consulta cómo te sientes.", "startWork": "Empezar a trabajar", "finishWork": "Terminar el trabajo", "working": "Trabajando", "worked": "Trabajó", "numbers": "{hours} trabajadas, {water}, {breaks} descansos", "crewToday": "Hoy", "crewTap": "Toca a una persona para registrar cómo se siente.", "editCrew": "Administrar cuadrilla"
+        "pickWorker": "¿Quién va a hacer el registro?",
+        "pickWorkerSub": "Elige a una persona o escribe un nombre.",
+        "changeWorker": "Cambiar persona",
+        "noWorkers": "Agrega tu nombre en Configuración o agrega personas para hacer registros rápidamente.",
+        "pageSub": "Registra el trabajo, los descansos y el agua. Consulta cómo te sientes.",
+        "startWork": "Empezar a trabajar",
+        "finishWork": "Terminar el trabajo",
+        "working": "Trabajando",
+        "worked": "Trabajó",
+        "numbers": "{hours} trabajadas, {water}, {breaks} descansos",
+        "crewToday": "Hoy",
+        "crewTap": "Toca a una persona para registrar cómo se siente.",
+        "editCrew": "Administrar cuadrilla"
       }
     }
   }

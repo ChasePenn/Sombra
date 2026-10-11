@@ -50,3 +50,4 @@ Thumbs.db
 
 # Temporary files written by test runs
 artifacts/api-server/tests/.*-test.mjs
+artifacts/api-server/tests/.*.test-bundle.mjs

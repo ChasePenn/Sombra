@@ -165,6 +165,15 @@
               <div class="forecast-tags"><span id="forecast-intensity" class="meta-tag"></span><span id="forecast-acclimation" class="meta-tag"></span></div>
             </div>
           </section>
+          <section id="conditions-panel" class="conditions-panel" aria-labelledby="conditions-title" hidden>
+            <h2 id="conditions-title" data-i18n="extras.conditionsTitle"></h2>
+            <div id="conditions-alerts" class="conditions-alerts"></div>
+            <div class="conditions-grid">
+              <div class="condition-tile" id="uv-tile" hidden><span data-i18n="extras.uvTitle"></span><strong id="uv-level"></strong><small id="uv-peak"></small></div>
+              <div class="condition-tile" id="aqi-tile" hidden><span data-i18n="extras.aqiTitle"></span><strong id="aqi-level"></strong><small id="aqi-peak"></small></div>
+            </div>
+            <p id="conditions-dust" class="conditions-dust" hidden data-i18n="extras.dust"></p>
+          </section>
           <div class="results-top">
             <div class="section-heading">
               <h2 id="results-title" data-i18n="results.hourlyConditions"></h2>
@@ -186,6 +195,10 @@
               <button id="full-plan-link" class="text-link" type="button" data-i18n="results.fullPlan"></button>
             </div>
             <div id="hour-strip" class="hour-strip" role="group" data-i18n-aria-label="results.restOfToday"></div>
+          </section>
+          <section id="bring-panel" class="bring-panel" aria-labelledby="bring-title" hidden>
+            <h2 id="bring-title" data-i18n="extras.bringTitle"></h2>
+            <ul id="bring-list" class="bring-list"></ul>
           </section>
           <section id="site-check" class="site-check" aria-labelledby="site-check-title" hidden>
             <div class="site-check-heading">
@@ -262,6 +275,7 @@
               <span id="schedule-site-badge" class="site-adjusted-badge" hidden data-i18n="results.siteAdjusted"></span>
             </div>
             <div id="stop-work-banner" class="stop-work-banner" role="alert" hidden data-i18n="results.stopWork"></div>
+            <p id="profile-caution" class="profile-caution" hidden data-i18n="extras.profileNote"></p>
             <ol id="schedule-cards" class="schedule-cards" data-i18n-aria-label="results.scheduleAria"></ol>
             <p id="schedule-status" class="forecast-status" role="status" aria-live="polite" hidden></p>
             <p id="schedule-policy-notes" class="schedule-policy-notes">
