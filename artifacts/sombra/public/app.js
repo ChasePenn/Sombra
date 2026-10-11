@@ -14,6 +14,10 @@ const requestedModeId = new URLSearchParams(window.location.search).get("mode") 
 const selectedModeId = requestedModeId === "workers" ? "work" : requestedModeId;
 const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
 
+// Forecast hours and the sun angle use Arizona time (no daylight saving). Outside Arizona that
+// can differ from local time, so the planner says so instead of quietly showing shifted hours.
+const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 && lon <= -109.0;
+
 (() => {
   "use strict";
 
@@ -378,8 +382,10 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     suggestions.hidden = true;
     suggestions.replaceChildren();
     setLocationMessage("location.selected");
+    document.querySelector("#arizona-note").hidden = isInArizona(item.latitude, item.longitude);
   };
   const clearSelectedLocation = (keepText = false) => {
+    document.querySelector("#arizona-note").hidden = true;
     selectedLocation = null;
     locationNameInput.value = "";
     latitudeInput.value = "";
@@ -725,7 +731,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     const [hour] = time.split(":").map(Number);
     return `${String((hour + 1) % 24).padStart(2, "0")}:00`;
   };
-  const appendWaterLine = (parent, cups, varied = false) => {
+  const appendWaterLine = (parent, cups, varied = false, dailyCapReached = false) => {
     const water = document.createElement("p");
     water.className = "schedule-water";
     const icons = document.createElement("span");
@@ -741,7 +747,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     }
     const text = document.createElement("span");
     text.textContent = translate(
-      cups === 0 ? "results.noWater" : varied ? "results.waterUpTo" : "results.waterPerHour",
+      dailyCapReached && cups === 0 ? "extras.waterDayCap" : cups === 0 ? "results.noWater" : varied ? "results.waterUpTo" : "results.waterPerHour",
       { amount: cups },
     );
     water.append(icons, text);
@@ -858,7 +864,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
         blockSummary.append(bar);
       }
       const waterCups = Math.max(...group.hours.map((item) => item.waterCups));
-      appendWaterLine(blockSummary, waterCups, group.hours.some((item) => item.waterCups !== waterCups));
+      appendWaterLine(blockSummary, waterCups, group.hours.some((item) => item.waterCups !== waterCups), group.hours.every((item) => item.dailyCapReached));
       if (single) {
         expander.append(blockSummary);
         card.append(expander);
@@ -879,7 +885,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
         hourTitle.textContent = formatTime(item.time, timezone);
         hourRow.append(hourTitle);
         appendWorkAction(hourRow, item);
-        appendWaterLine(hourRow, item.waterCups);
+        appendWaterLine(hourRow, item.waterCups, false, item.dailyCapReached);
         const technical = document.createElement("details");
         technical.className = "hour-technical-details";
         const technicalSummary = document.createElement("summary");

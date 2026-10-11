@@ -949,3 +949,5 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 /* Longer Spanish labels wrap onto a second line instead of pushing past the screen edge. */
 .results-actions { flex-wrap: wrap; max-width: 100%; }
 .results-actions .button { flex: 1 1 auto; min-width: 0; white-space: normal; }
+.arizona-note { margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; background: #FFF4D6; color: var(--ink, #2A1206); font-size: 14px; line-height: 1.4; }
+.arizona-note[hidden] { display: none; }

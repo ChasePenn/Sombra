@@ -87,6 +87,8 @@ export function buildWorkRestSchedule({
       remainingWaterQt,
     );
     remainingWaterQt = Math.max(0, remainingWaterQt - waterQt);
+    // True when the 12-quart daily limit, not the heat, is what lowered this hour's water.
+    const dailyCapReached = waterQt < Math.min(recommendation.water_qt, table.max_water_qt_per_hour);
 
     return {
       time: hour.time ?? "",
@@ -98,6 +100,7 @@ export function buildWorkRestSchedule({
       restMinutes: recommendation.rest,
       waterQt,
       waterCups: Math.round(waterQt * 4),
+      dailyCapReached,
       stopWork: category === maximumCategory && (stopAtExtreme || intensity === "hard"),
     };
   });

@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Check, Lock, Phone, Plus, Trash2, TriangleAlert } from 'lucide-react';
+import { BellOff, Check, Lock, Phone, Plus, Trash2, TriangleAlert } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { Sheet } from '../components/Sheet';
 import { useSession } from '../lib/session';
@@ -77,6 +77,7 @@ export default function CareCheck() {
           <p>{f.careSub}</p>
         </header>
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
+        <p className="privacy-note"><BellOff size={16} aria-hidden="true" />{f.careReminderLimit}</p>
         {heatWarning && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
 
         {msg && (
