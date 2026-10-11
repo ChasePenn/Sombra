@@ -40,3 +40,12 @@ jobs:
           grep -n -E -A12 "not ok" live.log | grep -vE "^--$" | head -45 | sed -E 's/^([0-9]+)[:-]/::error::L\1 /'
           tail -n 15 live.log | nl -ba | sed -E 's/^ *([0-9]+)\t/::error::tail\1 /'
           exit $status
+      - name: Map server status
+        if: always()
+        shell: bash
+        run: |
+          q='[out:json][timeout:10];node["amenity"="library"](around:2000,33.45,-112.07);out 3;'
+          for u in https://overpass.private.coffee/api/interpreter https://maps.mail.ru/osm/tools/overpass/api/interpreter https://overpass-api.de/api/interpreter; do
+            r=$(curl -s -o /tmp/o.json -w "%{http_code} %{time_total}s" -A "sombra-heat-safety (https://github.com/ChasePenn/sombra)" --max-time 20 --data-urlencode "data=$q" "$u" || echo "curl-failed")
+            echo "::notice::$u -> $r $(head -c 120 /tmp/o.json 2>/dev/null | tr -d '\n')"
+          done
