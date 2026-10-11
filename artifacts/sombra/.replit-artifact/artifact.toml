@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Sombra"
+description = "A mobile-first heat-safety planner for outdoor crews in Phoenix. It combines Open-Meteo forecasts with outdoor WBGT calculations to help crews plan safer shifts."
+version = "1.0.0"
+id = "artifacts/sombra"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25823
+
+[services.development]
+run = "pnpm --filter @workspace/sombra run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/sombra", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/sombra/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25823"
+BASE_PATH = "/"

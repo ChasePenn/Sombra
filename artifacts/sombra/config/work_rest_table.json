@@ -1,0 +1,24 @@
+{
+  "source": "U.S. Army TB MED 507 Work/Rest and Fluid Replacement Guide",
+  "max_water_qt_per_hour": 1.5,
+  "max_water_qt_per_day": 12,
+  "categories": [
+    { "category": 0, "label": "Low risk",  "color": "green",  "min_f": null, "max_f": 77.9,
+      "easy": {"work": "NL", "rest": 0,  "water_qt": 0.5},  "moderate": {"work": "NL", "rest": 0,  "water_qt": 0.5},  "hard": {"work": "NL", "rest": 0,  "water_qt": 0.75} },
+    { "category": 1, "label": "Caution",   "color": "green",  "min_f": 78,   "max_f": 81.9,
+      "easy": {"work": "NL", "rest": 0,  "water_qt": 0.5},  "moderate": {"work": "NL", "rest": 0,  "water_qt": 0.75}, "hard": {"work": 40,   "rest": 20, "water_qt": 0.75} },
+    { "category": 2, "label": "Elevated",  "color": "yellow", "min_f": 82,   "max_f": 84.9,
+      "easy": {"work": "NL", "rest": 0,  "water_qt": 0.5},  "moderate": {"work": 50,   "rest": 10, "water_qt": 0.75}, "hard": {"work": 30,   "rest": 30, "water_qt": 1} },
+    { "category": 3, "label": "High",      "color": "orange", "min_f": 85,   "max_f": 87.9,
+      "easy": {"work": "NL", "rest": 0,  "water_qt": 0.75}, "moderate": {"work": 40,   "rest": 20, "water_qt": 0.75}, "hard": {"work": 30,   "rest": 30, "water_qt": 1} },
+    { "category": 4, "label": "Very high", "color": "red",    "min_f": 88,   "max_f": 89.9,
+      "easy": {"work": "NL", "rest": 0,  "water_qt": 0.75}, "moderate": {"work": 30,   "rest": 30, "water_qt": 0.75}, "hard": {"work": 20,   "rest": 40, "water_qt": 1} },
+    { "category": 5, "label": "Extreme",   "color": "black",  "min_f": 90,   "max_f": null,
+      "easy": {"work": 50,   "rest": 10, "water_qt": 1},    "moderate": {"work": 20,   "rest": 40, "water_qt": 1},    "hard": {"work": 10,   "rest": 50, "water_qt": 1} }
+  ],
+  "app_policy_notes": [
+    "Category 0 values are an app assumption (below the table's range), not from TB MED 507.",
+    "Workers new to the heat are treated as ONE category higher (app safety policy, conservative).",
+    "Rest = sitting or standing in shade if possible."
+  ]
+}

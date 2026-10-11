@@ -1,0 +1,123 @@
+/*
+  sombra UI layer: the final say on the app's look.
+  Loaded after styles.css. Brand: orange + dark brown on a warm canvas,
+  chunky "pressable" buttons, bordered cards, Rubik headings, Atkinson body.
+*/
+:root {
+  --bark: var(--brown);
+  --bark-dark: #1A0902;
+  --line: #F0E2D8;
+  --edge: #E8D3C4;
+  --tone-orange: #FF6A2B; --tone-orange-tint: #FFE6D9;
+  --tone-blue: #2F86C9; --tone-blue-tint: #E4F0FA;
+  --tone-green: #2FA36B; --tone-green-tint: #E2F4EA;
+}
+
+body { background: var(--canvas); }
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
+
+/* Chunky buttons: solid fill with a darker bottom edge that presses down. */
+.btn { min-height: 56px; border-radius: 16px; font-size: 1.05rem; font-weight: 700; border: 0; }
+.btn:active { transform: translateY(3px); box-shadow: none !important; }
+.btn-primary { background: var(--mesquite); color: #fff; box-shadow: 0 4px 0 var(--mesquite-dark); }
+.btn-secondary { background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); }
+.btn-quiet { color: var(--mesquite-dark); }
+.btn[disabled] { opacity: 1; background: #FFCDB5; box-shadow: 0 4px 0 #F5B897; color: #fff; }
+.btn-secondary[disabled] { background: #fff; color: var(--ink-soft); }
+
+/* Brand */
+.brand img { border-radius: 11px; }
+.wordmark { font-weight: 800; letter-spacing: -0.03em; }
+
+/* ---------- Landing ---------- */
+.landing { max-width: 440px; padding: calc(18px + var(--safe-t)) 20px calc(24px + var(--safe-b)); gap: 0; }
+.landing-top { display: flex; align-items: center; justify-content: space-between; }
+.landing-top .brand img { width: 40px; height: 40px; }
+.landing-top .wordmark { font-size: 1.45rem; }
+.landing-about { color: var(--ink-soft); font-weight: 700; text-decoration: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 4px; }
+.landing-hero { margin-top: 34px; }
+.landing h1 { font-size: 2.35rem; line-height: 1.05; margin: 0; max-width: 13ch; }
+.landing-sub { margin-top: 12px; font-size: 1.05rem; max-width: 32ch; }
+
+.preview { position: relative; margin: 28px 0 8px; height: 286px; }
+.preview-today { position: absolute; left: 0; right: 28px; top: 0; padding: 18px 20px; border-radius: 26px; background: var(--r-veryhigh); color: #fff; box-shadow: 0 6px 0 #B5302F; display: grid; gap: 6px; transform: rotate(-2deg); }
+.preview-time { font-weight: 700; opacity: .9; font-size: .95rem; }
+.preview-today strong { font: 800 2rem/1.05 var(--head); letter-spacing: -0.02em; }
+.preview-gauge { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; margin: 6px 0 4px; }
+.preview-gauge i { height: 9px; border-radius: 6px; background: #fff; }
+.preview-gauge i.off { background: rgba(255,255,255,.32); }
+.preview-advice { font-weight: 700; font-size: 1rem; line-height: 1.3; }
+.preview-chip { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 9px; border-radius: 999px; background: #fff; border: 2px solid var(--line); box-shadow: 0 4px 0 var(--line); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+.preview-chip-check { right: 0; bottom: 56px; transform: rotate(2.5deg); }
+.preview-chip-water { left: 14px; bottom: 0; padding-left: 12px; color: var(--monsoon-dark); transform: rotate(-1.5deg); }
+.preview-ring { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #7A5BB5; color: #fff; font: 700 .72rem var(--head); box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--r-low); }
+
+.landing-actions { margin-top: 26px; gap: 14px; }
+.landing-who { margin-top: 34px; }
+.landing-who h2 { font-size: 1.3rem; margin-bottom: 12px; }
+.landing-modes { gap: 12px; margin-top: 0; }
+.landing-mode { min-height: 76px; padding: 12px 14px; gap: 14px; border: 2px solid var(--line); border-radius: 22px; box-shadow: 0 4px 0 var(--line); background: #fff; transition: transform .08s; }
+.landing-mode:active { transform: translateY(3px); box-shadow: none; }
+.landing-mode:hover { background: #fff; border-color: var(--edge); }
+.landing-mode-copy { flex: 1; display: grid; gap: 2px; }
+.landing-mode strong { font: 700 1.05rem var(--head); }
+.landing-mode small { font-size: .9rem; }
+.landing-mode-arrow { color: var(--ink-soft); flex: none; }
+.landing-foot { justify-content: center; text-align: center; padding-top: 30px; font-size: .92rem; }
+
+/* Mode icon tiles (landing, welcome, mode sheet) */
+.mode-choice-icon { flex: none; width: 50px; height: 50px; border-radius: 16px; display: grid; place-items: center; background: var(--tone-orange-tint); color: var(--tone-orange); }
+.tone-blue .mode-choice-icon { background: var(--tone-blue-tint); color: var(--tone-blue); }
+.tone-green .mode-choice-icon { background: var(--tone-green-tint); color: var(--tone-green); }
+
+/* Mode choice buttons (welcome + mode sheet) */
+.mode-choice-list { gap: 12px; }
+.mode-choice { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 78px; padding: 12px 14px; text-align: left; background: #fff; border: 2px solid var(--line); border-radius: 22px; box-shadow: 0 4px 0 var(--line); cursor: pointer; }
+.mode-choice > i { display: none; }
+.mode-choice:active { transform: translateY(3px); box-shadow: none; }
+.mode-choice[aria-pressed='true'], .mode-choice[aria-checked='true'] { border-color: var(--mesquite); box-shadow: 0 4px 0 var(--mesquite-dark); }
+.mode-choice-copy { flex: 1; display: grid; gap: 2px; }
+.mode-choice-copy strong { font: 700 1.05rem var(--head); }
+.mode-choice-copy small { color: var(--ink-soft); font-size: .9rem; line-height: 1.3; }
+.mode-choice-mark { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #fff; background: transparent; border: 2px solid var(--line); }
+.mode-choice[aria-pressed='true'] .mode-choice-mark, .mode-choice[aria-checked='true'] .mode-choice-mark { background: var(--mesquite); border-color: var(--mesquite); }
+
+/* ---------- Welcome ---------- */
+.slide { padding-top: 5vh; }
+.slide-icon { background: var(--mesquite-tint); color: var(--mesquite); border-radius: 28px; }
+.slide h1 { font-size: 2rem; line-height: 1.08; }
+.dots button[aria-current='step'] span { background: var(--mesquite); }
+.dots span { background: var(--edge); }
+
+/* Segmented controls: selected = solid orange. */
+.seg { background: transparent; padding: 0; gap: 8px; }
+.seg button { min-height: 52px; border: 2px solid var(--line); background: #fff; border-radius: 16px; color: var(--ink); box-shadow: 0 3px 0 var(--line); }
+.seg button[aria-pressed='true'] { background: var(--mesquite); border-color: var(--mesquite); color: #fff; box-shadow: 0 3px 0 var(--mesquite-dark); }
+
+/* Inputs */
+.input { min-height: 54px; border-radius: 16px; border: 2px solid var(--edge); }
+.input:focus-visible { outline: 3px solid var(--mesquite); outline-offset: 1px; border-color: var(--mesquite); }
+
+/* ---------- App shell ---------- */
+.topbar { background: var(--canvas); }
+.lang-switch { border: 2px solid var(--line); }
+.lang-switch button[aria-pressed='true'] { color: var(--mesquite-dark); background: transparent; }
+.mode-chip { border: 2px solid var(--line); }
+.tabs { border-top: 2px solid var(--line); }
+.tab[aria-current='page'] { color: var(--mesquite-dark); }
+.checkin-tab, .checkin-tab[aria-current='page'] { background: var(--bark); color: #fff; box-shadow: 0 5px 0 var(--bark-dark); border-radius: 24px; }
+.checkin-tab:active { transform: translateY(3px); box-shadow: none; }
+
+/* Cards and lists */
+.group, .checkin-hero, .empty { border: 2px solid var(--line); border-radius: 24px; }
+.empty { border-style: dashed; border-color: var(--edge); }
+.notice, .prompt { background: var(--mesquite-tint); color: var(--ink); border-radius: 16px; }
+.prompt a { color: var(--mesquite-dark); }
+.avatar { background: var(--mesquite-tint); color: var(--mesquite-dark); }
+.switch[aria-checked='true'] { background: var(--mesquite); }
+.scrim { background: rgba(42, 18, 6, .45); }
+.sheet-grip { background: var(--edge); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:active, .landing-mode:active, .mode-choice:active, .checkin-tab:active { transform: none; }
+}

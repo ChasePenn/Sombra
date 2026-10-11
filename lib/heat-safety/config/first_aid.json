@@ -1,0 +1,30 @@
+{
+  "sources": [
+    { "name": "OSHA: Heat illness and first aid", "url": "https://www.osha.gov/heat-exposure/illness-first-aid" },
+    { "name": "CDC/NIOSH: Heat-related illnesses", "url": "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html" }
+  ],
+  "en": {
+    "DANGER": {
+      "title": "Possible heat stroke. Call 911 now.",
+      "steps": ["Call 911.", "Move the person to a cool, shaded area.", "Cool them right away with cold water, ice packs, or wet cloths on the head, neck, armpits, and groin.", "Remove extra clothing.", "Stay with them until help arrives."],
+      "reminder": "Stay with them. Do not give anything to drink if they are confused, unconscious, or unable to swallow."
+    },
+    "CAUTION": {
+      "title": "Stop work and cool down.",
+      "steps": ["Stop work and rest in a cool, shaded area.", "Drink water if you are alert and able to swallow.", "Remove extra clothing and use cool, wet cloths.", "Get medical help if symptoms get worse or do not improve within 1 hour."],
+      "reminder": "If confusion, fainting, or hot, dry skin develops, call 911 right away."
+    }
+  },
+  "es": {
+    "DANGER": {
+      "title": "Posible golpe de calor. Llama al 911 ahora.",
+      "steps": ["Llama al 911.", "Lleva a la persona a un lugar fresco y con sombra.", "Enfríala de inmediato con agua fría, hielo o paños mojados en la cabeza, el cuello, las axilas y la ingle.", "Quita la ropa adicional.", "Quédate con la persona hasta que llegue ayuda."],
+      "reminder": "Quédate con la persona. No le des nada de beber si está confundida, inconsciente o no puede tragar."
+    },
+    "CAUTION": {
+      "title": "Deja de trabajar y refréscate.",
+      "steps": ["Deja de trabajar y descansa en un lugar fresco y con sombra.", "Bebe agua si estás alerta y puedes tragar.", "Quita la ropa adicional y usa paños frescos y mojados.", "Busca ayuda médica si los síntomas empeoran o no mejoran dentro de 1 hora."],
+      "reminder": "Si hay confusión, desmayo o piel caliente y seca, llama al 911 de inmediato."
+    }
+  }
+}

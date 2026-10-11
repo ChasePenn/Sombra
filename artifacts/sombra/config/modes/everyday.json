@@ -1,0 +1,55 @@
+{
+  "id": "everyday",
+  "icon": "sun-horizon",
+  "welcomeQuestions": { "en": "Who's Sombra for today?", "es": "¿Para quién es Sombra hoy?" },
+  "taglines": { "en": "Heat safety for every crew, team and family.", "es": "Seguridad contra el calor para cuadrillas, equipos y familias." },
+  "rules": { "categoryIncrease": 0, "stopAtExtreme": false, "planKind": "activity-window", "coolerAdviceCategory": 4 },
+  "locales": {
+    "en": {
+      "mode": { "name": "Everyday outdoors", "shortName": "Outdoors", "description": "For families, walks, hikes, and outdoor events.", "group": "Group", "member": "Person", "leader": "Organizer", "greetingStyle": "personal", "siteLabel": "Outdoor activity location", "emptyState": "Add your group to plan an outing.", "stopBanner": "Avoid being active in extreme heat." },
+      "app": { "landingSub": "Plan a walk, hike, errand, or event with heat, shade, and water in mind.", "crew": "Group", "crewSub": "People joining your outdoor activity.", "noCrew": "No group added yet", "noCrewSub": "Add the people going with you.", "usualWork": "Usual activity", "newToHeat": "New to being active in heat", "newToHeatHint": "Started outdoor activity in the last 2 weeks", "testBody": "Time to check in with your group.", "signInPrompt": "Sign in to save your plans and group across devices.", "deleteBody": "This removes your profile, group, saved outings, and check-ins from Sombra, then signs you out. It cannot be undone.", "importBody": "You have a profile, group, outings, or check-ins saved on this device. Copy them into your account so they show up everywhere.", "signInTitle": "Sign in to save your plans and group", "signInSub": "Your account keeps your profile, group, and saved outings on every device.", "signUpSub": "Save your plans and group. Guest mode still works without an account." },
+      "about": { "what": "Sombra helps families and groups plan time outdoors around heat, shade breaks, and water. It is free and works without an account." },
+      "ui": { "documentTitle": "Sombra — Everyday outdoor heat safety", "metaDescription": "Plan a walk, hike, outing, or event around the heat.", "desktopTitle": "Heat guidance for your outing", "desktopDescription": "Choose your activity location and time window to plan for shade and water.", "crewStatus": "Your group", "crewStatusUnavailable": "Group information is temporarily unavailable.", "pageTitle": "Plan an activity", "introDescription": "Check conditions for your time outdoors.", "locationLabel": "Activity location", "locationHelp": "Choose the place you plan to visit.", "workerName": "Activity lead", "workerNamePlaceholder": "Name for this plan", "shiftDate": "Activity date", "shiftHours": "Activity window", "localTimeHelp": "Local time at your activity location", "newToHeatQuestion": "New to outdoor activity in heat in the last 2 weeks?", "stopBanner": "Avoid being active in extreme heat.", "coolerAdvice": "Cooler before 9 AM and after 7 PM." },
+      "taskIntensities": [
+        { "value": "easy", "label": "Easy", "forecastLabel": "Easy activity", "example": "Walking, waiting at a bus stop, light gardening" },
+        { "value": "moderate", "label": "Moderate", "forecastLabel": "Moderate activity", "example": "Yard work, hiking on flat trails, outdoor events" },
+        { "value": "hard", "label": "Hard", "forecastLabel": "Hard activity", "example": "Hiking uphill, running, moving furniture" }
+      ],
+      "checkIn": {
+        "questions": [
+          { "id": "dizzy", "label": "Dizzy or lightheaded" },
+          { "id": "headache", "label": "Headache" },
+          { "id": "nausea", "label": "Nausea, vomiting, or muscle cramps" },
+          { "id": "weak", "label": "Very tired or weak" },
+          { "id": "hot_dry", "label": "Stopped sweating, or skin hot and dry" },
+          { "id": "confused", "label": "Confused or slurred speech" },
+          { "id": "fainted", "label": "Fainted, passed out, or had a seizure" }
+        ],
+        "pickWorker": "Who is checking in?", "pickWorkerSub": "Choose someone in your group.", "changeWorker": "Change person", "noWorkers": "Add people in Settings to check in quickly.", "pageSub": "Log time outside, breaks, and water. Check in on how everyone feels.", "startWork": "Start activity", "finishWork": "Finish activity", "working": "Active", "worked": "Active", "numbers": "{hours} active, {water}, {breaks} breaks", "crewToday": "Today", "crewTap": "Tap someone to check in.", "editCrew": "Manage group"
+      }
+    },
+    "es": {
+      "mode": { "name": "Actividades al aire libre", "shortName": "Afuera", "description": "Para familias, caminatas, excursiones y eventos.", "group": "Grupo", "member": "Persona", "leader": "Organizador", "greetingStyle": "personal", "siteLabel": "Lugar de la actividad", "emptyState": "Agrega a tu grupo para planear una salida.", "stopBanner": "Evita la actividad física durante el calor extremo." },
+      "app": { "landingSub": "Planea una caminata, diligencia o evento pensando en el calor, la sombra y el agua.", "crew": "Grupo", "crewSub": "Personas que te acompañan en la actividad al aire libre.", "noCrew": "Aún no hay grupo", "noCrewSub": "Agrega a las personas que irán contigo.", "usualWork": "Actividad habitual", "newToHeat": "Nuevo en la actividad con calor", "newToHeatHint": "Comenzó actividad al aire libre en las últimas 2 semanas", "testBody": "Es hora de consultar a tu grupo.", "signInPrompt": "Inicia sesión para guardar tus planes y grupo en varios dispositivos.", "deleteBody": "Esto elimina tu perfil, grupo, salidas y registros de Sombra, y cierra tu sesión. No se puede deshacer.", "importBody": "Tienes un perfil, grupo, salidas o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.", "signInTitle": "Inicia sesión para guardar tus planes y grupo", "signInSub": "Tu cuenta guarda tu perfil, grupo y salidas en todos tus dispositivos.", "signUpSub": "Guarda tus planes y grupo. También puedes usar Sombra sin cuenta." },
+      "about": { "what": "Sombra ayuda a familias y grupos a planear actividades al aire libre según el calor, la sombra y el agua. Es gratis y funciona sin cuenta." },
+      "ui": { "documentTitle": "Sombra — Seguridad al aire libre", "metaDescription": "Planea una caminata, excursión o evento según el calor.", "desktopTitle": "Orientación para tu salida", "desktopDescription": "Elige el lugar y horario de tu actividad para planear la sombra y el agua.", "crewStatus": "Tu grupo", "crewStatusUnavailable": "La información del grupo no está disponible ahora.", "pageTitle": "Planea una actividad", "introDescription": "Consulta las condiciones para estar al aire libre.", "locationLabel": "Lugar de la actividad", "locationHelp": "Elige el lugar que planeas visitar.", "workerName": "Responsable de la actividad", "workerNamePlaceholder": "Nombre para este plan", "shiftDate": "Fecha de la actividad", "shiftHours": "Horario de la actividad", "localTimeHelp": "Hora local en el lugar de la actividad", "newToHeatQuestion": "¿Es nuevo en las actividades al aire libre con calor durante las últimas 2 semanas?", "stopBanner": "Evita la actividad física durante el calor extremo.", "coolerAdvice": "Más fresco antes de las 9 a. m. y después de las 7 p. m." },
+      "taskIntensities": [
+        { "value": "easy", "label": "Fácil", "forecastLabel": "Actividad fácil", "example": "Caminar, esperar el autobús, jardinería ligera" },
+        { "value": "moderate", "label": "Moderada", "forecastLabel": "Actividad moderada", "example": "Trabajo en el jardín, senderos planos, eventos al aire libre" },
+        { "value": "hard", "label": "Intensa", "forecastLabel": "Actividad intensa", "example": "Subir senderos, correr, mover muebles" }
+      ],
+      "checkIn": {
+        "questions": [
+          { "id": "dizzy", "label": "Mareo o aturdimiento" },
+          { "id": "headache", "label": "Dolor de cabeza" },
+          { "id": "nausea", "label": "Náuseas, vómitos o calambres musculares" },
+          { "id": "weak", "label": "Mucho cansancio o debilidad" },
+          { "id": "hot_dry", "label": "Dejó de sudar o tiene la piel caliente y seca" },
+          { "id": "confused", "label": "Confusión o dificultad para hablar" },
+          { "id": "fainted", "label": "Se desmayó o tuvo convulsiones" }
+        ],
+        "pickWorker": "¿Quién va a hacer el registro?", "pickWorkerSub": "Elige a alguien del grupo.", "changeWorker": "Cambiar persona", "noWorkers": "Agrega personas en Configuración para hacer registros rápidamente.", "pageSub": "Registra el tiempo afuera, los descansos y el agua. Consulta cómo se siente cada persona.", "startWork": "Empezar actividad", "finishWork": "Terminar actividad", "working": "En actividad", "worked": "En actividad", "numbers": "{hours} en actividad, {water}, {breaks} descansos", "crewToday": "Hoy", "crewTap": "Toca a alguien para consultar cómo se siente.", "editCrew": "Administrar grupo"
+      }
+    }
+  }
+}
