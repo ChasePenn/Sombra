@@ -13,10 +13,20 @@ for arg in "$@"; do [ "$arg" = "--live" ] && live=true; done
 
 results=()
 failed=0
+log_dir=$(mktemp -d)
 step() {
   local name="$1"; shift
+  local log="$log_dir/$(echo "$name" | tr -c 'a-zA-Z0-9' '_').log"
   echo "==> $name"
-  if "$@"; then results+=("PASS     $name"); else results+=("FAIL     $name"); failed=1; fi
+  if "$@" 2>&1 | tee "$log"; [ "${PIPESTATUS[0]}" -eq 0 ]; then
+    results+=("PASS     $name")
+  else
+    results+=("FAIL     $name"); failed=1
+    # On GitHub, put the end of the failing output on the run page (numbered so lines aren't merged).
+    if [ -n "${GITHUB_ACTIONS:-}" ]; then
+      grep -vE "^\s*$" "$log" | tail -n 25 | nl -ba | sed -E "s/^ *([0-9]+)\t/::error title=${name}::\1 /"
+    fi
+  fi
 }
 skip() { results+=("SKIPPED  $1 ($2)"); }
 
