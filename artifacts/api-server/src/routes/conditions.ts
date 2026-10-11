@@ -15,13 +15,13 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 export const NWS_ALERTS_URL = "https://api.weather.gov/alerts/active";
 export const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-// The main Overpass server has been overloaded since spring 2026 and turns away busy
-// clients, so start with community servers that have no rate limit and use it last.
+// The main Overpass server has been overloaded since spring 2026 and sometimes turns
+// requests away; two community servers are the backup.
 // List from https://wiki.openstreetmap.org/wiki/Overpass_API (public instances).
 export const OVERPASS_MIRRORS = [
+  OVERPASS_URL,
   "https://overpass.private.coffee/api/interpreter",
   "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
-  OVERPASS_URL,
 ];
 // Places barely change day to day; keeping them a day spares the shared servers.
 const PLACES_TTL_MS = 24 * 60 * 60 * 1000;
@@ -259,18 +259,30 @@ export function summarizePlaces(elements: OverpassElement[], origin: { lat: numb
     .slice(0, 20);
 }
 
+/** A box about 3 km around the point. Box filters cost the Overpass server far less than radius searches. */
+export function placesQuery(lat: number, lon: number) {
+  const dLat = 3000 / 111_320;
+  const dLon = 3000 / (111_320 * Math.cos((lat * Math.PI) / 180));
+  const box = [lat - dLat, lon - dLon, lat + dLat, lon + dLon].map((n) => n.toFixed(4)).join(",");
+  return `[out:json][timeout:15][bbox:${box}];(node[amenity=drinking_water];nwr[amenity~"^(library|community_centre)$"];nwr[shop=mall];node[amenity=shelter];);out center 80;`;
+}
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function loadPlaces(lat: number, lon: number) {
-  const radius = 3000;
-  const around = `(around:${radius},${lat},${lon})`;
-  const query = `[out:json][timeout:15];(
-    node["amenity"="drinking_water"]${around};
-    nwr["amenity"="library"]${around};
-    nwr["amenity"="community_centre"]${around};
-    nwr["shop"="mall"]${around};
-    node["amenity"="shelter"]${around};
-  );out center 80;`;
+  const query = placesQuery(lat, lon);
+  // The main server is busy but usually answers on a second try a few seconds later.
+  // Overpass asks clients to back off for 30 s after a 429, so that case skips straight to the next server.
+  const attempts: Array<{ url: string; delay: number }> = [
+    { url: OVERPASS_URL, delay: 0 },
+    { url: OVERPASS_URL, delay: 5_000 },
+    ...OVERPASS_MIRRORS.filter((url) => url !== OVERPASS_URL).map((url) => ({ url, delay: 0 })),
+  ];
   let lastError: unknown = null;
-  for (const url of OVERPASS_MIRRORS) {
+  let mainRateLimited = false;
+  for (const { url, delay } of attempts) {
+    if (url === OVERPASS_URL && mainRateLimited) continue;
+    if (delay) await wait(delay);
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -278,6 +290,7 @@ async function loadPlaces(lat: number, lon: number) {
         body: new URLSearchParams({ data: query }),
         signal: AbortSignal.timeout(15_000),
       });
+      if (response.status === 429 && url === OVERPASS_URL) mainRateLimited = true;
       if (!response.ok) throw new Error(`Overpass ${url} failed with ${response.status}`);
       const data = (await response.json()) as { elements?: OverpassElement[] };
       return summarizePlaces(data.elements ?? [], { lat, lon });
