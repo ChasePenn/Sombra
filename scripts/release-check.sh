@@ -24,7 +24,7 @@ step() {
     results+=("FAIL     $name"); failed=1
     # On GitHub, put the end of the failing output on the run page (numbered so lines aren't merged).
     if [ -n "${GITHUB_ACTIONS:-}" ]; then
-      grep -vE "^\s*$" "$log" | tail -n 25 | nl -ba | sed -E "s/^ *([0-9]+)\t/::error title=${name}::\1 /"
+      grep -vE "^\s*$" "$log" | grep -E "not ok|error:|expected|actual|Error|at .*browser.test" | head -n 25 | nl -ba | sed -E "s/^ *([0-9]+)\t/::error title=${name}::\1 /"
     fi
   fi
 }
@@ -52,7 +52,7 @@ else
 fi
 
 if command -v chromium >/dev/null 2>&1 || [ -n "${CHROME_BIN:-}" ]; then
-  step "Planner browser test" pnpm --filter @workspace/sombra run test:browser
+  step "Planner browser test" bash -c "cd artifacts/sombra && node --test --test-reporter=tap tests/*.browser.test.js"
 else
   skip "Planner browser test" "needs Chromium or CHROME_BIN"
 fi
