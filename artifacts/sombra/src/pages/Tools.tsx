@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'wouter';
+import { Link } from 'wouter';
 import { ChevronRight, Clock, HeartPulse, PhoneCall, Droplet, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { useSession } from '../lib/session';
 import { currentMode, fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
-import { getRiskFactors, isGroupEnabled, setGroupEnabled } from '../lib/local';
+import { getRiskFactors, isGroupEnabled } from '../lib/local';
 
 function ToolCard({ href, Icon, tone, title, body, badge }: { href: string; Icon: LucideIcon; tone: string; title: string; body: string; badge?: string }) {
   return (
@@ -27,7 +27,6 @@ export default function Tools() {
   const f = featureCopy[lang];
   const group = currentMode(lang).group;
   const [groupOn, setGroupOn] = useState(isGroupEnabled);
-  const [, setLocation] = useLocation();
   const riskOn = getRiskFactors().length > 0;
 
   useEffect(() => {
@@ -41,7 +40,6 @@ export default function Tools() {
       <div className="page">
         <header className="page-head">
           <h1>{f.toolsTitle}</h1>
-          <p>{f.toolsSub}</p>
         </header>
         <div className="tool-list">
           <ToolCard href="/app/best-time" Icon={Clock} tone="tone-orange" title={f.bestTitle} body={f.bestCard} />
@@ -51,14 +49,8 @@ export default function Tools() {
           {groupOn ? (
             <ToolCard href="/app/crew" Icon={Users} tone="tone-brown" title={group} body={fill(f.groupCardOn, { group: group.toLowerCase() })} />
           ) : (
-            <div className="tool-card tone-brown">
-              <span className="mode-choice-icon"><Users size={24} strokeWidth={2.2} aria-hidden="true" /></span>
-              <span className="tool-copy">
-                <strong>{f.groupTitleOff}</strong>
-                <small>{fill(f.groupCardOff, { group: group.toLowerCase() })}</small>
-              </span>
-              <button type="button" className="btn btn-secondary tool-btn" onClick={() => { setGroupEnabled(true); setLocation('/app/crew'); }}>{f.groupTurnOn}</button>
-            </div>
+            // Group stays off until someone is actually added on the next screen.
+            <ToolCard href="/app/crew" Icon={Users} tone="tone-brown" title={f.groupTitleOff} body={fill(f.groupCardOff, { group: group.toLowerCase() })} />
           )}
         </div>
       </div>

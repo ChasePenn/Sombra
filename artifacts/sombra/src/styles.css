@@ -287,7 +287,7 @@ button.row:hover, a.row:hover { background: var(--mesquite-soft); }
 .ring.lv-OK .ring-lvl { color: var(--ok); } .ring.lv-CAUTION .ring-lvl { color: var(--caution); } .ring.lv-DANGER .ring-lvl { color: var(--danger); }
 .rem-body { font-size: 1.08rem; margin-bottom: 8px; }
 
-/* Sombra Stage 6B — warm, dependable phone-first product shell */
+/* App shell */
 :root {
   --bark: var(--mesquite);
   --bark-dark: var(--mesquite-dark);

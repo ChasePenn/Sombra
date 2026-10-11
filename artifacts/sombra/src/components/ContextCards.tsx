@@ -7,7 +7,13 @@ import { featureCopy } from '../lib/features-copy';
 import { getCareContacts, getLastPlace } from '../lib/local';
 import { isDue } from '../lib/care';
 
-type Alert = { event: string; kind: string };
+type Alert = { event: string; kind: string; ends?: string | null };
+
+function untilText(iso: string | null | undefined, lang: string) {
+  const date = iso ? new Date(iso) : null;
+  if (!date || Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat(lang, { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/Phoenix' }).format(date);
+}
 
 /** Puts the right tool on the Today screen at the right moment. */
 export function ContextCards({ maxCategory }: { maxCategory: number | null }) {
@@ -35,7 +41,7 @@ export function ContextCards({ maxCategory }: { maxCategory: number | null }) {
       {heatAlert && (
         <section className="ctx-card ctx-heat" aria-live="polite">
           <h2><TriangleAlert size={20} aria-hidden="true" />{fill(f.ctxHeatTitle, { event: heatAlert.event })}</h2>
-          <p>{f.ctxHeatBody}</p>
+          <p>{untilText(heatAlert.ends, lang) ? fill(f.ctxHeatUntil, { time: untilText(heatAlert.ends, lang) }) : f.ctxHeatBody}</p>
           <div className="ctx-actions">
             <Link href="/app/cool-spots" className="btn btn-white"><Droplet size={18} aria-hidden="true" />{f.ctxCool}</Link>
             {dueContact && <Link href="/app/check-on" className="btn btn-white"><PhoneCall size={18} aria-hidden="true" />{fill(f.ctxCheck, { name: dueContact.name })}</Link>}

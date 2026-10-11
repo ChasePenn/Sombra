@@ -2,8 +2,8 @@
   "id": "everyday",
   "icon": "sun-horizon",
   "welcomeQuestions": {
-    "en": "Who's Sombra for today?",
-    "es": "¿Para quién es Sombra hoy?"
+    "en": "What are you planning for?",
+    "es": "¿Qué vas a planear?"
   },
   "taglines": {
     "en": "Heat safety for every crew, team and family.",
@@ -40,17 +40,14 @@
         "newToHeatHint": "Started outdoor activity in the last 2 weeks",
         "testBody": "Time to check in. How are you feeling?",
         "signInPrompt": "Sign in to save your plans and group across devices.",
-        "deleteBody": "This removes your profile, group, saved outings, and check-ins from Sombra, then signs you out. It cannot be undone.",
+        "deleteBody": "This removes your profile, group, saved outings, and check-ins from sombra, then signs you out. It cannot be undone.",
         "importBody": "You have a profile, group, outings, or check-ins saved on this device. Copy them into your account so they show up everywhere.",
         "signInTitle": "Sign in to save your plans and group",
         "signInSub": "Your account keeps your profile, group, and saved outings on every device.",
         "signUpSub": "Save your plans and group. Guest mode still works without an account."
       },
-      "about": {
-        "what": "Sombra helps families and groups plan time outdoors around heat, shade breaks, and water. It is free and works without an account."
-      },
       "ui": {
-        "documentTitle": "Sombra — Everyday outdoor heat safety",
+        "documentTitle": "sombra — Everyday outdoor heat safety",
         "metaDescription": "Plan a walk, hike, outing, or event around the heat.",
         "desktopTitle": "Heat guidance for your outing",
         "desktopDescription": "Choose your activity location and time window to plan for shade and water.",
@@ -159,17 +156,14 @@
         "newToHeatHint": "Comenzó actividad al aire libre en las últimas 2 semanas",
         "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
         "signInPrompt": "Inicia sesión para guardar tus planes y grupo en varios dispositivos.",
-        "deleteBody": "Esto elimina tu perfil, grupo, salidas y registros de Sombra, y cierra tu sesión. No se puede deshacer.",
+        "deleteBody": "Esto elimina tu perfil, grupo, salidas y registros de sombra, y cierra tu sesión. No se puede deshacer.",
         "importBody": "Tienes un perfil, grupo, salidas o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.",
         "signInTitle": "Inicia sesión para guardar tus planes y grupo",
         "signInSub": "Tu cuenta guarda tu perfil, grupo y salidas en todos tus dispositivos.",
-        "signUpSub": "Guarda tus planes y grupo. También puedes usar Sombra sin cuenta."
-      },
-      "about": {
-        "what": "Sombra ayuda a familias y grupos a planear actividades al aire libre según el calor, la sombra y el agua. Es gratis y funciona sin cuenta."
+        "signUpSub": "Guarda tus planes y grupo. También puedes usar sombra sin cuenta."
       },
       "ui": {
-        "documentTitle": "Sombra — Seguridad al aire libre",
+        "documentTitle": "sombra — Seguridad al aire libre",
         "metaDescription": "Planea una caminata, excursión o evento según el calor.",
         "desktopTitle": "Orientación para tu salida",
         "desktopDescription": "Elige el lugar y horario de tu actividad para planear la sombra y el agua.",

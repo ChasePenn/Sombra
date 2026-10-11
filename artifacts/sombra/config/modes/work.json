@@ -2,8 +2,8 @@
   "id": "work",
   "icon": "hard-hat",
   "welcomeQuestions": {
-    "en": "Who's Sombra for today?",
-    "es": "¿Para quién es Sombra hoy?"
+    "en": "What are you planning for?",
+    "es": "¿Qué vas a planear?"
   },
   "taglines": {
     "en": "Heat safety for every crew, team and family.",
@@ -40,17 +40,14 @@
         "newToHeatHint": "Started outdoor work in the last 2 weeks",
         "testBody": "Time to check in. How are you feeling?",
         "signInPrompt": "Sign in to save your plans and crew across devices.",
-        "deleteBody": "This removes your profile, crew, saved shifts, and check-ins from Sombra, then signs you out. It cannot be undone.",
+        "deleteBody": "This removes your profile, crew, saved shifts, and check-ins from sombra, then signs you out. It cannot be undone.",
         "importBody": "You have a profile, crew, shifts, or check-ins saved on this device. Copy them into your account so they show up everywhere.",
         "signInTitle": "Sign in to save your plans and crew",
         "signInSub": "Your account keeps your profile, crew, and saved shifts on every device.",
         "signUpSub": "Save your plans and crew. Guest mode still works without one."
       },
-      "about": {
-        "what": "Sombra helps outdoor crews plan for heat, shade breaks, and water. It is free and works without an account."
-      },
       "ui": {
-        "documentTitle": "Sombra — Heat plan for work",
+        "documentTitle": "sombra — Heat plan for work",
         "metaDescription": "Hourly heat guidance for outdoor work.",
         "desktopTitle": "Heat guidance for your work site",
         "desktopDescription": "Choose a place and shift hours to plan work, shade breaks, and water.",
@@ -156,17 +153,14 @@
         "newToHeatHint": "Comenzó a trabajar al aire libre en las últimas 2 semanas",
         "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
         "signInPrompt": "Inicia sesión para guardar tus planes y cuadrilla en varios dispositivos.",
-        "deleteBody": "Esto elimina tu perfil, cuadrilla, turnos y registros de Sombra, y cierra tu sesión. No se puede deshacer.",
+        "deleteBody": "Esto elimina tu perfil, cuadrilla, turnos y registros de sombra, y cierra tu sesión. No se puede deshacer.",
         "importBody": "Tienes un perfil, cuadrilla, turnos o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.",
         "signInTitle": "Inicia sesión para guardar tus planes y cuadrilla",
         "signInSub": "Tu cuenta guarda tu perfil, cuadrilla y turnos en todos tus dispositivos.",
-        "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar Sombra sin una cuenta."
-      },
-      "about": {
-        "what": "Sombra ayuda a las cuadrillas al aire libre a planear el calor, los descansos a la sombra y el agua. Es gratis y funciona sin cuenta."
+        "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar sombra sin una cuenta."
       },
       "ui": {
-        "documentTitle": "Sombra — Plan de calor para el trabajo",
+        "documentTitle": "sombra — Plan de calor para el trabajo",
         "metaDescription": "Orientación por hora para trabajar al aire libre con calor.",
         "desktopTitle": "Orientación para tu lugar de trabajo",
         "desktopDescription": "Elige un lugar y horario para planear el trabajo, los descansos a la sombra y el agua.",

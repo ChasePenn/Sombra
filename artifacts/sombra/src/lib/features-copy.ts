@@ -6,7 +6,8 @@ const en = {
   riskWords: ['Low', 'Caution', 'Elevated', 'High', 'Very high', 'Extreme'],
   // Today screen suggestions
   ctxHeatTitle: '{event} in effect',
-  ctxHeatBody: 'Plan around the hottest hours, stay near cool places, and check on people at risk.',
+  ctxHeatBody: 'From the National Weather Service.',
+  ctxHeatUntil: 'From the National Weather Service, until {time}.',
   ctxCool: 'Cool spots near you',
   ctxCheck: 'Check on {name}',
   ctxHotTitle: 'Very hot later today',
@@ -53,7 +54,6 @@ const en = {
   careAfternoon: 'Afternoon check (heat warning)',
 
   toolsTitle: 'Tools',
-  toolsSub: 'More ways to stay safe in the heat.',
   bestTitle: 'Best time to go',
   bestCard: 'Find the safest window in the next two days.',
   coolTitle: 'Cool spots nearby',
@@ -66,7 +66,6 @@ const en = {
   groupTitleOff: 'Plan for a group',
   groupCardOff: 'Add your {group} to plan and check in together.',
   groupCardOn: 'Your {group} and their check-ins.',
-  groupTurnOn: 'Turn on',
   open: 'Open',
 
   // location
@@ -101,7 +100,6 @@ const en = {
   bringWater: 'Bring about {liters} L of water.',
 
   // cool spots
-  coolSub: 'Places to cool off, refill water, or wait out the heat.',
   kind_water: 'Water refill',
   kind_library: 'Library',
   kind_community: 'Community center',
@@ -114,8 +112,8 @@ const en = {
   coolFailed: "Couldn't load nearby places. Try again in a moment.",
   coolLoading: 'Finding cool spots…',
   coolSource: 'From OpenStreetMap. Hours can change, so call ahead when you can.',
-  heatRelief: 'During heat warnings, Arizona runs free cooling and hydration centers. Call 2-1-1 to find one open now.',
-  call211: 'Call 2-1-1',
+  heatRelief: 'Free cooling and water centers open across the Valley in the hot months. Call 2‑1‑1 to find one open now.',
+  call211: 'Call 2‑1‑1',
 
   // care
   careSub: 'Older adults living alone are among the most at risk in a heat wave. Get a daily reminder to check on them.',
@@ -128,7 +126,7 @@ const en = {
   careCancel: 'Cancel',
   careCall: 'Call',
   careChecked: 'Checked on',
-  careMark: 'I checked on them',
+  careMark: 'Mark checked',
   careCheckedAt: 'Checked today at {time}',
   careNotYet: 'Not checked yet today · reminder at {time}',
   careDue: 'Time to check on {name}',
@@ -163,6 +161,15 @@ const en = {
     school: ['Sports practice', 'PE class', 'Marching band', 'Recess or field trip'],
     everyday: ['Hike', 'Walk or run', 'Yard work', 'Outdoor event', 'Walk to the bus'],
   } as Record<string, string[]>,
+  effortWord: { easy: 'light', moderate: 'moderate', hard: 'hard' } as Record<'easy' | 'moderate' | 'hard', string>,
+  countsAs: 'Planned as {level} effort.',
+};
+
+/** How hard each preset activity is, in the same order as `activities` (same in every language). */
+export const activityIntensity: Record<string, Array<'easy' | 'moderate' | 'hard'>> = {
+  work: ['hard', 'moderate', 'moderate', 'easy'],
+  school: ['hard', 'moderate', 'moderate', 'easy'],
+  everyday: ['hard', 'moderate', 'moderate', 'easy', 'easy'],
 };
 
 type FeatureCopy = typeof en;
@@ -170,7 +177,8 @@ type FeatureCopy = typeof en;
 const es: FeatureCopy = {
   riskWords: ['Bajo', 'Precaución', 'Elevado', 'Alto', 'Muy alto', 'Extremo'],
   ctxHeatTitle: '{event} vigente',
-  ctxHeatBody: 'Planea evitando las horas más calientes, quédate cerca de lugares frescos y revisa a quienes están en riesgo.',
+  ctxHeatBody: 'Del Servicio Meteorológico Nacional.',
+  ctxHeatUntil: 'Del Servicio Meteorológico Nacional, hasta {time}.',
   ctxCool: 'Lugares frescos cerca',
   ctxCheck: 'Revisar a {name}',
   ctxHotTitle: 'Mucho calor más tarde',
@@ -213,7 +221,6 @@ const es: FeatureCopy = {
   careAfternoon: 'Revisión de la tarde (alerta de calor)',
 
   toolsTitle: 'Herramientas',
-  toolsSub: 'Más formas de protegerte del calor.',
   bestTitle: 'Mejor hora para salir',
   bestCard: 'Encuentra el horario más seguro en los próximos dos días.',
   coolTitle: 'Lugares frescos cerca',
@@ -226,7 +233,6 @@ const es: FeatureCopy = {
   groupTitleOff: 'Planear para un grupo',
   groupCardOff: 'Agrega a tu {group} para planear y registrarse juntos.',
   groupCardOn: 'Tu {group} y sus registros.',
-  groupTurnOn: 'Activar',
   open: 'Abrir',
 
   near: 'Cerca de {place}',
@@ -258,7 +264,6 @@ const es: FeatureCopy = {
   planThis: 'Planear esto',
   bringWater: 'Lleva unos {liters} L de agua.',
 
-  coolSub: 'Lugares para refrescarte, rellenar agua o esperar a que baje el calor.',
   kind_water: 'Agua potable',
   kind_library: 'Biblioteca',
   kind_community: 'Centro comunitario',
@@ -271,8 +276,8 @@ const es: FeatureCopy = {
   coolFailed: 'No pudimos cargar los lugares cercanos. Inténtalo en un momento.',
   coolLoading: 'Buscando lugares frescos…',
   coolSource: 'Datos de OpenStreetMap. Los horarios cambian; llama antes si puedes.',
-  heatRelief: 'Durante alertas de calor, Arizona tiene centros gratuitos de enfriamiento e hidratación. Llama al 2-1-1 para encontrar uno abierto.',
-  call211: 'Llamar al 2-1-1',
+  heatRelief: 'En los meses de calor hay centros gratuitos para refrescarte y tomar agua en todo el Valle. Llama al 2‑1‑1 para encontrar uno abierto.',
+  call211: 'Llamar al 2‑1‑1',
 
   careSub: 'Los adultos mayores que viven solos están entre los de mayor riesgo en una ola de calor. Recibe un recordatorio diario para revisarlos.',
   carePrivacy: 'Los nombres y números se quedan en este teléfono.',
@@ -284,7 +289,7 @@ const es: FeatureCopy = {
   careCancel: 'Cancelar',
   careCall: 'Llamar',
   careChecked: 'Revisado',
-  careMark: 'Ya lo revisé',
+  careMark: 'Marcar revisado',
   careCheckedAt: 'Revisado hoy a las {time}',
   careNotYet: 'Sin revisar hoy · recordatorio a las {time}',
   careDue: 'Hora de revisar a {name}',
@@ -317,6 +322,8 @@ const es: FeatureCopy = {
     school: ['Práctica deportiva', 'Educación física', 'Banda de marcha', 'Recreo o excursión'],
     everyday: ['Caminata en el cerro', 'Caminar o correr', 'Trabajo en el jardín', 'Evento al aire libre', 'Caminar al autobús'],
   },
+  effortWord: { easy: 'ligero', moderate: 'moderado', hard: 'intenso' },
+  countsAs: 'Se planea como esfuerzo {level}.',
 };
 
 export const featureCopy: Record<Lang, FeatureCopy> = { en, es };

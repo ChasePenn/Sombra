@@ -229,6 +229,8 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       applyTranslations();
     }
     document.querySelector("#worker-name").value = profile.name ?? "";
+    // The name is already in the profile, so don't ask for it again.
+    document.querySelector(".worker-field").hidden = Boolean(profile.name?.trim());
     const intensity = form.querySelector(`input[name="intensity"][value="${profile.usualIntensity}"]`);
     if (intensity) intensity.checked = true;
     const acclimation = form.querySelector(`input[name="newToHeat"][value="${profile.newToHeat ? "yes" : "no"}"]`);
@@ -748,6 +750,13 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
   const appendWorkAction = (parent, hour) => {
     const action = document.createElement("p");
     action.className = "schedule-action";
+    // Hours flagged as stop-work say so plainly instead of showing a work/rest split.
+    if (hour.stopWork) {
+      action.classList.add("schedule-action-stop");
+      action.textContent = activeModeLocale().ui.stopBanner || translate("results.stopWork");
+      parent.append(action);
+      return;
+    }
     action.textContent = hour.work === "NL"
       ? translate("results.workNormally")
       : translate("results.workMinutes", { minutes: hour.work });
@@ -779,7 +788,12 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     summaryAdvice.textContent = [summary.message, coolerAdvice].filter(Boolean).join(" ");
     summaryHottest.textContent = summary.hottest;
     const activeHour = schedule.hours[summary.currentHourIndex >= 0 ? summary.currentHourIndex : 0];
-    summaryWbgt.textContent = formatWbgt(activeHour.wbgtF);
+    // Show the air temperature people know next to the heat-stress number, so 84°F isn't read as the weather.
+    const activeWeather = activeForecast?.hours?.find((weather) => weather.time === activeHour.time);
+    const wbgtRounded = Math.round(Number(activeHour.wbgtF));
+    summaryWbgt.textContent = Number.isFinite(activeWeather?.airTempF)
+      ? translate("extras.readingLine", { air: Math.round(activeWeather.airTempF), wbgt: wbgtRounded })
+      : translate("extras.readingWbgt", { wbgt: wbgtRounded });
     todayMeta.textContent = translate(
       summary.currentHourIndex >= 0 ? "results.currentAt" : "results.startingAt",
       {
@@ -806,9 +820,11 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       const isCurrent = summary.currentHourIndex >= firstHourIndex &&
         summary.currentHourIndex < firstHourIndex + group.hours.length;
       card.dataset.current = String(isCurrent);
-      const expander = document.createElement("details");
+      // A one-hour block has nothing more to show, so it isn't expandable.
+      const single = group.hours.length === 1;
+      const expander = document.createElement(single ? "div" : "details");
       expander.className = "schedule-block";
-      const blockSummary = document.createElement("summary");
+      const blockSummary = document.createElement(single ? "div" : "summary");
       blockSummary.className = "schedule-block-summary";
       const header = document.createElement("div");
       header.className = "schedule-card-header";
@@ -827,7 +843,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       }
       blockSummary.append(header);
       appendWorkAction(blockSummary, hour);
-      if (hour.restMinutes > 0 && hour.work !== "NL") {
+      if (hour.restMinutes > 0 && hour.work !== "NL" && !hour.stopWork) {
         const bar = document.createElement("div");
         bar.className = "work-rest-bar";
         bar.setAttribute("role", "img");
@@ -843,6 +859,13 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       }
       const waterCups = Math.max(...group.hours.map((item) => item.waterCups));
       appendWaterLine(blockSummary, waterCups, group.hours.some((item) => item.waterCups !== waterCups));
+      if (single) {
+        expander.append(blockSummary);
+        card.append(expander);
+        scheduleCards.append(card);
+        firstHourIndex += 1;
+        return;
+      }
       const expandHint = document.createElement("span");
       expandHint.className = "schedule-expand-hint";
       expandHint.textContent = translate("results.expandHours");
@@ -883,9 +906,14 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     });
     renderHourStrip(schedule.hours, timezone, summary);
 
-    stopWorkBanner.hidden = !schedule.hours.some((hour) => hour.stopWork);
-    if (!stopWorkBanner.hidden) {
-      stopWorkBanner.textContent = activeModeLocale().ui.stopBanner || translate("results.stopWork");
+    // Say exactly when to stop, not just that it's hot at some point.
+    const firstStop = schedule.hours.findIndex((hour) => hour.stopWork);
+    stopWorkBanner.hidden = firstStop < 0;
+    if (firstStop >= 0) {
+      let lastStop = firstStop;
+      while (schedule.hours[lastStop + 1]?.stopWork) lastStop += 1;
+      const span = `${formatTime(schedule.hours[firstStop].time, timezone)}–${formatTime(hourEndTime(schedule.hours[lastStop].time), timezone)}`;
+      stopWorkBanner.textContent = `${span}: ${activeModeLocale().ui.stopBanner || translate("results.stopWork")}`;
     }
     schedulePolicyCopy.textContent = translate("results.schedulePolicy");
     document.querySelector("#schedule-technical-policy").textContent = translate("results.scheduleTechnicalPolicy", {
@@ -1047,8 +1075,12 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       return;
     }
     conditionsAlerts.replaceChildren();
-    if (Array.isArray(data.alerts) && data.alerts.length) {
-      data.alerts.forEach((alert) => {
+    // Inside the app, heat warnings already have their own card at the top of Today; don't repeat them here.
+    const embedded = window.parent !== window;
+    const alerts = Array.isArray(data.alerts) ? data.alerts.filter((alert) => !(embedded && alert.kind === "heat")) : null;
+    const heatShownAbove = Array.isArray(data.alerts) && alerts.length < data.alerts.length;
+    if (alerts && alerts.length) {
+      alerts.forEach((alert) => {
         const item = document.createElement("div");
         item.className = `alert-item alert-${alert.kind}`;
         const title = document.createElement("strong");
@@ -1059,7 +1091,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
         item.append(title, meta);
         conditionsAlerts.append(item);
       });
-    } else {
+    } else if (!heatShownAbove) {
       const none = document.createElement("p");
       none.className = "alerts-none";
       none.textContent = translate(Array.isArray(data.alerts) ? "extras.alertsNone" : "extras.alertsUnavailable");
@@ -1164,9 +1196,11 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     const air = latestConditions?.air;
     const uvPeak = air?.uv?.peak;
     const site = appliedSiteSelection;
+    const liters = Math.round(cups * 0.2366 * 2) / 2;
+    const gallons = Math.max(0.5, Math.round((liters / 3.785) * 2) / 2);
+    // Only items this plan actually calls for; generic advice lives elsewhere.
     const items = [
-      translate("extras.bringWater", { liters: (Math.round(cups * 0.2366 * 2) / 2).toLocaleString(activeLocale), cups }),
-      translate("extras.bringClothes"),
+      translate("extras.bringWater", { liters: liters.toLocaleString(activeLocale), gallons: gallons.toLocaleString(activeLocale) }),
     ];
     if (hours.length >= 2 && maxCategory >= 2) items.push(translate("extras.bringElectrolytes"));
     if (uvPeak == null ? maxCategory >= 1 : uvPeak >= 6) items.push(translate("extras.bringHat"));
@@ -1175,7 +1209,6 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     if (site ? site.shade === "full_sun" : maxCategory >= 3) items.push(translate("extras.bringShade"));
     if (site && ["dark_roof", "asphalt"].includes(site.surface)) items.push(translate("extras.bringGloves"));
     if (air && ((air.aqi?.peak ?? 0) > 100 || (air.dustPeak ?? 0) >= 100)) items.push(translate("extras.bringMask"));
-    if (maxCategory >= 4) items.push(translate("extras.bringPhone"));
     // Tap an item to tick it off while packing. Ticks are remembered for this plan on this device.
     const planKey = `sombra.bring:${activeShiftPayload?.date ?? ""}:${activeShiftPayload?.latitude ?? ""},${activeShiftPayload?.longitude ?? ""}`;
     let ticked = [];
@@ -1608,12 +1641,6 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     document.body.classList.remove("has-plan");
     if (!reduceMotion.matches) window.scrollTo({ top: 0, behavior: "smooth" });
     locationInput.focus({ preventScroll: true });
-  });
-  document.querySelector("#full-plan-link").addEventListener("click", () => {
-    document.querySelector("#work-rest-schedule").scrollIntoView({
-      behavior: reduceMotion.matches ? "auto" : "smooth",
-      block: "start",
-    });
   });
   document.querySelector("#print-brief").addEventListener("click", () => window.print());
   let printDetailsState = [];
