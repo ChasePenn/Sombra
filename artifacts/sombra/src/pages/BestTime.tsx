@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
-import { CalendarClock, Droplet, Ban } from 'lucide-react';
+import { BellRing, CalendarClock, Droplet, Ban } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
 import { IntensityPicker, Segmented } from '../components/Controls';
 import { useSession } from '../lib/session';
 import { audienceModeId, fill, modeRules, type Intensity } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
-import { getRiskFactors } from '../lib/local';
+import { getRiskFactors, getWindowReminders, saveWindowReminders } from '../lib/local';
 import { clock, nextDate, phoenixNow } from '../lib/time';
 import { findBestWindows } from '../../lib/best-window.js';
 import table from '../../config/work_rest_table.json';
@@ -28,6 +28,25 @@ export default function BestTime() {
   const [state, setState] = useState<'idle' | 'loading' | 'error' | 'done'>('idle');
   const [result, setResult] = useState<ReturnType<typeof findBestWindows> | null>(null);
   const caution = getRiskFactors().length > 0 || (modeRules().categoryIncrease ?? 0) > 0;
+  const [reminder, setReminder] = useState<string | null>(null);
+
+  const planHref = (w: NonNullable<Window>) => {
+    if (!place) return '/app';
+    const q = new URLSearchParams({ lat: String(place.lat), lon: String(place.lon), place: place.name, date: w.date, start: w.start, end: w.end, intensity });
+    return `/app?${q.toString()}`;
+  };
+
+  const remind = (w: NonNullable<Window>) => {
+    const id = `${w.date}T${w.start}`;
+    const others = getWindowReminders().filter((r) => r.id !== id);
+    saveWindowReminders([...others, { id, date: w.date, start: w.start, activity, hours: duration }]);
+    setReminder(id);
+    if ('Notification' in window && Notification.permission === 'default') void Notification.requestPermission();
+  };
+  const cancelReminder = (id: string) => {
+    saveWindowReminders(getWindowReminders().filter((r) => r.id !== id));
+    setReminder(null);
+  };
 
   const dayLabel = useMemo(() => {
     const today = phoenixNow().slice(0, 10);
@@ -135,7 +154,17 @@ export default function BestTime() {
                     </ul>
                   </div>
                 )}
-                <Link href="/app" className="btn btn-secondary btn-block">{f.planThis}</Link>
+                <div className="best-actions">
+                  <Link href={planHref(result.best)} className="btn btn-primary btn-block">{f.planThis}</Link>
+                  {reminder === `${result.best.date}T${result.best.start}` ? (
+                    <>
+                      <p className="notice" role="status">{fill(f.reminderSet, { when: span(result.best) })}</p>
+                      <button type="button" className="btn btn-quiet btn-block" onClick={() => cancelReminder(`${result.best!.date}T${result.best!.start}`)}>{f.reminderCancel}</button>
+                    </>
+                  ) : (
+                    <button type="button" className="btn btn-secondary btn-block" onClick={() => remind(result.best!)}><BellRing size={18} aria-hidden="true" />{f.remindMe}</button>
+                  )}
+                </div>
               </>
             ) : (
               <p className="notice">{f.forecastFailed}</p>

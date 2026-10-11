@@ -512,7 +512,23 @@
         "bringMask": "A well-fitting N95 mask for dust or smoke",
         "bringClothes": "Light, loose, light-colored clothes",
         "bringPhone": "A charged phone and someone who knows your plan",
-        "profileNote": "Extra caution is on from your heat profile, so heat counts as one level higher."
+        "profileNote": "Extra caution is on from your heat profile, so heat counts as one level higher.",
+        "tapToLearn": "Tap a tile to see what it means for you.",
+        "uvMean_low": "Low UV. Sunglasses on bright days are enough.",
+        "uvMean_moderate": "Moderate UV. Wear sunscreen and a hat if you're out more than an hour.",
+        "uvMean_high": "High UV. Unprotected skin can burn in about 30 minutes. Cover up and seek shade at midday.",
+        "uvMean_very_high": "Very high UV. Skin can burn in 15 to 20 minutes. Wear a wide-brim hat, sunscreen and long sleeves, and take breaks in shade.",
+        "uvMean_extreme": "Extreme UV. Skin can burn in under 10 minutes. Avoid direct sun around midday if you can.",
+        "aqiMean_good": "Air is clean. No need to change plans.",
+        "aqiMean_moderate": "Air is okay for most people. If you have asthma or lung disease, take it easier.",
+        "aqiMean_sensitive": "Children, older adults, and people with asthma, heart or lung disease should cut back on hard outdoor work or exercise.",
+        "aqiMean_unhealthy": "Everyone may feel effects. Keep hard outdoor activity short and take breaks indoors.",
+        "aqiMean_very_unhealthy": "Health alert. Move strenuous activity indoors or reschedule.",
+        "aqiMean_hazardous": "Emergency conditions. Stay indoors with windows closed if you can.",
+        "alertMean": "This is an official warning from the National Weather Service for your area. Follow your plan's breaks closely and check on people at risk.",
+        "shareList": "Share list",
+        "copied": "List copied. Paste it in a text or chat.",
+        "shareTitle": "What to bring"
       }
     },
     "es": {
@@ -1026,7 +1042,23 @@
         "bringMask": "Una mascarilla N95 bien ajustada para el polvo o el humo",
         "bringClothes": "Ropa ligera, holgada y de color claro",
         "bringPhone": "Un teléfono cargado y alguien que sepa tu plan",
-        "profileNote": "La precaución extra de tu perfil de calor está activa, así que el calor cuenta como un nivel más alto."
+        "profileNote": "La precaución extra de tu perfil de calor está activa, así que el calor cuenta como un nivel más alto.",
+        "tapToLearn": "Toca un recuadro para ver qué significa para ti.",
+        "uvMean_low": "UV bajo. Con lentes de sol en días brillantes es suficiente.",
+        "uvMean_moderate": "UV moderado. Usa protector solar y sombrero si vas a estar afuera más de una hora.",
+        "uvMean_high": "UV alto. La piel sin protección puede quemarse en unos 30 minutos. Cúbrete y busca sombra al mediodía.",
+        "uvMean_very_high": "UV muy alto. La piel puede quemarse en 15 a 20 minutos. Usa sombrero de ala ancha, protector solar y manga larga, y descansa en la sombra.",
+        "uvMean_extreme": "UV extremo. La piel puede quemarse en menos de 10 minutos. Evita el sol directo al mediodía si puedes.",
+        "aqiMean_good": "El aire está limpio. No necesitas cambiar tus planes.",
+        "aqiMean_moderate": "El aire está bien para la mayoría. Si tienes asma o enfermedad pulmonar, tómalo con calma.",
+        "aqiMean_sensitive": "Niños, adultos mayores y personas con asma o enfermedades del corazón o pulmón deben reducir el trabajo o ejercicio fuerte afuera.",
+        "aqiMean_unhealthy": "Todos pueden sentir efectos. Haz actividades fuertes por poco tiempo y descansa adentro.",
+        "aqiMean_very_unhealthy": "Alerta de salud. Pasa la actividad fuerte adentro o cambia el horario.",
+        "aqiMean_hazardous": "Condiciones de emergencia. Quédate adentro con las ventanas cerradas si puedes.",
+        "alertMean": "Esta es una alerta oficial del Servicio Meteorológico Nacional para tu zona. Sigue los descansos de tu plan y revisa a quienes están en riesgo.",
+        "shareList": "Compartir lista",
+        "copied": "Lista copiada. Pégala en un mensaje o chat.",
+        "shareTitle": "Qué llevar"
       }
     }
   }

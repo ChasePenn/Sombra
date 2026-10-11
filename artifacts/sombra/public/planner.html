@@ -169,9 +169,11 @@
             <h2 id="conditions-title" data-i18n="extras.conditionsTitle"></h2>
             <div id="conditions-alerts" class="conditions-alerts"></div>
             <div class="conditions-grid">
-              <div class="condition-tile" id="uv-tile" hidden><span data-i18n="extras.uvTitle"></span><strong id="uv-level"></strong><small id="uv-peak"></small></div>
-              <div class="condition-tile" id="aqi-tile" hidden><span data-i18n="extras.aqiTitle"></span><strong id="aqi-level"></strong><small id="aqi-peak"></small></div>
+              <button type="button" class="condition-tile" id="uv-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.uvTitle"></span><strong id="uv-level"></strong><small id="uv-peak"></small></button>
+              <button type="button" class="condition-tile" id="aqi-tile" aria-expanded="false" aria-controls="condition-meaning" hidden><span data-i18n="extras.aqiTitle"></span><strong id="aqi-level"></strong><small id="aqi-peak"></small></button>
             </div>
+            <p id="condition-meaning" class="condition-meaning" role="status" hidden></p>
+            <p id="condition-hint" class="condition-hint" data-i18n="extras.tapToLearn" hidden></p>
             <p id="conditions-dust" class="conditions-dust" hidden data-i18n="extras.dust"></p>
           </section>
           <div class="results-top">
@@ -197,8 +199,12 @@
             <div id="hour-strip" class="hour-strip" role="group" data-i18n-aria-label="results.restOfToday"></div>
           </section>
           <section id="bring-panel" class="bring-panel" aria-labelledby="bring-title" hidden>
-            <h2 id="bring-title" data-i18n="extras.bringTitle"></h2>
+            <div class="bring-head">
+              <h2 id="bring-title" data-i18n="extras.bringTitle"></h2>
+              <button id="bring-share" class="text-link" type="button" data-i18n="extras.shareList"></button>
+            </div>
             <ul id="bring-list" class="bring-list"></ul>
+            <p id="bring-status" class="bring-status" role="status" hidden></p>
           </section>
           <section id="site-check" class="site-check" aria-labelledby="site-check-title" hidden>
             <div class="site-check-heading">

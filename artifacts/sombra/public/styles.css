@@ -935,3 +935,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 .bring-list button[aria-pressed="true"] { color: var(--ink-soft); text-decoration: line-through; }
 .bring-list button[aria-pressed="true"]::before { background: var(--mesquite) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/16px no-repeat; }
 .profile-caution { margin: 0 0 10px; padding: 10px 12px; border-radius: 14px; background: #FDE7E7; color: #9F292F; font-weight: 700; font-size: .92rem; }
+button.condition-tile { text-align: left; font: inherit; color: var(--ink); cursor: pointer; }
+button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite); outline-offset: 1px; }
+.condition-meaning { margin-top: 10px; padding: 12px 14px; border-radius: 14px; background: var(--canvas); font-weight: 700; font-size: .95rem; line-height: 1.4; }
+.condition-hint { margin-top: 8px; color: var(--ink-soft); font-size: .85rem; }
+.alert-item[role="button"] { cursor: pointer; }
+.bring-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.bring-head .text-link { min-height: 44px; }
+.bring-status { margin-top: 8px; color: var(--ink-soft); font-size: .9rem; font-weight: 700; }

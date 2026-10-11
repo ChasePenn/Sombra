@@ -55,3 +55,9 @@ export type CareContact = {
 const CARE = 'sombra.care-contacts';
 export const getCareContacts = () => read<CareContact[]>(CARE, []);
 export const saveCareContacts = (contacts: CareContact[]) => write(CARE, contacts);
+
+/* "Remind me when it starts" reminders from Best time. */
+export type WindowReminder = { id: string; date: string; start: string; activity: string; hours: number };
+const WINDOWS = 'sombra.window-reminders';
+export const getWindowReminders = () => read<WindowReminder[]>(WINDOWS, []);
+export const saveWindowReminders = (list: WindowReminder[]) => write(WINDOWS, list);
