@@ -535,8 +535,8 @@
         "shareList": "Share list",
         "copied": "List copied. Paste it in a text or chat.",
         "shareTitle": "What to bring",
-        "readingLine": "Air {air}°F · Heat stress {wbgt}°F WBGT",
-        "readingWbgt": "Heat stress {wbgt}°F WBGT",
+        "readingLine": "Air {air}°F · Heat stress {wbgt}°F",
+        "readingWbgt": "Heat stress {wbgt}°F",
         "hourlyNumbers": "Hourly numbers"
       }
     },
@@ -1074,8 +1074,8 @@
         "shareList": "Compartir lista",
         "copied": "Lista copiada. Pégala en un mensaje o chat.",
         "shareTitle": "Qué llevar",
-        "readingLine": "Aire {air}°F · Estrés por calor {wbgt}°F WBGT",
-        "readingWbgt": "Estrés por calor {wbgt}°F WBGT",
+        "readingLine": "Aire {air}°F · Estrés por calor {wbgt}°F",
+        "readingWbgt": "Estrés por calor {wbgt}°F",
         "hourlyNumbers": "Números por hora"
       }
     }

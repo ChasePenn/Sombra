@@ -356,6 +356,10 @@ router.post("/weather/shift", async (req, res): Promise<void> => {
     }
 
     const date = requestedDate;
+    if (!data.hourly.time.some((time) => time.startsWith(date))) {
+      res.status(400).json({ error: "The forecast isn't available for the selected date yet. Choose today, or try again later." });
+      return;
+    }
     const startAt = `${date}T${shift.startTime}`;
     const endDate = crossesMidnight ? nextCalendarDate(date) : date;
     const endAt = `${endDate}T${shift.endTime}`;
@@ -369,6 +373,17 @@ router.post("/weather/shift", async (req, res): Promise<void> => {
       timestamp += 60 * 60 * 1000
     ) {
       requestedHours.push(new Date(timestamp).toISOString().slice(0, 16));
+    }
+
+    // A physically impossible reading means the provider's data is broken. Don't turn it into
+    // advice, even for the hours that look fine: say the forecast is unavailable instead.
+    const implausible = data.hourly.time.some(
+      (time, index) => time >= startAt && time < endAt && !isPlausibleWeatherReading(data.hourly!, index),
+    );
+    if (implausible) {
+      req.log.error("Open-Meteo returned implausible readings for the requested shift");
+      res.status(502).json({ error: "The forecast came back with implausible readings, so it's temporarily unavailable. Try again soon." });
+      return;
     }
 
     const availableTimes = new Set<string>();

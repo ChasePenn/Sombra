@@ -7,11 +7,18 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { resolveAudienceMode } from "../lib/modes.js";
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = path.resolve(testDirectory, "../../..");
 const browserPath = process.env.CHROME_BIN || "/repl/tools/bin/chromium";
-const workerMode = JSON.parse(await readFile(new URL("../config/modes/workers.json", import.meta.url), "utf8"));
+// The planner opens in Work mode, which layers work.json over the shared workers.json copy.
+// Resolve it the same way the app does, so the test checks the text people actually see.
+const readMode = async (id) => JSON.parse(await readFile(new URL(`../config/modes/${id}.json`, import.meta.url), "utf8"));
+const workerMode = resolveAudienceMode({
+  "../config/modes/workers.json": await readMode("workers"),
+  "../config/modes/work.json": await readMode("work"),
+}, "work");
 
 async function availablePort(excluded = new Set()) {
   while (true) {
@@ -424,7 +431,8 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     assert.equal(success.renderedHours, "Shift: 10 PM to 2 AM (next day)");
     assert.match(success.hourlyConditions, /100°F/);
     assert.equal(success.resultVisible, true);
-    assert.equal(success.currentHeat, "90°F", "the large heat reading uses the same solar-adjusted WBGT as the schedule");
+    assert.match(success.currentHeat, /Heat stress 90°F$/, "the large heat reading uses the same solar-adjusted WBGT as the schedule");
+    assert.match(success.currentHeat, /^Air \d+°F/, "the air temperature is shown next to it so the two aren't confused");
     assert.equal(success.hourStripTitle, workerMode.locales.en.results.restOfShift);
     assert.equal(success.blocks, 1, "consecutive hours with the same risk form one block");
     assert.equal(success.detailClosed, true, "technical weather values start behind Details");
@@ -466,7 +474,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     assert.match(siteResult.comparison, /80°F/);
     assert.equal(siteResult.siteBadge, true);
     assert.equal(siteResult.scheduleBadge, true);
-    assert.equal(siteResult.currentHeat, "80°F", "the displayed reading follows the applied site shade adjustment");
+    assert.match(siteResult.currentHeat, /Heat stress 80°F$/, "the displayed reading follows the applied site shade adjustment");
     const adjustedCopy = await page.evaluate(`document.querySelector("#results").innerText`);
     assert.match(adjustedCopy, /Asphalt in full shade: we adjusted your plan/);
     assert.match(adjustedCopy, /Work normally/);
@@ -536,7 +544,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     await page.evaluate(`window.__printCalled = false; window.print = () => { window.__printCalled = true; }; document.querySelector("#print-brief").click()`);
     assert.equal(await page.evaluate(`window.__printCalled`), true, "the print action must open the browser print dialog");
     const printedDisclaimer = await page.evaluate(`document.querySelector("footer").textContent.replace(/\\s+/g, " ").trim()`);
-    assert.match(printedDisclaimer, /Sombra supports, but does not replace, your employer's heat safety plan or medical care\. In an emergency call 911/);
+    assert.match(printedDisclaimer, /sombra supports, but does not replace, your employer's heat safety plan or medical care\. In an emergency call 911/);
 
     await page.evaluate(`window.__mockMissingHours = ["11:00", "12:00"]; document.querySelector("#shift-form").requestSubmit()`);
     const partialDeadline = Date.now() + 5000;
@@ -620,14 +628,17 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
         assert.deepEqual(adjusted, referenceAdjusted, "English and Spanish send identical site factors");
         assert.deepEqual(adjustedSchedule, referenceAdjustedSchedule, "site-adjusted schedule values are language-independent");
         await page.evaluate(`document.querySelector("#site-edit-adjustment").click()`);
+        // The form is folded away while a plan is showing; open it the way a person would before measuring it.
+        await page.evaluate(`document.querySelector("#edit-shift").click()`);
         const layout = await page.evaluate(`({
           viewport: document.documentElement.clientWidth,
           width: document.documentElement.scrollWidth,
           body: document.body.scrollWidth,
+          widest: [...document.querySelectorAll("body *")].filter((el) => el.getBoundingClientRect().right > document.documentElement.clientWidth + 1).slice(0, 4).map((el) => (el.id || el.className || el.tagName) + ":" + Math.round(el.getBoundingClientRect().right)).join(", "),
           choiceHeight: document.querySelector(".intensity-card").getBoundingClientRect().height
         })`);
-        assert.ok(layout.width <= layout.viewport && layout.body <= layout.viewport, `${locale} fits at ${width}px`);
-        assert.ok(layout.choiceHeight >= 48);
+        assert.ok(layout.width <= layout.viewport && layout.body <= layout.viewport, `${locale} fits at ${width}px; too wide: ${layout.widest}`);
+        assert.ok(layout.choiceHeight >= 48, `intensity choice is ${layout.choiceHeight}px tall at ${width}px (${locale})`);
         await page.evaluate(`document.querySelector("#shift-form").scrollIntoView({ block: "start", behavior: "instant" })`);
         const capture = await page.send("Page.captureScreenshot", { format: "png", fromSurface: true });
         await writeFile(path.join(os.tmpdir(), `sombra-planner-${locale}-${width}.png`), Buffer.from(capture.data, "base64"));

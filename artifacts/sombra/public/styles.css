@@ -946,3 +946,6 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 #location-status[data-error="false"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 .worker-field[hidden] { display: none; }
 .schedule-action.schedule-action-stop { font-weight: 800; color: var(--ink, #2A1206); }
+/* Longer Spanish labels wrap onto a second line instead of pushing past the screen edge. */
+.results-actions { flex-wrap: wrap; max-width: 100%; }
+.results-actions .button { flex: 1 1 auto; min-width: 0; white-space: normal; }
