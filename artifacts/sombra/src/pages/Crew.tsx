@@ -8,6 +8,7 @@ import { fmtTime, initial, isLevel, latestFor, latestToday, levelRank } from '..
 import { useSession } from '../lib/session';
 import { intensityLabel, modeUi, type Intensity } from '../lib/copy';
 import { AppShell } from '../components/AppShell';
+import { setGroupEnabled } from '../lib/local';
 import { Sheet } from '../components/Sheet';
 import { IntensityPicker, Switch } from '../components/Controls';
 
@@ -56,6 +57,7 @@ export default function Crew() {
     setBusy(true); setSaveErr(false);
     try {
       setCrew(await store.saveCrew(next));
+      if (next.length > 0) setGroupEnabled(true);
       setDraft(null);
     } catch {
       setSaveErr(true);

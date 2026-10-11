@@ -8,11 +8,17 @@ import CheckIn from './pages/CheckIn';
 import Crew from './pages/Crew';
 import Settings from './pages/Settings';
 import About from './pages/About';
+import Tools from './pages/Tools';
+import BestTime from './pages/BestTime';
+import CoolSpots from './pages/CoolSpots';
+import CareCheck from './pages/CareCheck';
+import HeatProfile from './pages/HeatProfile';
 import { SignInPage, SignUpPage } from './pages/Auth';
 import { useEffect } from 'react';
 import { audienceModeId, modeQuery } from './lib/copy';
 import { ImportOffer } from './components/ImportOffer';
 import { ReminderHost } from './components/ReminderHost';
+import { CareReminderHost } from './components/CareReminderHost';
 
 const clerkPubKey = publishableKeyFromHost(window.location.hostname, import.meta.env.VITE_CLERK_PUBLISHABLE_KEY);
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
@@ -99,6 +105,11 @@ function Routes() {
       <Route path="/app" component={Plan} />
       <Route path="/app/check-in" component={CheckIn} />
       <Route path="/app/crew" component={Crew} />
+      <Route path="/app/tools" component={Tools} />
+      <Route path="/app/best-time" component={BestTime} />
+      <Route path="/app/cool-spots" component={CoolSpots} />
+      <Route path="/app/check-on" component={CareCheck} />
+      <Route path="/app/profile" component={HeatProfile} />
       <Route path="/settings" component={Settings} />
       <Route path="/about" component={About} />
       <Route path="/sign-in/*?" component={SignInPage} />
@@ -127,6 +138,7 @@ function ClerkWithRoutes() {
         <Routes />
         <ImportOffer />
         <ReminderHost />
+        <CareReminderHost />
       </SessionProvider>
     </ClerkProvider>
   );

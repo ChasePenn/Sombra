@@ -1,54 +1,248 @@
 {
   "id": "school",
   "icon": "student",
-  "welcomeQuestions": { "en": "Who's Sombra for today?", "es": "¿Para quién es Sombra hoy?" },
-  "taglines": { "en": "Heat safety for every crew, team and family.", "es": "Seguridad contra el calor para cuadrillas, equipos y familias." },
-  "rules": { "categoryIncrease": 1, "stopAtExtreme": true, "planKind": "practice" },
+  "welcomeQuestions": {
+    "en": "Who's Sombra for today?",
+    "es": "¿Para quién es Sombra hoy?"
+  },
+  "taglines": {
+    "en": "Heat safety for every crew, team and family.",
+    "es": "Seguridad contra el calor para cuadrillas, equipos y familias."
+  },
+  "rules": {
+    "categoryIncrease": 1,
+    "stopAtExtreme": true,
+    "planKind": "practice"
+  },
   "locales": {
     "en": {
-      "mode": { "name": "School & sports", "shortName": "School", "description": "For coaches, PE, band, and athletes.", "group": "Team", "member": "Student", "leader": "Coach", "greetingStyle": "friendly", "siteLabel": "School or practice location", "emptyState": "Add your team to plan together.", "stopBanner": "Move practice indoors or reschedule." },
-      "app": { "landingSub": "A clearer way to plan for heat before practice, PE, or band.", "crew": "Team", "crewSub": "Players, students, and staff you look after.", "noCrew": "No team added yet", "noCrewSub": "Add the people joining practice.", "usualWork": "Usual activity", "newToHeat": "New to being active in heat", "newToHeatHint": "Started outdoor activity in the last 2 weeks", "testBody": "Time to check in with your team.", "signInPrompt": "Sign in to save your plans and team across devices.", "deleteBody": "This removes your profile, team, saved plans, and check-ins from Sombra, then signs you out. It cannot be undone.", "importBody": "You have a profile, team, plans, or check-ins saved on this device. Copy them into your account so they show up everywhere.", "signInTitle": "Sign in to save your plans and team", "signInSub": "Your account keeps your profile, team, and saved plans on every device.", "signUpSub": "Save your plans and team. Guest mode still works without an account." },
-      "about": { "what": "Sombra helps school teams plan outdoor activities around heat, shade breaks, and water. It is free and works without an account." },
-      "ui": { "documentTitle": "Sombra — School heat safety", "metaDescription": "Heat safety guidance for school activities, sports, and band.", "desktopTitle": "Heat guidance for your team", "desktopDescription": "Plan practice, shade breaks, and water around the hourly conditions.", "crewStatus": "Your team", "crewStatusUnavailable": "Team information is temporarily unavailable.", "pageTitle": "Plan your activity", "introDescription": "Check the heat before practice or an outdoor activity.", "locationLabel": "School or practice location", "locationHelp": "Choose the school, field, or outdoor practice location.", "workerName": "Student or participant", "workerNamePlaceholder": "Name for this plan", "newToHeatQuestion": "New to being active in heat in the last 2 weeks?", "stopBanner": "Move practice indoors or reschedule." },
+      "mode": {
+        "name": "School & sports",
+        "shortName": "School",
+        "description": "For coaches, PE, band, and athletes.",
+        "group": "Team",
+        "member": "Student",
+        "leader": "Coach",
+        "greetingStyle": "friendly",
+        "siteLabel": "School or practice location",
+        "emptyState": "Add your team to plan together.",
+        "stopBanner": "Move practice indoors or reschedule."
+      },
+      "app": {
+        "landingSub": "A clearer way to plan for heat before practice, PE, or band.",
+        "crew": "Team",
+        "crewSub": "Players, students, and staff you look after.",
+        "noCrew": "No team added yet",
+        "noCrewSub": "Add the people joining practice.",
+        "usualWork": "Usual activity",
+        "newToHeat": "New to being active in heat",
+        "newToHeatHint": "Started outdoor activity in the last 2 weeks",
+        "testBody": "Time to check in. How are you feeling?",
+        "signInPrompt": "Sign in to save your plans and team across devices.",
+        "deleteBody": "This removes your profile, team, saved plans, and check-ins from Sombra, then signs you out. It cannot be undone.",
+        "importBody": "You have a profile, team, plans, or check-ins saved on this device. Copy them into your account so they show up everywhere.",
+        "signInTitle": "Sign in to save your plans and team",
+        "signInSub": "Your account keeps your profile, team, and saved plans on every device.",
+        "signUpSub": "Save your plans and team. Guest mode still works without an account."
+      },
+      "about": {
+        "what": "Sombra helps school teams plan outdoor activities around heat, shade breaks, and water. It is free and works without an account."
+      },
+      "ui": {
+        "documentTitle": "Sombra — School heat safety",
+        "metaDescription": "Heat safety guidance for school activities, sports, and band.",
+        "desktopTitle": "Heat guidance for your team",
+        "desktopDescription": "Plan practice, shade breaks, and water around the hourly conditions.",
+        "crewStatus": "Your team",
+        "crewStatusUnavailable": "Team information is temporarily unavailable.",
+        "pageTitle": "Plan your activity",
+        "introDescription": "Check the heat before practice or an outdoor activity.",
+        "locationLabel": "School or practice location",
+        "locationHelp": "Choose the school, field, or outdoor practice location.",
+        "workerName": "Student or participant",
+        "workerNamePlaceholder": "Name for this plan",
+        "newToHeatQuestion": "New to being active in heat in the last 2 weeks?",
+        "stopBanner": "Move practice indoors or reschedule."
+      },
       "taskIntensities": [
-        { "value": "easy", "label": "Easy", "forecastLabel": "Easy activity", "example": "Walk-throughs, stretching, band standing practice" },
-        { "value": "moderate", "label": "Moderate", "forecastLabel": "Moderate activity", "example": "Regular practice, drills, marching band" },
-        { "value": "hard", "label": "Hard", "forecastLabel": "Hard activity", "example": "Conditioning, sprints, full-pad football practice" }
+        {
+          "value": "easy",
+          "label": "Easy",
+          "forecastLabel": "Easy activity",
+          "example": "Walk-throughs, stretching, band standing practice"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderate",
+          "forecastLabel": "Moderate activity",
+          "example": "Regular practice, drills, marching band"
+        },
+        {
+          "value": "hard",
+          "label": "Hard",
+          "forecastLabel": "Hard activity",
+          "example": "Conditioning, sprints, full-pad football practice"
+        }
       ],
       "checkIn": {
         "questions": [
-          { "id": "dizzy", "label": "Do you feel dizzy or lightheaded?" },
-          { "id": "headache", "label": "Do you have a headache?" },
-          { "id": "nausea", "label": "Do you feel sick or have muscle cramps?" },
-          { "id": "weak", "label": "Do you feel very tired or weak?" },
-          { "id": "hot_dry", "label": "Have you stopped sweating, or is your skin hot and dry?" },
-          { "id": "confused", "label": "Do you feel confused or have trouble speaking?" },
-          { "id": "fainted", "label": "Did you faint, pass out, or have a seizure?" }
+          {
+            "id": "dizzy",
+            "label": "Do you feel dizzy or lightheaded?"
+          },
+          {
+            "id": "headache",
+            "label": "Do you have a headache?"
+          },
+          {
+            "id": "nausea",
+            "label": "Do you feel sick or have muscle cramps?"
+          },
+          {
+            "id": "weak",
+            "label": "Do you feel very tired or weak?"
+          },
+          {
+            "id": "hot_dry",
+            "label": "Have you stopped sweating, or is your skin hot and dry?"
+          },
+          {
+            "id": "confused",
+            "label": "Do you feel confused or have trouble speaking?"
+          },
+          {
+            "id": "fainted",
+            "label": "Did you faint, pass out, or have a seizure?"
+          }
         ],
-        "pickWorker": "Who is checking in?", "pickWorkerSub": "Choose a person on the team.", "changeWorker": "Change person", "noWorkers": "Add your name or your team in Settings to check in quickly.", "pageSub": "Log activity, breaks, and water. Tell us how you feel.", "startWork": "Start activity", "finishWork": "Finish activity", "working": "Active", "worked": "Active", "numbers": "{hours} active, {water}, {breaks} breaks", "crewToday": "Today", "crewTap": "Tap a student or teammate to check in.", "editCrew": "Manage team"
+        "pickWorker": "Who is checking in?",
+        "pickWorkerSub": "Choose a person on the team.",
+        "changeWorker": "Change person",
+        "noWorkers": "Add your name or your team in Settings to check in quickly.",
+        "pageSub": "Log activity, breaks, and water. Tell us how you feel.",
+        "startWork": "Start activity",
+        "finishWork": "Finish activity",
+        "working": "Active",
+        "worked": "Active",
+        "numbers": "{hours} active, {water}, {breaks} breaks",
+        "crewToday": "Today",
+        "crewTap": "Tap a student or teammate to check in.",
+        "editCrew": "Manage team"
       }
     },
     "es": {
-      "mode": { "name": "Escuela y deportes", "shortName": "Escuela", "description": "Para entrenadores, educación física, banda y atletas.", "group": "Equipo", "member": "Estudiante", "leader": "Entrenador", "greetingStyle": "friendly", "siteLabel": "Escuela o lugar de práctica", "emptyState": "Agrega a tu equipo para planear juntos.", "stopBanner": "Muevan la práctica al interior o reprogramen." },
-      "app": { "landingSub": "Una forma clara de prepararse para el calor antes de practicar o tocar en la banda.", "crew": "Equipo", "crewSub": "Estudiantes, atletas y personal a tu cargo.", "noCrew": "Aún no hay equipo", "noCrewSub": "Agrega a quienes participarán en la práctica.", "usualWork": "Actividad habitual", "newToHeat": "Nuevo en la actividad con calor", "newToHeatHint": "Comenzó actividad al aire libre en las últimas 2 semanas", "testBody": "Es hora de consultar a tu equipo.", "signInPrompt": "Inicia sesión para guardar tus planes y equipo en varios dispositivos.", "deleteBody": "Esto elimina tu perfil, equipo, planes y registros de Sombra, y cierra tu sesión. No se puede deshacer.", "importBody": "Tienes un perfil, equipo, planes o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.", "signInTitle": "Inicia sesión para guardar tus planes y equipo", "signInSub": "Tu cuenta guarda tu perfil, equipo y planes en todos tus dispositivos.", "signUpSub": "Guarda tus planes y equipo. También puedes usar Sombra sin cuenta." },
-      "about": { "what": "Sombra ayuda a los equipos escolares a planear actividades al aire libre según el calor, la sombra y el agua. Es gratis y funciona sin cuenta." },
-      "ui": { "documentTitle": "Sombra — Seguridad escolar contra el calor", "metaDescription": "Orientación contra el calor para actividades escolares, deportes y banda.", "desktopTitle": "Orientación para tu equipo", "desktopDescription": "Planea la práctica, los descansos a la sombra y el agua según las condiciones por hora.", "crewStatus": "Tu equipo", "crewStatusUnavailable": "La información del equipo no está disponible ahora.", "pageTitle": "Planea la actividad", "introDescription": "Revisa el calor antes de la práctica o una actividad al aire libre.", "locationLabel": "Escuela o lugar de práctica", "locationHelp": "Elige la escuela, cancha o lugar de práctica al aire libre.", "workerName": "Estudiante o participante", "workerNamePlaceholder": "Nombre para este plan", "newToHeatQuestion": "¿Es nuevo en la actividad con calor durante las últimas 2 semanas?", "stopBanner": "Muevan la práctica al interior o reprogramen." },
+      "mode": {
+        "name": "Escuela y deportes",
+        "shortName": "Escuela",
+        "description": "Para entrenadores, educación física, banda y atletas.",
+        "group": "Equipo",
+        "member": "Estudiante",
+        "leader": "Entrenador",
+        "greetingStyle": "friendly",
+        "siteLabel": "Escuela o lugar de práctica",
+        "emptyState": "Agrega a tu equipo para planear juntos.",
+        "stopBanner": "Muevan la práctica al interior o reprogramen."
+      },
+      "app": {
+        "landingSub": "Una forma clara de prepararse para el calor antes de practicar o tocar en la banda.",
+        "crew": "Equipo",
+        "crewSub": "Estudiantes, atletas y personal a tu cargo.",
+        "noCrew": "Aún no hay equipo",
+        "noCrewSub": "Agrega a quienes participarán en la práctica.",
+        "usualWork": "Actividad habitual",
+        "newToHeat": "Nuevo en la actividad con calor",
+        "newToHeatHint": "Comenzó actividad al aire libre en las últimas 2 semanas",
+        "testBody": "Es hora de registrarte. ¿Cómo te sientes?",
+        "signInPrompt": "Inicia sesión para guardar tus planes y equipo en varios dispositivos.",
+        "deleteBody": "Esto elimina tu perfil, equipo, planes y registros de Sombra, y cierra tu sesión. No se puede deshacer.",
+        "importBody": "Tienes un perfil, equipo, planes o registros guardados en este dispositivo. Cópialos a tu cuenta para verlos en todas partes.",
+        "signInTitle": "Inicia sesión para guardar tus planes y equipo",
+        "signInSub": "Tu cuenta guarda tu perfil, equipo y planes en todos tus dispositivos.",
+        "signUpSub": "Guarda tus planes y equipo. También puedes usar Sombra sin cuenta."
+      },
+      "about": {
+        "what": "Sombra ayuda a los equipos escolares a planear actividades al aire libre según el calor, la sombra y el agua. Es gratis y funciona sin cuenta."
+      },
+      "ui": {
+        "documentTitle": "Sombra — Seguridad escolar contra el calor",
+        "metaDescription": "Orientación contra el calor para actividades escolares, deportes y banda.",
+        "desktopTitle": "Orientación para tu equipo",
+        "desktopDescription": "Planea la práctica, los descansos a la sombra y el agua según las condiciones por hora.",
+        "crewStatus": "Tu equipo",
+        "crewStatusUnavailable": "La información del equipo no está disponible ahora.",
+        "pageTitle": "Planea la actividad",
+        "introDescription": "Revisa el calor antes de la práctica o una actividad al aire libre.",
+        "locationLabel": "Escuela o lugar de práctica",
+        "locationHelp": "Elige la escuela, cancha o lugar de práctica al aire libre.",
+        "workerName": "Estudiante o participante",
+        "workerNamePlaceholder": "Nombre para este plan",
+        "newToHeatQuestion": "¿Es nuevo en la actividad con calor durante las últimas 2 semanas?",
+        "stopBanner": "Muevan la práctica al interior o reprogramen."
+      },
       "taskIntensities": [
-        { "value": "easy", "label": "Fácil", "forecastLabel": "Actividad fácil", "example": "Recorrido de práctica, estiramientos, práctica de banda de pie" },
-        { "value": "moderate", "label": "Moderada", "forecastLabel": "Actividad moderada", "example": "Práctica regular, ejercicios, banda de marcha" },
-        { "value": "hard", "label": "Intensa", "forecastLabel": "Actividad intensa", "example": "Acondicionamiento, carreras rápidas, fútbol americano con equipo completo" }
+        {
+          "value": "easy",
+          "label": "Fácil",
+          "forecastLabel": "Actividad fácil",
+          "example": "Recorrido de práctica, estiramientos, práctica de banda de pie"
+        },
+        {
+          "value": "moderate",
+          "label": "Moderada",
+          "forecastLabel": "Actividad moderada",
+          "example": "Práctica regular, ejercicios, banda de marcha"
+        },
+        {
+          "value": "hard",
+          "label": "Intensa",
+          "forecastLabel": "Actividad intensa",
+          "example": "Acondicionamiento, carreras rápidas, fútbol americano con equipo completo"
+        }
       ],
       "checkIn": {
         "questions": [
-          { "id": "dizzy", "label": "¿Te sientes mareado o aturdido?" },
-          { "id": "headache", "label": "¿Te duele la cabeza?" },
-          { "id": "nausea", "label": "¿Te sientes mal o tienes calambres?" },
-          { "id": "weak", "label": "¿Te sientes muy cansado o débil?" },
-          { "id": "hot_dry", "label": "¿Dejaste de sudar o tienes la piel caliente y seca?" },
-          { "id": "confused", "label": "¿Te sientes confundido o te cuesta hablar?" },
-          { "id": "fainted", "label": "¿Te desmayaste o tuviste convulsiones?" }
+          {
+            "id": "dizzy",
+            "label": "¿Te sientes mareado o aturdido?"
+          },
+          {
+            "id": "headache",
+            "label": "¿Te duele la cabeza?"
+          },
+          {
+            "id": "nausea",
+            "label": "¿Te sientes mal o tienes calambres?"
+          },
+          {
+            "id": "weak",
+            "label": "¿Te sientes muy cansado o débil?"
+          },
+          {
+            "id": "hot_dry",
+            "label": "¿Dejaste de sudar o tienes la piel caliente y seca?"
+          },
+          {
+            "id": "confused",
+            "label": "¿Te sientes confundido o te cuesta hablar?"
+          },
+          {
+            "id": "fainted",
+            "label": "¿Te desmayaste o tuviste convulsiones?"
+          }
         ],
-        "pickWorker": "¿Quién va a hacer el registro?", "pickWorkerSub": "Elige a una persona del equipo.", "changeWorker": "Cambiar persona", "noWorkers": "Agrega tu nombre o equipo en Configuración para hacer registros rápidamente.", "pageSub": "Registra la actividad, los descansos y el agua. Cuéntanos cómo te sientes.", "startWork": "Empezar actividad", "finishWork": "Terminar actividad", "working": "En actividad", "worked": "En actividad", "numbers": "{hours} en actividad, {water}, {breaks} descansos", "crewToday": "Hoy", "crewTap": "Toca a un estudiante o compañero para consultar cómo se siente.", "editCrew": "Administrar equipo"
+        "pickWorker": "¿Quién va a hacer el registro?",
+        "pickWorkerSub": "Elige a una persona del equipo.",
+        "changeWorker": "Cambiar persona",
+        "noWorkers": "Agrega tu nombre o equipo en Configuración para hacer registros rápidamente.",
+        "pageSub": "Registra la actividad, los descansos y el agua. Cuéntanos cómo te sientes.",
+        "startWork": "Empezar actividad",
+        "finishWork": "Terminar actividad",
+        "working": "En actividad",
+        "worked": "En actividad",
+        "numbers": "{hours} en actividad, {water}, {breaks} descansos",
+        "crewToday": "Hoy",
+        "crewTap": "Toca a un estudiante o compañero para consultar cómo se siente.",
+        "editCrew": "Administrar equipo"
       }
     }
   }

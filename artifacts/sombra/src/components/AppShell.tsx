@@ -7,6 +7,7 @@ import { useSession } from '../lib/session';
 import { Sheet } from './Sheet';
 import { ModePicker } from './ModePicker';
 import { InstallTip } from './InstallTip';
+import { featureCopy } from '../lib/features-copy';
 
 function Glyph({ name, size = 24 }: { name: string; size?: number }) {
   return <Icon name={name} size={size} strokeWidth={name === 'check' ? 3 : 2.2} />;
@@ -64,11 +65,11 @@ export function TopBar({ title }: { title?: string }) {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { t } = useSession();
+  const { t, lang } = useSession();
   const [loc] = useLocation();
   const tabs = [
     { href: '/app', label: t.today, icon: 'sun-horizon', active: loc === '/app' },
-    { href: '/app/crew', label: t.crew, icon: 'users-three', active: loc.startsWith('/app/crew') },
+    { href: '/app/tools', label: featureCopy[lang].toolsTitle, icon: 'tools', active: ['/app/tools', '/app/best-time', '/app/cool-spots', '/app/check-on', '/app/profile', '/app/crew'].some((p) => loc.startsWith(p)) },
   ];
   return (
     <div className="app-layout">

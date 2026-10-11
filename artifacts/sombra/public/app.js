@@ -125,6 +125,17 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     localizedMessages.set(element, { key, values });
     element.textContent = key ? translate(key, values) : "";
   };
+  // Personal heat risk factors are saved on this device only (Tools > My heat profile).
+  const personalRiskFactors = () => {
+    try {
+      const value = JSON.parse(localStorage.getItem("sombra.risk-profile") || "[]");
+      return Array.isArray(value) ? value : [];
+    } catch {
+      return [];
+    }
+  };
+  const effectiveCategoryIncrease = () =>
+    Math.max(selectedMode.rules?.categoryIncrease ?? 0, personalRiskFactors().length > 0 ? 1 : 0);
   const renderIntensityOptions = () => {
     const container = document.querySelector("#intensity-options");
     const selectedValue = container.querySelector('input[name="intensity"]:checked')?.value;
@@ -295,7 +306,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
           input: {
             ...payload,
             mode: selectedModeId,
-            categoryIncrease: selectedMode.rules?.categoryIncrease ?? 0,
+            categoryIncrease: effectiveCategoryIncrease(),
             stopAtExtreme: selectedMode.rules?.stopAtExtreme === true,
           },
           forecast,
@@ -928,7 +939,8 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
         }
         crewStatus.append(item);
       });
-      crewStatus.hidden = people.length === 0;
+      // Solo users never see group rings; they appear once someone else is added.
+      crewStatus.hidden = !people.some((person) => !person.self);
     } catch {
       crewStatus.hidden = false;
       crewStatus.textContent = translate("ui.crewStatusUnavailable");
@@ -963,11 +975,130 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       })),
       intensity: forecast.intensity,
       newToHeat: forecast.newToHeat,
-      categoryIncrease: selectedMode.rules?.categoryIncrease ?? 0,
+      categoryIncrease: effectiveCategoryIncrease(),
       stopAtExtreme: selectedMode.rules?.stopAtExtreme === true,
       table: workRestTable,
     });
+    latestSchedule = schedule;
+    profileCaution.hidden = personalRiskFactors().length === 0;
     renderWorkRestSchedule(schedule, workRestTable, forecast.timezone, siteAdjusted);
+    renderBringList();
+  };
+
+  // --- Outdoor conditions (official alerts, UV, air quality) and what to bring ---
+  let latestSchedule = null;
+  let latestConditions = null;
+  let conditionsRequest = 0;
+  const conditionsPanel = document.querySelector("#conditions-panel");
+  const conditionsAlerts = document.querySelector("#conditions-alerts");
+  const conditionsDust = document.querySelector("#conditions-dust");
+  const bringPanel = document.querySelector("#bring-panel");
+  const bringList = document.querySelector("#bring-list");
+  const profileCaution = document.querySelector("#profile-caution");
+  const formatAlertEnd = (iso) => {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "";
+    return new Intl.DateTimeFormat(activeLocale, {
+      weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/Phoenix",
+    }).format(date);
+  };
+  const renderConditions = () => {
+    const data = latestConditions;
+    if (!data) {
+      conditionsPanel.hidden = true;
+      return;
+    }
+    conditionsAlerts.replaceChildren();
+    if (Array.isArray(data.alerts) && data.alerts.length) {
+      data.alerts.forEach((alert) => {
+        const item = document.createElement("div");
+        item.className = `alert-item alert-${alert.kind}`;
+        const title = document.createElement("strong");
+        title.textContent = alert.event;
+        const meta = document.createElement("small");
+        meta.textContent = [translate("extras.alertSource"), alert.ends ? translate("extras.until", { time: formatAlertEnd(alert.ends) }) : ""]
+          .filter(Boolean).join(" · ");
+        item.append(title, meta);
+        conditionsAlerts.append(item);
+      });
+    } else {
+      const none = document.createElement("p");
+      none.className = "alerts-none";
+      none.textContent = translate(Array.isArray(data.alerts) ? "extras.alertsNone" : "extras.alertsUnavailable");
+      conditionsAlerts.append(none);
+    }
+    const air = data.air;
+    const uvTile = document.querySelector("#uv-tile");
+    const aqiTile = document.querySelector("#aqi-tile");
+    uvTile.hidden = !(air && air.uv && air.uv.level);
+    aqiTile.hidden = !(air && air.aqi && air.aqi.level);
+    if (!uvTile.hidden) {
+      uvTile.dataset.level = air.uv.level;
+      document.querySelector("#uv-level").textContent = translate(`extras.uv_${air.uv.level}`);
+      document.querySelector("#uv-peak").textContent = translate("extras.uvPeak", { value: Math.round(air.uv.peak), time: formatTime(air.uv.peakTime) });
+    }
+    if (!aqiTile.hidden) {
+      aqiTile.dataset.level = air.aqi.level;
+      document.querySelector("#aqi-level").textContent = translate(`extras.aqi_${air.aqi.level}`);
+      document.querySelector("#aqi-peak").textContent = translate("extras.aqiPeak", { value: Math.round(air.aqi.peak), time: formatTime(air.aqi.peakTime) });
+    }
+    conditionsDust.hidden = !(air && Number.isFinite(air.dustPeak) && air.dustPeak >= 100);
+    conditionsPanel.hidden = false;
+  };
+  const loadConditions = async (latitude, longitude) => {
+    const request = ++conditionsRequest;
+    latestConditions = null;
+    conditionsPanel.hidden = true;
+    try {
+      const response = await fetch(`/api/conditions?lat=${latitude}&lon=${longitude}`, { headers: { Accept: "application/json" } });
+      if (!response.ok) throw new Error("conditions");
+      const data = await response.json();
+      if (request !== conditionsRequest) return;
+      latestConditions = data;
+    } catch {
+      if (request !== conditionsRequest) return;
+      latestConditions = null;
+    }
+    renderConditions();
+    renderBringList();
+  };
+  const renderBringList = () => {
+    if (!latestSchedule || !latestSchedule.hours.length) {
+      bringPanel.hidden = true;
+      return;
+    }
+    const hours = latestSchedule.hours;
+    const maxCategory = Math.max(...hours.map((hour) => hour.category));
+    const cups = latestSchedule.totalWaterCups;
+    const air = latestConditions?.air;
+    const uvPeak = air?.uv?.peak;
+    const site = appliedSiteSelection;
+    const items = [
+      translate("extras.bringWater", { liters: (Math.round(cups * 0.2366 * 2) / 2).toLocaleString(activeLocale), cups }),
+      translate("extras.bringClothes"),
+    ];
+    if (hours.length >= 2 && maxCategory >= 2) items.push(translate("extras.bringElectrolytes"));
+    if (uvPeak == null ? maxCategory >= 1 : uvPeak >= 6) items.push(translate("extras.bringHat"));
+    if (uvPeak == null || uvPeak >= 3) items.push(translate("extras.bringSunscreen"));
+    if (maxCategory >= 3) items.push(translate("extras.bringTowel"));
+    if (site ? site.shade === "full_sun" : maxCategory >= 3) items.push(translate("extras.bringShade"));
+    if (site && ["dark_roof", "asphalt"].includes(site.surface)) items.push(translate("extras.bringGloves"));
+    if (air && ((air.aqi?.peak ?? 0) > 100 || (air.dustPeak ?? 0) >= 100)) items.push(translate("extras.bringMask"));
+    if (maxCategory >= 4) items.push(translate("extras.bringPhone"));
+    // Tap an item to tick it off while packing.
+    bringList.replaceChildren(...items.map((text) => {
+      const item = document.createElement("li");
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.setAttribute("aria-pressed", "false");
+      toggle.textContent = text;
+      toggle.addEventListener("click", () => {
+        toggle.setAttribute("aria-pressed", String(toggle.getAttribute("aria-pressed") !== "true"));
+      });
+      item.append(toggle);
+      return item;
+    }));
+    bringPanel.hidden = false;
   };
   const resetSiteAdjustment = () => {
     siteCheck.hidden = true;
@@ -1171,6 +1302,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       renderScheduleFromForecast(data, true);
       siteAdjustmentApplied = true;
       appliedSiteSelection = { ...selection };
+      renderBringList();
       siteCheck.hidden = true;
       setSiteAdjustmentStatus("results.siteAppliedStatus");
       await persistPlan({ ...activeShiftPayload, ...factors }, data);
@@ -1321,6 +1453,12 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       date: getSelectedShiftDate(),
       newToHeat: form.querySelector('input[name="newToHeat"]:checked').value === "yes"
     };
+    // Remember the place so Tools (best time, cool spots) can start from it.
+    try {
+      localStorage.setItem("sombra.last-place", JSON.stringify({ lat: payload.latitude, lon: payload.longitude, name: payload.locationName }));
+    } catch {
+      // Tools will simply ask for a location.
+    }
     setLoading(true);
     results.hidden = false;
     renderForecastSkeleton();
@@ -1354,6 +1492,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       document.body.classList.add("has-plan");
       siteCheck.hidden = false;
       renderForecast(data, payload);
+      void loadConditions(payload.latitude, payload.longitude);
       try {
         renderScheduleFromForecast(data);
       } catch (scheduleError) {
