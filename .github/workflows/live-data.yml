@@ -27,7 +27,7 @@ jobs:
       - name: Unit tests
         run: |
           pnpm --filter @workspace/heat-safety test
-          pnpm --filter @workspace/sombra exec node --test tests/best-window.test.js tests/summary.test.js
+          pnpm --filter @workspace/sombra exec node --test tests/best-window.test.js tests/summary.test.js tests/opening-hours.test.js
           pnpm --filter @workspace/api-server exec node --test tests/conditions.test.js
       - name: Live data
         run: pnpm --filter @workspace/api-server run test:live

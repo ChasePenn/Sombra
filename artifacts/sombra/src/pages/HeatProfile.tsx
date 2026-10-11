@@ -28,10 +28,13 @@ export default function HeatProfile() {
           {RISK_FACTORS.map((factor) => {
             const on = selected.includes(factor);
             return (
-              <button key={factor} type="button" className="check-item" aria-pressed={on} onClick={() => toggle(factor)}>
-                <span className="check-box" aria-hidden="true">{on && <Check size={18} strokeWidth={3} />}</span>
-                {f.risk[factor]}
-              </button>
+              <div key={factor} className={`check-wrap ${on ? 'is-on' : ''}`}>
+                <button type="button" className="check-item" aria-pressed={on} onClick={() => toggle(factor)}>
+                  <span className="check-box" aria-hidden="true">{on && <Check size={18} strokeWidth={3} />}</span>
+                  {f.risk[factor]}
+                </button>
+                {on && <p className="check-tip">{f.tips[factor]}</p>}
+              </div>
             );
           })}
         </div>

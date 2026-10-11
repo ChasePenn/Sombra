@@ -6,7 +6,7 @@ import { useSession } from '../lib/session';
 import { fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
 import { getCareContacts, getLastPlace, saveCareContacts, type CareContact } from '../lib/local';
-import { checkedTodayAt, markChecked } from '../lib/care';
+import { checkedTodayAt, markChecked, overdueMinutes } from '../lib/care';
 import { clock } from '../lib/time';
 
 const initials = (name: string) => name.trim().split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
@@ -73,7 +73,7 @@ export default function CareCheck() {
                   <span className="care-avatar" aria-hidden="true">{initials(c.name)}</span>
                   <span className="care-copy">
                     <strong>{c.name}</strong>
-                    <small>{at ? fill(f.careCheckedAt, { time: clock(at, lang) }) : fill(f.careNotYet, { time: clock(c.time, lang) })}</small>
+                    <small className={!at && overdueMinutes(c) > 0 ? 'care-late' : undefined}>{at ? fill(f.careCheckedAt, { time: clock(at, lang) }) : overdueMinutes(c) > 0 ? fill(f.careOverdue, { mins: overdueMinutes(c) }) : fill(f.careNotYet, { time: clock(c.time, lang) })}</small>
                   </span>
                   <button type="button" className="icon-btn" aria-label={`${f.careRemove} ${c.name}`} onClick={() => remove(c.id)}><Trash2 size={18} /></button>
                 </div>

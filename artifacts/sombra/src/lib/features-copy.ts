@@ -4,6 +4,54 @@ import type { RiskFactor } from './local';
 /** Text for the Tools hub: best time finder, cool spots, check on someone, heat profile. */
 const en = {
   riskWords: ['Low', 'Caution', 'Elevated', 'High', 'Very high', 'Extreme'],
+  // Today screen suggestions
+  ctxHeatTitle: '{event} in effect',
+  ctxHeatBody: 'Plan around the hottest hours, stay near cool places, and check on people at risk.',
+  ctxCool: 'Cool spots near you',
+  ctxCheck: 'Check on {name}',
+  ctxHotTitle: 'Very hot later today',
+  ctxHotBody: 'Your plan reaches Very high heat. A cooler time could make it much safer.',
+  ctxBest: 'Find a cooler time',
+
+  // Best time reminders
+  remindMe: 'Remind me when it starts',
+  reminderSet: "Reminder set for {when}. Keep sombra open or installed on your home screen.",
+  reminderDue: 'Your best window starts now: {activity}',
+  reminderDueBody: 'Heat is at its lowest for the next {hours} h. Bring water.',
+  reminderCancel: 'Cancel reminder',
+
+  // Heat profile tips
+  tips: {
+    age65: 'Older bodies sweat less and feel thirst later. Drink on a schedule, not just when thirsty.',
+    child: "Young kids heat up fast and can't tell you early. Never leave them in a car, and plan play for the coolest hours.",
+    pregnant: 'Pregnancy raises body temperature. Take shade breaks often and stop at the first sign of dizziness.',
+    heart: 'Heat makes your heart work harder. Keep exertion light during hot hours and know your warning signs.',
+    diabetes: 'Heat can change blood sugar and damage supplies. Keep insulin and meters out of the sun and check sugar more often.',
+    kidney: 'Dehydration is hard on kidneys. Ask your doctor how much water is right for you on hot days.',
+    meds_bp: 'Water pills and some blood pressure medicines cause faster fluid loss. Watch for cramps, dizziness, and dark urine.',
+    meds_allergy: 'Antihistamines and sleep aids can reduce sweating. Cool off before you feel overheated.',
+    meds_mental: 'Some mood and focus medicines affect sweating or thirst. Take extra breaks and drink water regularly.',
+    past_illness: 'Having had heat illness raises your risk of it happening again. Start slow and stop at the first symptom.',
+  } as Record<RiskFactor, string>,
+
+  // Cool spots map + filters
+  viewList: 'List',
+  viewMap: 'Map',
+  filterAll: 'All',
+  filterWater: 'Water',
+  filterIndoor: 'Indoor AC',
+  filterShade: 'Shade',
+  openNow: 'Open now',
+  closedNow: 'Closed now',
+  openNowOnly: 'Open now only',
+  mapAttribution: 'Map data © OpenStreetMap contributors',
+
+  // Check on someone escalation
+  careOverdue: 'Still not checked · {mins} min overdue',
+  careOverdueTitle: '{name} still needs a check-in',
+  careOverdueBody: "It's been 2 hours since the reminder. Try calling again, or ask another relative or neighbor to stop by.",
+  careAfternoon: 'Afternoon check (heat warning)',
+
   toolsTitle: 'Tools',
   toolsSub: 'More ways to stay safe in the heat.',
   bestTitle: 'Best time to go',
@@ -121,6 +169,49 @@ type FeatureCopy = typeof en;
 
 const es: FeatureCopy = {
   riskWords: ['Bajo', 'Precaución', 'Elevado', 'Alto', 'Muy alto', 'Extremo'],
+  ctxHeatTitle: '{event} vigente',
+  ctxHeatBody: 'Planea evitando las horas más calientes, quédate cerca de lugares frescos y revisa a quienes están en riesgo.',
+  ctxCool: 'Lugares frescos cerca',
+  ctxCheck: 'Revisar a {name}',
+  ctxHotTitle: 'Mucho calor más tarde',
+  ctxHotBody: 'Tu plan llega a calor muy alto. Un horario más fresco puede ser mucho más seguro.',
+  ctxBest: 'Buscar un horario más fresco',
+
+  remindMe: 'Avísame cuando empiece',
+  reminderSet: 'Recordatorio para {when}. Mantén sombra abierto o instalado en tu pantalla de inicio.',
+  reminderDue: 'Tu mejor horario empieza ahora: {activity}',
+  reminderDueBody: 'El calor está en su punto más bajo por las próximas {hours} h. Lleva agua.',
+  reminderCancel: 'Cancelar recordatorio',
+
+  tips: {
+    age65: 'Con la edad se suda menos y la sed llega tarde. Toma agua con horario, no solo cuando tengas sed.',
+    child: 'Los niños pequeños se calientan rápido y no avisan a tiempo. Nunca los dejes en un auto y planea el juego en las horas más frescas.',
+    pregnant: 'El embarazo sube la temperatura del cuerpo. Descansa en la sombra seguido y detente al primer mareo.',
+    heart: 'El calor hace trabajar más al corazón. Haz poco esfuerzo en las horas calientes y conoce tus señales de alerta.',
+    diabetes: 'El calor puede cambiar el azúcar y dañar tus insumos. Guarda la insulina y el medidor lejos del sol y revisa tu azúcar más seguido.',
+    kidney: 'La deshidratación daña los riñones. Pregunta a tu médico cuánta agua te conviene en días de calor.',
+    meds_bp: 'Los diuréticos y algunas medicinas para la presión hacen perder líquido más rápido. Vigila calambres, mareo y orina oscura.',
+    meds_allergy: 'Los antihistamínicos y pastillas para dormir pueden reducir el sudor. Refréscate antes de sentirte acalorado.',
+    meds_mental: 'Algunas medicinas para el ánimo o la concentración afectan el sudor o la sed. Toma descansos extra y agua seguido.',
+    past_illness: 'Haber tenido una enfermedad por calor aumenta el riesgo de que vuelva. Empieza despacio y detente al primer síntoma.',
+  },
+
+  viewList: 'Lista',
+  viewMap: 'Mapa',
+  filterAll: 'Todo',
+  filterWater: 'Agua',
+  filterIndoor: 'Con aire',
+  filterShade: 'Sombra',
+  openNow: 'Abierto ahora',
+  closedNow: 'Cerrado ahora',
+  openNowOnly: 'Solo abiertos ahora',
+  mapAttribution: 'Datos del mapa © colaboradores de OpenStreetMap',
+
+  careOverdue: 'Sin revisar · {mins} min de retraso',
+  careOverdueTitle: '{name} todavía necesita que lo revisen',
+  careOverdueBody: 'Pasaron 2 horas desde el recordatorio. Vuelve a llamar o pide a otro familiar o vecino que pase a verlo.',
+  careAfternoon: 'Revisión de la tarde (alerta de calor)',
+
   toolsTitle: 'Herramientas',
   toolsSub: 'Más formas de protegerte del calor.',
   bestTitle: 'Mejor hora para salir',

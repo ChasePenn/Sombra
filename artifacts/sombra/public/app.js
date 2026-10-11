@@ -233,7 +233,43 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     if (intensity) intensity.checked = true;
     const acclimation = form.querySelector(`input[name="newToHeat"][value="${profile.newToHeat ? "yes" : "no"}"]`);
     if (acclimation) acclimation.checked = true;
+    applyPrefill();
   };
+  // "Plan this" from Best time opens the planner with ?lat&lon&place&date&start&end&intensity.
+  const prefillParams = new URLSearchParams(window.location.search);
+  const prefill = (() => {
+    const lat = Number(prefillParams.get("lat"));
+    const lon = Number(prefillParams.get("lon"));
+    const clock = /^\d{2}:\d{2}$/;
+    const start = prefillParams.get("start");
+    const end = prefillParams.get("end");
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || !clock.test(start ?? "") || !clock.test(end ?? "")) return null;
+    return {
+      lat, lon, start, end,
+      place: (prefillParams.get("place") || "").slice(0, 120),
+      date: prefillParams.get("date") || "",
+      intensity: prefillParams.get("intensity") || "",
+    };
+  })();
+  let prefillSubmitted = false;
+  function applyPrefill() {
+    if (!prefill) return;
+    setSelectedLocation({ name: prefill.place || `${prefill.lat.toFixed(3)}, ${prefill.lon.toFixed(3)}`, latitude: prefill.lat, longitude: prefill.lon });
+    document.querySelector("#start-time").value = prefill.start;
+    document.querySelector("#end-time").value = prefill.end;
+    const date = dateInputs.find((field) => field.value === prefill.date);
+    if (date) date.checked = true;
+    const intensity = form.querySelector(`input[name="intensity"][value="${prefill.intensity}"]`);
+    if (intensity) intensity.checked = true;
+    // Plan right away once we know who it's for.
+    if (!prefillSubmitted && document.querySelector("#worker-name").value.trim()) {
+      prefillSubmitted = true;
+      if (!form.querySelector('input[name="newToHeat"]:checked')) {
+        form.querySelector('input[name="newToHeat"][value="no"]').checked = true;
+      }
+      setTimeout(() => form.requestSubmit(), 0);
+    }
+  }
   function renderSavedPlanNotice() {
     savedPlanNotice.textContent = translate("results.savedPlanNotice")
       .replace("{location}", restoredShift.location)
@@ -247,11 +283,8 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       restoredShift = saved[0] ?? null;
       if (!restoredShift) return;
       const input = restoredShift.planJson?.input;
-      if (!formTouched && input && Number.isFinite(input.latitude) && Number.isFinite(input.longitude)) {
-        locationInput.value = input.locationName ?? restoredShift.location;
-        locationNameInput.value = input.locationName ?? restoredShift.location;
-        latitudeInput.value = input.latitude;
-        longitudeInput.value = input.longitude;
+      if (!formTouched && !prefill && input && Number.isFinite(input.latitude) && Number.isFinite(input.longitude)) {
+        setSelectedLocation({ name: input.locationName ?? restoredShift.location, latitude: input.latitude, longitude: input.longitude });
         document.querySelector("#worker-name").value = profile?.name || input.workerName || "";
         for (const name of ["startTime", "endTime"]) {
           const field = form.querySelector(`[name="${name}"]`);
@@ -570,6 +603,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     (selectedInput ?? todayDateInput).checked = true;
   };
   refreshShiftDates();
+  applyPrefill();
   const formatValue = (value, suffix = "") => {
     const number = Number(value);
     return Number.isFinite(number) ? `${Math.round(number)}${suffix}` : "—";
@@ -980,6 +1014,10 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       table: workRestTable,
     });
     latestSchedule = schedule;
+    if (window.parent !== window) {
+      // Lets the Today screen suggest the right tool (for example, Best time when it gets very hot).
+      window.parent.postMessage({ type: "sombra:summary", maxCategory: Math.max(...schedule.hours.map((hour) => hour.category)) }, window.location.origin);
+    }
     profileCaution.hidden = personalRiskFactors().length === 0;
     renderWorkRestSchedule(schedule, workRestTable, forecast.timezone, siteAdjusted);
     renderBringList();
@@ -1043,8 +1081,43 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       document.querySelector("#aqi-peak").textContent = translate("extras.aqiPeak", { value: Math.round(air.aqi.peak), time: formatTime(air.aqi.peakTime) });
     }
     conditionsDust.hidden = !(air && Number.isFinite(air.dustPeak) && air.dustPeak >= 100);
+    // Alerts explain themselves when tapped too.
+    conditionsAlerts.querySelectorAll(".alert-item").forEach((item) => {
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
+      const show = () => showConditionMeaning(item, translate("extras.alertMean"));
+      item.addEventListener("click", show);
+      item.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); show(); } });
+    });
+    conditionMeaning.hidden = true;
+    conditionHint.hidden = uvTile.hidden && aqiTile.hidden;
     conditionsPanel.hidden = false;
   };
+  const conditionMeaning = document.querySelector("#condition-meaning");
+  const conditionHint = document.querySelector("#condition-hint");
+  let meaningOwner = null;
+  const showConditionMeaning = (owner, text) => {
+    const closing = meaningOwner === owner && !conditionMeaning.hidden;
+    document.querySelectorAll(".condition-tile").forEach((tile) => tile.setAttribute("aria-expanded", "false"));
+    if (closing) {
+      conditionMeaning.hidden = true;
+      meaningOwner = null;
+      return;
+    }
+    if (owner.classList.contains("condition-tile")) owner.setAttribute("aria-expanded", "true");
+    conditionMeaning.textContent = text;
+    conditionMeaning.hidden = false;
+    conditionHint.hidden = true;
+    meaningOwner = owner;
+  };
+  document.querySelector("#uv-tile").addEventListener("click", (event) => {
+    const level = latestConditions?.air?.uv?.level;
+    if (level) showConditionMeaning(event.currentTarget, translate(`extras.uvMean_${level}`));
+  });
+  document.querySelector("#aqi-tile").addEventListener("click", (event) => {
+    const level = latestConditions?.air?.aqi?.level;
+    if (level) showConditionMeaning(event.currentTarget, translate(`extras.aqiMean_${level}`));
+  });
   const loadConditions = async (latitude, longitude) => {
     const request = ++conditionsRequest;
     latestConditions = null;
@@ -1062,6 +1135,24 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     renderConditions();
     renderBringList();
   };
+  let latestBringItems = [];
+  const bringStatus = document.querySelector("#bring-status");
+  document.querySelector("#bring-share").addEventListener("click", async () => {
+    if (!latestBringItems.length) return;
+    const place = activeShiftPayload?.locationName ? ` (${activeShiftPayload.locationName})` : "";
+    const text = `${translate("extras.shareTitle")}${place}\n${latestBringItems.map((item) => `• ${item}`).join("\n")}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: translate("extras.shareTitle"), text });
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      bringStatus.textContent = translate("extras.copied");
+      bringStatus.hidden = false;
+    } catch {
+      // Sharing was cancelled; nothing to do.
+    }
+  });
   const renderBringList = () => {
     if (!latestSchedule || !latestSchedule.hours.length) {
       bringPanel.hidden = true;
@@ -1085,15 +1176,22 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
     if (site && ["dark_roof", "asphalt"].includes(site.surface)) items.push(translate("extras.bringGloves"));
     if (air && ((air.aqi?.peak ?? 0) > 100 || (air.dustPeak ?? 0) >= 100)) items.push(translate("extras.bringMask"));
     if (maxCategory >= 4) items.push(translate("extras.bringPhone"));
-    // Tap an item to tick it off while packing.
-    bringList.replaceChildren(...items.map((text) => {
+    // Tap an item to tick it off while packing. Ticks are remembered for this plan on this device.
+    const planKey = `sombra.bring:${activeShiftPayload?.date ?? ""}:${activeShiftPayload?.latitude ?? ""},${activeShiftPayload?.longitude ?? ""}`;
+    let ticked = [];
+    try { ticked = JSON.parse(localStorage.getItem(planKey) || "[]"); } catch { ticked = []; }
+    latestBringItems = items;
+    bringList.replaceChildren(...items.map((text, index) => {
       const item = document.createElement("li");
       const toggle = document.createElement("button");
       toggle.type = "button";
-      toggle.setAttribute("aria-pressed", "false");
+      toggle.setAttribute("aria-pressed", String(ticked.includes(index)));
       toggle.textContent = text;
       toggle.addEventListener("click", () => {
-        toggle.setAttribute("aria-pressed", String(toggle.getAttribute("aria-pressed") !== "true"));
+        const on = toggle.getAttribute("aria-pressed") !== "true";
+        toggle.setAttribute("aria-pressed", String(on));
+        ticked = on ? [...new Set([...ticked, index])] : ticked.filter((value) => value !== index);
+        try { localStorage.setItem(planKey, JSON.stringify(ticked)); } catch { /* ticks just won't be remembered */ }
       });
       item.append(toggle);
       return item;

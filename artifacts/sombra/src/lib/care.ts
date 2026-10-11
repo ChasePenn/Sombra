@@ -19,3 +19,21 @@ export function markChecked(id: string) {
   saveCareContacts(next);
   return next;
 }
+
+const minutes = (clock: string) => Number(clock.slice(0, 2)) * 60 + Number(clock.slice(3, 5));
+
+/** Minutes past the reminder time with no check-in today (0 when not overdue). */
+export function overdueMinutes(contact: CareContact, now = phoenixNow()) {
+  if (!isDue(contact, now)) return 0;
+  return Math.max(0, minutes(now.slice(11, 16)) - minutes(contact.time));
+}
+
+export const ESCALATE_AFTER_MIN = 120;
+export const AFTERNOON_CHECK = '16:00';
+
+/** During a heat warning, a second check is due at 4 PM unless they were checked after 1 PM. */
+export function needsAfternoonCheck(contact: CareContact, now = phoenixNow()) {
+  if (now.slice(11, 16) < AFTERNOON_CHECK) return false;
+  const at = checkedTodayAt(contact, now);
+  return at == null ? contact.time < AFTERNOON_CHECK : at < '13:00';
+}
