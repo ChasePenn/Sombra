@@ -16,7 +16,7 @@ const en = {
 
   // Best time reminders
   remindMe: 'Remind me when it starts',
-  reminderSet: "Reminder set for {when}. Keep sombra open or installed on your home screen.",
+  reminderSet: "Reminder set for {when}. It only shows if sombra is open on this phone then, so set a phone alarm too.",
   reminderDue: 'Your best window starts now: {activity}',
   reminderDueBody: 'Heat is at its lowest for the next {hours} h. Bring water.',
   reminderCancel: 'Cancel reminder',
@@ -116,7 +116,8 @@ const en = {
   call211: 'Call 2‑1‑1',
 
   // care
-  careSub: 'Older adults living alone are among the most at risk in a heat wave. Get a daily reminder to check on them.',
+  careSub: 'Older adults living alone are among the most at risk in a heat wave. Add the people you check on, and sombra shows who is due and who is overdue.',
+  careReminderLimit: 'Reminders only appear while sombra is open on this phone. For a check you can\'t miss, also set a daily phone alarm.',
   carePrivacy: 'Names and numbers stay on this phone.',
   careAdd: 'Add someone',
   careName: 'Name',
@@ -131,6 +132,7 @@ const en = {
   careRemoved: 'Removed {name}.',
   careMarkedMsg: '{name} is checked for today.',
   careUndo: 'Undo',
+  outsideArizona: 'sombra is built for Arizona. Times here are Arizona time, which may not match local time at this place.',
   saveFailed: 'Couldn\'t save on this phone. Check that storage isn\'t full or blocked, then try again.',
   careCheckedAt: 'Checked today at {time}',
   careNotYet: 'Not checked yet today · reminder at {time}',
@@ -191,7 +193,7 @@ const es: FeatureCopy = {
   ctxBest: 'Buscar un horario más fresco',
 
   remindMe: 'Avísame cuando empiece',
-  reminderSet: 'Recordatorio para {when}. Mantén sombra abierto o instalado en tu pantalla de inicio.',
+  reminderSet: 'Recordatorio para {when}. Solo aparece si sombra está abierto en este teléfono a esa hora, así que pon también una alarma.',
   reminderDue: 'Tu mejor horario empieza ahora: {activity}',
   reminderDueBody: 'El calor está en su punto más bajo por las próximas {hours} h. Lleva agua.',
   reminderCancel: 'Cancelar recordatorio',
@@ -284,7 +286,8 @@ const es: FeatureCopy = {
   heatRelief: 'En los meses de calor hay centros gratuitos para refrescarte y tomar agua en todo el Valle. Llama al 2‑1‑1 para encontrar uno abierto.',
   call211: 'Llamar al 2‑1‑1',
 
-  careSub: 'Los adultos mayores que viven solos están entre los de mayor riesgo en una ola de calor. Recibe un recordatorio diario para revisarlos.',
+  careSub: 'Los adultos mayores que viven solos están entre los de mayor riesgo en una ola de calor. Agrega a las personas que revisas y sombra te muestra a quién le toca y quién está atrasado.',
+  careReminderLimit: 'Los recordatorios solo aparecen mientras sombra está abierto en este teléfono. Para no olvidarlo, pon también una alarma diaria.',
   carePrivacy: 'Los nombres y números se quedan en este teléfono.',
   careAdd: 'Agregar a alguien',
   careName: 'Nombre',
@@ -299,6 +302,7 @@ const es: FeatureCopy = {
   careRemoved: 'Quitaste a {name}.',
   careMarkedMsg: '{name} ya está revisado por hoy.',
   careUndo: 'Deshacer',
+  outsideArizona: 'sombra está hecho para Arizona. Las horas son de Arizona y pueden no coincidir con la hora local de este lugar.',
   saveFailed: 'No se pudo guardar en este teléfono. Revisa que el almacenamiento no esté lleno o bloqueado e inténtalo de nuevo.',
   careCheckedAt: 'Revisado hoy a las {time}',
   careNotYet: 'Sin revisar hoy · recordatorio a las {time}',

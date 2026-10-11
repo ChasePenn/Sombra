@@ -158,3 +158,28 @@ test("rejects missing or invalid WBGT instead of returning a fabricated schedule
     /finite wbgtF/,
   );
 });
+
+test("being new to the heat and having a risk factor still adds only one level", () => {
+  const hours = [{ time: "10:00", wbgtF: 82.5 }]; // Elevated (2)
+  const one = buildWorkRestSchedule({ hours, intensity: "moderate", newToHeat: true, table, categoryIncrease: 0 });
+  const both = buildWorkRestSchedule({ hours, intensity: "moderate", newToHeat: true, table, categoryIncrease: 1 });
+  assert.equal(one.hours[0].category, 3);
+  assert.equal(both.hours[0].category, 3, "the two adjustments must not stack");
+});
+
+test("stop-work is only flagged at the top level, for hard work or modes that stop at extreme", () => {
+  const at = (wbgtF, intensity, stopAtExtreme = false) =>
+    buildWorkRestSchedule({ hours: [{ time: "13:00", wbgtF }], intensity, newToHeat: false, table, stopAtExtreme }).hours[0].stopWork;
+  assert.equal(at(90, "hard"), true);
+  assert.equal(at(89.9, "hard"), false);
+  assert.equal(at(95, "moderate"), false);
+  assert.equal(at(95, "easy", true), true);
+});
+
+test("hours past the 12-quart daily limit are marked, so the app can explain the zero", () => {
+  const hours = Array.from({ length: 14 }, (_, i) => ({ time: `${String(6 + i).padStart(2, "0")}:00`, wbgtF: 92 }));
+  const result = buildWorkRestSchedule({ hours, intensity: "hard", newToHeat: false, table });
+  assert.equal(result.hours[0].dailyCapReached, false);
+  assert.equal(result.hours.at(-1).waterCups, 0);
+  assert.equal(result.hours.at(-1).dailyCapReached, true);
+});

@@ -266,3 +266,4 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .not-found-code { font: 800 4.5rem/1 var(--head); color: var(--mesquite); margin: 0 0 8px; }
 .success-msg { display: flex; align-items: center; justify-content: space-between; gap: 12px; border-left: 4px solid var(--r-low); }
 .text-btn { background: none; border: 0; padding: 8px 4px; min-height: 44px; font: 700 .95rem var(--head); color: var(--mesquite-dark); cursor: pointer; text-decoration: underline; }
+.arizona-note { margin: 8px 0 12px; padding: 10px 12px; border-radius: 12px; background: #FFF4D6; color: var(--ink); font-size: .92rem; line-height: 1.4; }

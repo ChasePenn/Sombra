@@ -123,3 +123,5 @@ overrides:
   esbuild: "0.28.2"
   # orval pins js-yaml to an exact version older than the CVE fix (>=4.3.2)
   js-yaml: '4.3.2'
+  # express 5 pulls proxy-addr 2.0.7, which has an IP-spoofing advisory (GHSA fixed in 2.0.8)
+  proxy-addr: '^2.0.8'

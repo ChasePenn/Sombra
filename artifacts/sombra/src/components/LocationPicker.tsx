@@ -58,11 +58,14 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
 
   if (!editing && value) {
     return (
-      <div className="place-row">
-        <span className="place-icon" aria-hidden="true"><MapPin size={18} /></span>
-        <span className="place-name">{fill(f.near, { place: value.name })}</span>
-        <button type="button" className="btn-quiet place-change" onClick={() => setEditing(true)}>{f.change}</button>
-      </div>
+      <>
+        <div className="place-row">
+          <span className="place-icon" aria-hidden="true"><MapPin size={18} /></span>
+          <span className="place-name">{fill(f.near, { place: value.name })}</span>
+          <button type="button" className="btn-quiet place-change" onClick={() => setEditing(true)}>{f.change}</button>
+        </div>
+        {!isInArizona(value.lat, value.lon) && <p className="arizona-note" role="note">{f.outsideArizona}</p>}
+      </>
     );
   }
 
@@ -94,4 +97,9 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
 /** The last planned place, if any. */
 export function useInitialPlace() {
   return useState<Place | null>(() => getLastPlace());
+}
+
+/** Hours are Arizona time (no daylight saving); outside Arizona that may not match local time. */
+export function isInArizona(lat: number, lon: number) {
+  return lat >= 31.3 && lat <= 37.0 && lon >= -114.9 && lon <= -109.0;
 }

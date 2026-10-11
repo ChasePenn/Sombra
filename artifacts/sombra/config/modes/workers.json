@@ -272,9 +272,9 @@
         "siteHeading": "Sun, shade and hot ground",
         "sitePhoto": "Take a photo",
         "siteManual": "Pick it myself",
-        "sitePrivacy": "A dark roof or asphalt adds heat; shade takes it away. Snap the spot to adjust the plan. Photos stay on your phone.",
+        "sitePrivacy": "A dark roof or asphalt adds heat; shade takes it away. Snap the spot, or pick it yourself. The first photo check downloads a 150 MB model, so use Wi-Fi. Photos stay on your phone.",
         "sitePhotoLabel": "Take or choose a photo of the work area",
-        "siteModelNote": "The on-device model downloads once and is cached in this browser.",
+        "siteModelNote": "The photo model (about 150 MB) downloads once and is saved in this browser.",
         "sitePhotoReady": "On-device model ready. Choose a photo of the work area.",
         "siteDownload": "Downloading the on-device model ({percent}%).",
         "siteModelReady": "A model file is ready.",
@@ -461,7 +461,7 @@
         "previewCheck": "Ana checked in: feeling fine",
         "previewWater": "5 of 8 cups",
         "installTitle": "Get reminders on your iPhone",
-        "installBody": "Tap Share, then \"Add to Home Screen\". Open sombra from your home screen to turn on reminders.",
+        "installBody": "Tap Share, then \"Add to Home Screen\". iPhones only allow sombra's reminders from the home screen app, and they show while sombra is open.",
         "privacyLink": "Privacy",
         "sourcesLink": "Sources"
       },
@@ -537,7 +537,9 @@
         "shareTitle": "What to bring",
         "readingLine": "Air {air}°F · Heat stress {wbgt}°F",
         "readingWbgt": "Heat stress {wbgt}°F",
-        "hourlyNumbers": "Hourly numbers"
+        "hourlyNumbers": "Hourly numbers",
+        "outsideArizona": "sombra is built for Arizona. Hours here are Arizona time, which may not match local time at this place.",
+        "waterDayCap": "Daily water limit reached (12 quarts). Drinking much more can be harmful; keep resting in the shade."
       }
     },
     "es": {
@@ -811,9 +813,9 @@
         "siteHeading": "Sol, sombra y suelo caliente",
         "sitePhoto": "Tomar una foto",
         "siteManual": "Elegir yo mismo",
-        "sitePrivacy": "Un techo oscuro o el asfalto suman calor; la sombra lo reduce. Toma una foto del lugar para ajustar el plan. Las fotos se quedan en tu teléfono.",
+        "sitePrivacy": "Un techo oscuro o el asfalto suman calor; la sombra lo reduce. Toma una foto del lugar o elígelo tú. La primera revisión con foto descarga un modelo de 150 MB, así que usa Wi-Fi. Las fotos se quedan en tu teléfono.",
         "sitePhotoLabel": "Toma o elige una foto del área de trabajo",
-        "siteModelNote": "El modelo del dispositivo se descarga una vez y se guarda en este navegador.",
+        "siteModelNote": "El modelo de fotos (unos 150 MB) se descarga una vez y se guarda en este navegador.",
         "sitePhotoReady": "El modelo del dispositivo está listo. Elige una foto del área de trabajo.",
         "siteDownload": "Descargando el modelo del dispositivo ({percent}%).",
         "siteModelReady": "El archivo del modelo está listo.",
@@ -1000,7 +1002,7 @@
         "previewCheck": "Ana se registró: se siente bien",
         "previewWater": "5 de 8 vasos",
         "installTitle": "Recibe recordatorios en tu iPhone",
-        "installBody": "Toca Compartir y luego \"Agregar a inicio\". Abre sombra desde tu pantalla de inicio para activar los recordatorios.",
+        "installBody": "Toca Compartir y luego \"Agregar a inicio\". En iPhone, los recordatorios de sombra solo funcionan desde la app en tu pantalla de inicio, y aparecen mientras sombra está abierto.",
         "privacyLink": "Privacidad",
         "sourcesLink": "Fuentes"
       },
@@ -1076,7 +1078,9 @@
         "shareTitle": "Qué llevar",
         "readingLine": "Aire {air}°F · Estrés por calor {wbgt}°F",
         "readingWbgt": "Estrés por calor {wbgt}°F",
-        "hourlyNumbers": "Números por hora"
+        "hourlyNumbers": "Números por hora",
+        "outsideArizona": "sombra está hecho para Arizona. Las horas se muestran en hora de Arizona, que puede no coincidir con la hora local de este lugar.",
+        "waterDayCap": "Llegaste al límite diario de agua (12 cuartos de galón). Tomar mucho más puede hacer daño; sigue descansando a la sombra."
       }
     }
   }
