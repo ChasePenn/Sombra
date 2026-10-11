@@ -6,6 +6,7 @@ import { useClerk, useUser } from '@clerk/react';
 import * as store from '../../public/js/store.js';
 import type { SombraProfile } from '../../public/js/store.js';
 import { useSession } from '../lib/session';
+import { goBack } from '../lib/nav';
 import { IntensityPicker, LanguagePicker, Switch } from '../components/Controls';
 import { Sheet } from '../components/Sheet';
 import { ModePicker } from '../components/ModePicker';
@@ -88,7 +89,7 @@ export default function Settings() {
   return (
     <div className="shell" style={{ paddingBottom: 'calc(32px + var(--safe-b))' }}>
       <header className="topbar" style={{ paddingLeft: 4 }}>
-        <button type="button" className="icon-btn" aria-label={t.back} onClick={() => (window.history.length > 1 ? window.history.back() : nav('/app'))}><ChevronLeft size={26} /></button>
+        <button type="button" className="icon-btn" aria-label={t.back} onClick={() => goBack(nav, '/app')}><ChevronLeft size={26} /></button>
         <h1 style={{ fontSize: '1.15rem' }}>{t.settings}</h1>
         <span style={{ width: 48 }} />
       </header>

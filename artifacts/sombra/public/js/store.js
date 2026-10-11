@@ -11,8 +11,8 @@ const LOCAL_KEYS = {
   welcomeDismissed: "sombra.welcome-dismissed",
 };
 
-// Guest is the default and never needs a network request. The auth adapter
-// selects account storage after Clerk has verified the browser session.
+// Guests are the default and never touch the network. Account storage is
+// used only after Clerk has confirmed who is signed in.
 let accountUserId = null;
 
 export function setAccountSession(userId) {
@@ -133,7 +133,7 @@ export async function saveProfile(profile) {
     try {
       window.localStorage.setItem(LOCAL_KEYS.locale, saved.language);
     } catch {
-      // The server copy is authoritative; the embedded planner can still read it.
+      // The server copy wins; the embedded planner can still read this one.
     }
     return saved;
   }

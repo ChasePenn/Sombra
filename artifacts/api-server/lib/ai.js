@@ -26,7 +26,7 @@ export function validatePersonalization(value, level, language = "en") {
   if (sentences.length < 2 || sentences.length > 3) return null;
   if (value.follow_up_question.trim() && (value.follow_up_question.match(/\?/g) || []).length !== 1) return null;
   const text = [value.message,value.follow_up_question,...value.actions].join(" ");
-  // Reject explicit reassurance, diagnosis, or advice that conflicts with fixed rules.
+  // Throw out replies that reassure, diagnose, or contradict the safety rules.
   if (/\b(no risk|completely safe|safe to work|you (?:have|are suffering from) heat ?(?:stroke|exhaustion)|sin riesgo|totalmente segur[oa]|tienes (?:un )?golpe de calor)\b/i.test(text)) return null;
   if (level === "CAUTION" && /\b(keep working|continue work(?:ing)?|do not stop|don't stop|ignore (?:your |the )?symptoms|do not seek|no need (?:for|to)|sigue trabajando|contin[uú]a trabajando|no pares|ignora (?:los |tus )?s[ií]ntomas|no necesitas ayuda)\b/i.test(text)) return null;
   return {
@@ -38,7 +38,7 @@ export function validatePersonalization(value, level, language = "en") {
 export async function personalize(input, options = {}) {
   const {level,context,language,mode="workers",symptoms=[],note="",pastAnswers=[]} = input;
   const fallback = {level,...fillTemplate(level,context,language,mode),source:"template"};
-  // An emergency cannot instantiate the SDK, use the key, or make a model call.
+  // Emergencies never reach the model: no client, no key, no request.
   if (level === "DANGER") return fallback;
   const model = options.model ?? process.env.GEMINI_MODEL;
   if (!model || (!options.client && !process.env.GEMINI_API_KEY)) {
@@ -75,7 +75,7 @@ export async function personalize(input, options = {}) {
     if (!parsed) options.onFailure?.({kind:"validation",status:null});
     return parsed ? {level,...parsed,source:"ai"} : fallback;
   } catch (error) {
-    // Deliberately never log the provider error, note, prompt, key, or response.
+    // Never log the error, note, prompt, key or reply. They can hold health details.
     const codes = [
       ["API_KEY_BLOCKED", /API_KEY_(?:LEAKED|BLOCKED)|API key.*(?:leak|revoke|block)/i],
       ["API_KEY_EXPIRED", /API_KEY_EXPIRED|API key.*expired/i],

@@ -48,7 +48,8 @@
         "footerWeather": "Weather data by",
         "currentLocation": "Current location",
         "listSeparator": "and",
-        "sourceLink": "Sources: U.S. Army TB MED 507"
+        "sourceLink": "Sources: U.S. Army TB MED 507",
+        "footerSources": "All sources"
       },
       "location": {
         "selected": "Work location selected.",
@@ -374,17 +375,8 @@
         "getStarted": "Get started",
         "signIn": "Sign in",
         "createAccount": "Create an account",
-        "feat1": "Hourly heat and work-rest guidance",
-        "feat2": "Adjust the plan for sun and shade",
-        "feat3": "Check in with your crew",
         "free": "Free. No account needed. English y español.",
         "about": "About",
-        "w1": "Check heat conditions for your shift",
-        "w1s": "See an hour-by-hour forecast for your work location.",
-        "w2": "Adjust for sun and shade at your site",
-        "w2s": "Choose a shade level or use a site photo to adjust the forecast. Photos stay on this phone.",
-        "w3": "Check in every hour",
-        "w3s": "Log a quick check-in for each person so the whole crew is accounted for.",
         "aboutYou": "Tell us about you",
         "skip": "Skip",
         "next": "Next",
@@ -457,9 +449,9 @@
         "signUpSub": "Save your plans and crew. Guest mode still works without one.",
         "continueGuest": "Continue as guest",
         "back": "Back",
-        "notFoundTitle": "This page is not here",
-        "notFoundBody": "Open sombra to plan your shift.",
-        "openSombra": "Open sombra",
+        "notFoundTitle": "Nothing here but heat",
+        "notFoundBody": "This page doesn't exist. Let's get you back to your plan.",
+        "openSombra": "Back to today",
         "reminderBody": "Time to check in. Follow your shift’s break and water plan.",
         "nameRequired": "Add your name to save your profile.",
         "landingWho": "Who's it for?",
@@ -469,7 +461,9 @@
         "previewCheck": "Ana checked in: feeling fine",
         "previewWater": "5 of 8 cups",
         "installTitle": "Get reminders on your iPhone",
-        "installBody": "Tap Share, then \"Add to Home Screen\". Open sombra from your home screen to turn on reminders."
+        "installBody": "Tap Share, then \"Add to Home Screen\". Open sombra from your home screen to turn on reminders.",
+        "privacyLink": "Privacy",
+        "sourcesLink": "Sources"
       },
       "about": {
         "title": "About sombra",
@@ -593,7 +587,8 @@
         "footerWeather": "Datos del clima de",
         "currentLocation": "Ubicación actual",
         "listSeparator": "y",
-        "sourceLink": "Fuentes: TB MED 507 del Ejército de EE. UU."
+        "sourceLink": "Fuentes: TB MED 507 del Ejército de EE. UU.",
+        "footerSources": "Todas las fuentes"
       },
       "location": {
         "selected": "Lugar de trabajo seleccionado.",
@@ -919,17 +914,8 @@
         "getStarted": "Empezar",
         "signIn": "Iniciar sesión",
         "createAccount": "Crear una cuenta",
-        "feat1": "Calor y guía de trabajo y descanso por hora",
-        "feat2": "Ajusta el plan al sol y la sombra",
-        "feat3": "Regístrate con tu cuadrilla",
         "free": "Gratis. Sin cuenta. English y español.",
         "about": "Acerca de",
-        "w1": "Revisa el calor para tu turno",
-        "w1s": "Consulta un pronóstico por hora para tu lugar de trabajo.",
-        "w2": "Ajusta el plan al sol y la sombra",
-        "w2s": "Elige el nivel de sombra o usa una foto del lugar para ajustar el pronóstico. Las fotos se quedan en este teléfono.",
-        "w3": "Regístrate cada hora",
-        "w3s": "Anota un registro rápido de cada persona para que toda la cuadrilla esté presente.",
         "aboutYou": "Cuéntanos de ti",
         "skip": "Omitir",
         "next": "Siguiente",
@@ -1002,9 +988,9 @@
         "signUpSub": "Guarda tus planes y tu cuadrilla. El modo invitado funciona sin cuenta.",
         "continueGuest": "Seguir como invitado",
         "back": "Atrás",
-        "notFoundTitle": "Esta página no está aquí",
-        "notFoundBody": "Abre sombra para planificar tu turno.",
-        "openSombra": "Abrir sombra",
+        "notFoundTitle": "Aquí solo hay calor",
+        "notFoundBody": "Esta página no existe. Volvamos a tu plan.",
+        "openSombra": "Volver a hoy",
         "reminderBody": "Es hora de registrarte. Sigue el plan de descansos y agua de tu turno.",
         "nameRequired": "Agrega tu nombre para guardar tu perfil.",
         "landingWho": "¿Para quién es?",
@@ -1014,7 +1000,9 @@
         "previewCheck": "Ana se registró: se siente bien",
         "previewWater": "5 de 8 vasos",
         "installTitle": "Recibe recordatorios en tu iPhone",
-        "installBody": "Toca Compartir y luego \"Agregar a inicio\". Abre sombra desde tu pantalla de inicio para activar los recordatorios."
+        "installBody": "Toca Compartir y luego \"Agregar a inicio\". Abre sombra desde tu pantalla de inicio para activar los recordatorios.",
+        "privacyLink": "Privacidad",
+        "sourcesLink": "Fuentes"
       },
       "about": {
         "title": "Acerca de sombra",

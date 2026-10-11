@@ -191,7 +191,7 @@ button.row:hover, a.row:hover { background: var(--mesquite-soft); }
 .topbar .wordmark { font-size: 22px; }
 .tabs-inner { grid-template-columns: 1fr 72px 1fr; }
 
-/* ---- Stage 6: check-ins, sessions, reminders ---- */
+/* Check-ins, sessions and reminders */
 :root { --bark: var(--mesquite); --bark-dark: var(--mesquite-dark); --ok: #2E8B57; --ok-tint: #EAF3EB; --caution: var(--r-caution); --caution-tint: #F1F5E7; --danger: var(--r-veryhigh); --danger-dark: #9F292F; }
 .checkin-tab { background: var(--bark); box-shadow: 0 5px 0 var(--bark-dark); }
 .btn-bark { background: var(--bark); color: var(--card); box-shadow: 0 4px 0 var(--bark-dark); min-height: 58px; }

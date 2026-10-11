@@ -48,7 +48,7 @@ export default function CheckIn() {
   const requestGeneration = useRef(0);
   useEffect(() => () => pendingRequest.current?.abort(), []);
 
-  // Resolve worker: ?worker → profile name → picker
+  // Who is checking in: ?worker in the URL, then the profile name, then ask.
   useEffect(() => {
     if (paramWorker) { setWho(paramWorker); return; }
     if (!profileLoaded) return;
@@ -101,7 +101,7 @@ export default function CheckIn() {
   };
 
   const triggerDanger = (symptoms: string[], local: CheckinResult) => {
-    // Shown synchronously, before any await.
+    // Show this right away, before anything async.
     pendingRequest.current?.abort();
     requestGeneration.current += 1;
     setBusy(false); setOutcome(null);

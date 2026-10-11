@@ -12,7 +12,7 @@ export default function Landing() {
   return (
     <main className="landing">
       <header className="landing-top">
-        <span className="brand wordmark"><img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" /><span>sombra</span></span>
+        <Link href="/" className="brand wordmark" aria-label="sombra"><img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" /><span>sombra</span></Link>
         <Link href="/about" className="landing-about">{t.about}</Link>
       </header>
 
@@ -51,8 +51,14 @@ export default function Landing() {
         </div>
       </section>
 
-      <footer className="landing-foot">
+      <footer className="landing-foot site-foot">
         <span>{t.free}</span>
+        <nav className="foot-links" aria-label={t.about}>
+          <Link href="/about">{t.about}</Link>
+          <Link href="/about#privacy">{t.privacyLink}</Link>
+          <Link href="/about#sources">{t.sourcesLink}</Link>
+        </nav>
+        <small>© {new Date().getFullYear()} sombra</small>
       </footer>
     </main>
   );

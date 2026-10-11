@@ -632,7 +632,7 @@ summary:focus-visible { outline: 3px solid var(--monsoon); outline-offset: 2px; 
   a { color: #111; text-decoration: none; }
 }
 
-/* Reference-matched Sombra dashboard */
+/* Today dashboard */
 .brand-icon { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 10px; }
 .brand-name { font-weight: 800; }
 .embedded-planner .page-shell { padding-top: 8px; }
@@ -745,7 +745,7 @@ summary:focus-visible { outline: 3px solid var(--monsoon); outline-offset: 2px; 
   .shift-summary, .submit-button, .site-photo-button, .site-apply-button { transition: none; }
 }
 
-/* Stage 6B visual system — planner shares the same 430px Sombra app frame. */
+/* The planner sits in the same 430px phone frame as the app. */
 html, body { background: var(--canvas); color: var(--ink); }
 body { font-family: "Atkinson Hyperlegible", system-ui, sans-serif; }
 .page-shell { width: min(100%, 430px); max-width: 430px; }
@@ -845,9 +845,7 @@ input:focus, select:focus { outline-color: var(--monsoon); border-color: var(--m
   .page-shell { grid-column: auto; grid-row: auto; margin: 0 auto; }
 }
 
-/* ==========================================================================
-   sombra UI layer (planner): final overrides matching the app design.
-   ========================================================================== */
+/* Planner overrides so it matches the rest of the app. */
 :root { --edge: #E8D3C4; }
 h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 

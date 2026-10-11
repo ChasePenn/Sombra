@@ -1,6 +1,8 @@
 import { ChevronLeft } from 'lucide-react';
-import { useLocation } from 'wouter';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
 import { useSession } from '../lib/session';
+import { goBack } from '../lib/nav';
 import { aboutCopy, modeUi } from '../lib/copy';
 
 export default function About() {
@@ -8,12 +10,17 @@ export default function About() {
   const [, nav] = useLocation();
   const c = aboutCopy[lang];
   const ui = modeUi(lang);
+  // Footer links like /about#privacy jump to their section once the page has rendered.
+  useEffect(() => {
+    const id = window.location.hash.slice(1);
+    if (id) document.getElementById(id)?.scrollIntoView();
+  }, []);
   const sources: Array<[string, string, string]> = [
     ['Open-Meteo', 'https://open-meteo.com/', c.srcWeather],
     ['National Weather Service', 'https://www.weather.gov/documentation/services-web-api', c.srcAlerts],
     ['OpenStreetMap', 'https://www.openstreetmap.org/copyright', c.srcPlaces],
     ['OSHA', 'https://www.osha.gov/heat-exposure', c.srcWbgt],
-    ['TB MED 507', 'https://armypubs.army.mil/epubs/DR_pubs/DR_a/ARN43608-TB_MED_507-001-WEB-2.pdf', c.srcRest],
+    ['TB MED 507', 'https://hprc-online.org/resources/tb-med-507-heat-stress-control-and-heat-casualty-management-pdf', c.srcRest],
     ['CDC', 'https://www.cdc.gov/heat-health/', c.srcFirstAid],
     ['Transformers.js', 'https://huggingface.co/docs/transformers.js', c.srcPhoto],
     ['Google Gemini', 'https://ai.google.dev/', c.srcCheckin],
@@ -21,8 +28,8 @@ export default function About() {
   return (
     <div className="shell" style={{ paddingBottom: 'calc(32px + var(--safe-b))' }}>
       <header className="topbar" style={{ paddingLeft: 4 }}>
-        <button type="button" className="icon-btn" aria-label={t.back} onClick={() => (window.history.length > 1 ? window.history.back() : nav('/'))}><ChevronLeft size={26} /></button>
-        <span className="brand wordmark"><img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" /><span>sombra</span></span>
+        <button type="button" className="icon-btn" aria-label={t.back} onClick={() => goBack(nav, '/')}><ChevronLeft size={26} /></button>
+        <Link href="/" className="brand wordmark" aria-label="sombra"><img src={`${import.meta.env.BASE_URL}brand/sombra-icon.svg`} alt="" /><span>sombra</span></Link>
         <span style={{ width: 48 }} />
       </header>
       <main className="page prose">
@@ -36,7 +43,7 @@ export default function About() {
           <li>{c.how3}</li>
         </ul>
 
-        <h2>{c.privacy}</h2>
+        <h2 id="privacy">{c.privacy}</h2>
         <ul>
           <li>{c.priv1}</li>
           <li>{c.priv2}</li>
@@ -44,7 +51,7 @@ export default function About() {
         </ul>
         <p style={{ marginTop: 10 }}>{c.p2}</p>
 
-        <h2>{c.sources}</h2>
+        <h2 id="sources">{c.sources}</h2>
         <ul className="source-list">
           {sources.map(([name, href, use]) => (
             <li key={name}><a href={href} target="_blank" rel="noreferrer">{name}</a>: {use}</li>
@@ -52,6 +59,7 @@ export default function About() {
         </ul>
 
         <p className="disclaimer">{ui.footerDisclaimer} <strong>{ui.footerEmergency}</strong></p>
+        <p className="copyright">© {new Date().getFullYear()} sombra</p>
       </main>
     </div>
   );

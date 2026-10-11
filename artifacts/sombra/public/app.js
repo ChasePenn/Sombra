@@ -100,7 +100,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
   try {
     savedLocale = localStorage.getItem("sombra.locale");
   } catch {
-    // Guest planning remains available when preference storage is unavailable.
+    // If storage is blocked, guests can still plan.
   }
   let activeLocale = availableLocales.includes(savedLocale) ? savedLocale :
     navigator.language?.toLowerCase().startsWith("es") && availableLocales.includes("es") ? "es" :
@@ -299,7 +299,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
         const acclimation = form.querySelector(`input[name="newToHeat"][value="${input.newToHeat ? "yes" : "no"}"]`);
         if (acclimation) acclimation.checked = true;
       }
-      // Cached forecasts are not replayed as current heat guidance.
+      // Never show an old forecast as today's heat advice.
       renderSavedPlanNotice();
     } catch {
       setLocalizedText(formError, "results.savedPlanLoadFailed");
@@ -920,7 +920,7 @@ const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
       hourly: schedule.maxWaterCupsPerHour,
       daily: schedule.maxWaterCupsPerDay,
     });
-    workRestSource.href = "https://armypubs.army.mil/epubs/DR_pubs/DR_a/ARN43608-TB_MED_507-001-WEB-2.pdf";
+    workRestSource.href = "https://hprc-online.org/resources/tb-med-507-heat-stress-control-and-heat-casualty-management-pdf";
     workRestSection.hidden = false;
     scheduleSiteBadge.hidden = !siteAdjusted;
     setScheduleMessage("");
