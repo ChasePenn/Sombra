@@ -36,5 +36,5 @@ jobs:
           pnpm --filter @workspace/api-server run test:live 2>&1 | tee live.log
           status=${PIPESTATUS[0]}
           # Surface failures as annotations so they show up on the run page and in the API.
-          grep -E "^not ok|^\s+error:|^\s+expected|^\s+actual|AssertionError" live.log | head -40 | sed 's/^/::error::/'
+          grep -E "not ok|error:|expected|actual" live.log | head -40 | sed 's/^/::error::/'
           exit $status
