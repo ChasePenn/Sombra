@@ -18,6 +18,7 @@ sombra turns the forecast for your exact spot into an hour-by-hour plan: when to
 - **My heat profile.** Optional health factors (age, pregnancy, heart conditions, certain medicines) add extra caution. Saved only on the phone.
 - **Cool spots nearby.** Water refills, libraries, malls and shade within 3 km (OpenStreetMap), plus Arizona's 2-1-1 heat relief line.
 - **Check on someone.** Daily reminders to check on an older relative or neighbor, with a call button and a stronger nudge during heat warnings.
+- **Reminders when the app is closed.** Web Push notifications for check-ins on loved ones, Best time windows and official heat warnings. The server never receives names; the phone fills them in.
 - **Solo or group.** Works for one person by default; turn on a crew, team or group when you need it.
 - **Three modes:** Work crew, School & sports, and Everyday outdoors, with wording, activity examples and rules for each.
 - **English and Spanish.** Works without an account; sign in to sync your plans and group across devices.
@@ -42,9 +43,11 @@ pnpm --filter @workspace/api-server run dev      # API (needs DATABASE_URL)
 PORT=25823 BASE_PATH=/ pnpm --filter @workspace/sombra run dev
 ```
 
-Environment: `DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`. Keys stay on the server and are never sent to the browser.
+Environment: `DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`. For push reminders also `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` (make a pair with `pnpm --filter @workspace/api-server exec web-push generate-vapid-keys`), optional `VAPID_SUBJECT`, and `PUSH_CRON_SECRET`. Secrets stay on the server and are never sent to the browser.
 
-Tests: `pnpm --filter @workspace/sombra test`, `pnpm --filter @workspace/heat-safety test`.
+Push reminders go out every minute while the server is awake. The `Send due reminders` GitHub workflow wakes it every 5 minutes; give it the repository secrets `PUSH_RUN_URL` (`https://<your-domain>/api/push/run`) and `PUSH_CRON_SECRET`.
+
+Tests: `pnpm run release-check` runs everything that works offline (add `DATABASE_URL` for a test database and `CHROME_BIN` for the browser tests, `-- --live` to call the real weather services).
 
 ## Sources
 
