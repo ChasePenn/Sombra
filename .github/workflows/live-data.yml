@@ -53,3 +53,10 @@ jobs:
           full="[out:json][timeout:15];(node[\"amenity\"=\"drinking_water\"]$a;nwr[\"amenity\"=\"library\"]$a;nwr[\"amenity\"=\"community_centre\"]$a;nwr[\"shop\"=\"mall\"]$a;node[\"amenity\"=\"shelter\"]$a;);out center 80;"
           r=$(curl -s -o /tmp/f.json -w "%{http_code} %{time_total}s" -A "sombra-heat-safety (https://github.com/ChasePenn/sombra)" --max-time 30 --data-urlencode "data=$full" https://overpass-api.de/api/interpreter || echo "curl-failed")
           echo "::notice::full query on main -> $r $(head -c 200 /tmp/f.json | tr -d '\n')"
+          b='(33.423,-112.102,33.477,-112.038)'
+          for t in 1 2; do
+            bq="[out:json][timeout:15][bbox:33.423,-112.102,33.477,-112.038];(node[amenity=drinking_water];nwr[amenity~\"^(library|community_centre)$\"];nwr[shop=mall];node[amenity=shelter];);out center 80;"
+            r=$(curl -s -o /tmp/b.json -w "%{http_code} %{time_total}s" -A "sombra-heat-safety (https://github.com/ChasePenn/sombra)" --max-time 30 --data-urlencode "data=$bq" https://overpass-api.de/api/interpreter || echo "curl-failed")
+            echo "::notice::bbox query try $t -> $r $(head -c 160 /tmp/b.json | tr -d '\n')"
+            sleep 5
+          done
