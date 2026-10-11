@@ -50,7 +50,7 @@ test("location search finds Phoenix", async () => {
   const places = await res.json();
   const phx = places.find((p) => p.admin1 === "Arizona");
   assert.ok(phx, "Phoenix, Arizona should be in the results");
-  assert.ok(Math.abs(phx.latitude - PHOENIX.lat) < 0.3 && Math.abs(phx.longitude - PHOENIX.lon) < 0.3);
+  assert.ok(Math.abs(phx.latitude - PHOENIX.lat) < 0.3 && Math.abs(phx.longitude - PHOENIX.lon) < 0.3, `Phoenix geocoded to ${phx.latitude}, ${phx.longitude}`);
 });
 
 test("today's heat forecast is complete and physically plausible", async () => {
@@ -86,6 +86,6 @@ test("cool spots near downtown Phoenix include real libraries or water", async (
   assert.equal(res.status, 200);
   const { places } = await res.json();
   assert.ok(places.length >= 3, `expected several places downtown, got ${places.length}`);
-  assert.ok(places.every((p) => p.distanceM <= 3600));
-  assert.ok(places.some((p) => p.kind === "library" || p.kind === "water"));
+  assert.ok(places.every((p) => p.distanceM <= 3600), "every place should be within 3.6 km");
+  assert.ok(places.some((p) => p.kind === "library" || p.kind === "water"), `expected a library or water spot downtown, got kinds: ${[...new Set(places.map((p) => p.kind))].join(", ")}`);
 });
