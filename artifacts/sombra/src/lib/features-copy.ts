@@ -1,6 +1,8 @@
 import type { Lang } from './copy';
 import type { RiskFactor } from './local';
 
+// 2-1-1 facts: KJZZ, Apr 30 2026 (Heat Relief Network May 1 to Sept 30, live operators 9 AM to 7 PM,
+// free Lyft rides) and Jul 14 2026 (live operators funded through early 2027). Recheck each spring.
 /** Text for the Tools hub: best time finder, cool spots, check on someone, heat profile. */
 const en = {
   riskWords: ['Low', 'Caution', 'Elevated', 'High', 'Very high', 'Extreme'],
@@ -112,7 +114,7 @@ const en = {
   coolFailed: "Couldn't load nearby places. Try again in a moment.",
   coolLoading: 'Finding cool spots…',
   coolSource: 'From OpenStreetMap. Hours can change, so call ahead when you can.',
-  heatRelief: 'Free cooling and water centers open across the Valley in the hot months. Call 2‑1‑1 to find one open now.',
+  heatRelief: 'From May through September, free cooling and water centers open across the Valley. Call 2‑1‑1 to find one and to ask about a free ride (live help 9 AM to 7 PM).',
   call211: 'Call 2‑1‑1',
 
   // care
@@ -283,7 +285,7 @@ const es: FeatureCopy = {
   coolFailed: 'No pudimos cargar los lugares cercanos. Inténtalo en un momento.',
   coolLoading: 'Buscando lugares frescos…',
   coolSource: 'Datos de OpenStreetMap. Los horarios cambian; llama antes si puedes.',
-  heatRelief: 'En los meses de calor hay centros gratuitos para refrescarte y tomar agua en todo el Valle. Llama al 2‑1‑1 para encontrar uno abierto.',
+  heatRelief: 'De mayo a septiembre hay centros gratuitos para refrescarte y tomar agua en todo el Valle. Llama al 2‑1‑1 para encontrar uno y pedir transporte gratis (atención en vivo de 9 a. m. a 7 p. m.).',
   call211: 'Llamar al 2‑1‑1',
 
   careSub: 'Los adultos mayores que viven solos están entre los de mayor riesgo en una ola de calor. Agrega a las personas que revisas y sombra te muestra a quién le toca y quién está atrasado.',
