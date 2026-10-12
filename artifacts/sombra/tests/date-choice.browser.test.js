@@ -545,7 +545,9 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     await page.evaluate(`window.__printCalled = false; window.print = () => { window.__printCalled = true; }; document.querySelector("#print-brief").click()`);
     assert.equal(await page.evaluate(`window.__printCalled`), true, "the print action must open the browser print dialog");
     const printedDisclaimer = await page.evaluate(`document.querySelector("footer").textContent.replace(/\\s+/g, " ").trim()`);
-    assert.match(printedDisclaimer, /sombra supports, but does not replace, your employer's heat safety plan or medical care\. In an emergency call 911/);
+    // The printed brief keeps the disclaimer and the 911 line, whatever their current wording.
+    assert.ok(printedDisclaimer.includes(workerMode.locales.en.ui.footerDisclaimer), printedDisclaimer);
+    assert.match(printedDisclaimer, /911/);
 
     await page.evaluate(`window.__mockMissingHours = ["11:00", "12:00"]; document.querySelector("#shift-form").requestSubmit()`);
     const partialDeadline = Date.now() + 5000;
@@ -559,15 +561,13 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
       role: document.querySelector("#forecast-partial-notice").getAttribute("role"),
       live: document.querySelector("#forecast-partial-notice").getAttribute("aria-live")
     })`);
-    assert.match(partialNotice.message, /Forecast incomplete/);
-    assert.match(partialNotice.message, /2 requested shift hours/);
-    assert.match(partialNotice.message, /11 AM, 12 PM/);
+    // The notice names how many hours are missing and which ones.
+    assert.equal(partialNotice.message, workerMode.locales.en.results.partialForecastPlural.replace("{count}", "2").replace("{times}", "11 AM, 12 PM"));
     assert.equal(partialNotice.role, "status");
     assert.equal(partialNotice.live, "polite");
     await page.evaluate(`document.querySelector('[data-locale="es"]').click()`);
     const spanishPartialNotice = await page.evaluate(`document.querySelector("#forecast-partial-notice").textContent`);
-    assert.match(spanishPartialNotice, /Pronóstico incompleto/);
-    assert.match(spanishPartialNotice, /2 horas solicitadas/);
+    assert.match(spanishPartialNotice, /^Sin pronóstico para 2 horas/);
 
     // Compare actual requests and numeric rendered schedule data across both
     // languages and phone widths, including applied site adjustments.
