@@ -1,17 +1,17 @@
 /*
   Downloads every cool spot sombra lists (water fountains, libraries, community centers,
   malls, shade shelters) for metro Phoenix and Tucson from OpenStreetMap, and saves them to
-  data/places.json. The server answers from this file, so Cool spots works even when the
+  src/data/places.json. The server answers from this file, so Cool spots works even when the
   shared OpenStreetMap servers are busy. A monthly GitHub workflow runs this again.
 
   node scripts/fetch-places.mjs [out-file]
 */
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const out = process.argv[2] ?? path.resolve(here, "../data/places.json");
+const out = process.argv[2] ?? path.resolve(here, "../src/data/places.json");
 
 // south, west, north, east
 const REGIONS = [
@@ -97,5 +97,6 @@ const body = {
   fields: ["id", "kind", "lat", "lon", "name", "openingHours"],
   places,
 };
+await mkdir(path.dirname(out), { recursive: true });
 await writeFile(out, JSON.stringify(body).replace(/\],\[/g, "],\n["));
 console.log(`Saved ${places.length} places to ${out}`);
