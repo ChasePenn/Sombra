@@ -1,10 +1,15 @@
 import { Router, type IRouter, type Request } from "express";
 import { WEATHER_TIMEZONE } from "../config/weather";
+import { snapshotElements } from "../lib/places-snapshot";
+
+export { snapshotElements };
 
 /*
   Outdoor conditions beyond heat:
   - GET /conditions   official National Weather Service alerts + UV index and air quality
-  - GET /places/cool  nearby water refill spots, libraries, malls and shelters (OpenStreetMap)
+  - GET /places/cool  nearby water refill spots, libraries, malls and shelters (OpenStreetMap).
+                      Metro Phoenix and Tucson answer from a saved monthly copy; elsewhere asks
+                      the live map servers and falls back to the last good answer.
   Each upstream source is optional: if one fails, the others are still returned.
 */
 
@@ -306,7 +311,7 @@ async function loadPlaces(lat: number, lon: number) {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": NWS_USER_AGENT },
         body: new URLSearchParams({ data: query }),
-        signal: AbortSignal.timeout(15_000),
+        signal: AbortSignal.timeout(10_000),
       });
       if (response.status === 429 && url === OVERPASS_URL) mainRateLimited = true;
       if (!response.ok) throw new Error(`Overpass ${url} failed with ${response.status}`);
@@ -319,17 +324,40 @@ async function loadPlaces(lat: number, lon: number) {
   throw lastError;
 }
 
+// The last good live answer for each spot, served if the map servers are down later.
+const lastGood = new Map<string, { places: ReturnType<typeof summarizePlaces>; updated: string }>();
+
 router.get("/places/cool", async (req, res): Promise<void> => {
   const point = parseCoordinates(req);
   if (!point) {
     res.status(400).json({ error: "Choose a location first." });
     return;
   }
+  const saved = snapshotElements(point.lat, point.lon);
+  const fromSaved = () => ({ places: summarizePlaces(saved.elements, point), source: "saved", updated: saved.updated });
+  if (saved.complete) {
+    res.json(fromSaved());
+    return;
+  }
+  const key = `places:${point.lat},${point.lon}`;
   try {
-    const places = await cached(`places:${point.lat},${point.lon}`, () => loadPlaces(point.lat, point.lon), PLACES_TTL_MS);
-    res.json({ places });
+    const places = await cached(key, () => loadPlaces(point.lat, point.lon), PLACES_TTL_MS);
+    const updated = lastGood.get(key)?.places === places ? lastGood.get(key)!.updated : phoenixNowIso().slice(0, 10);
+    lastGood.set(key, { places, updated });
+    if (lastGood.size > 500) lastGood.delete(lastGood.keys().next().value as string);
+    res.json({ places, source: "live", updated });
   } catch (error) {
     req.log.error({ err: error }, "Unable to load nearby cool spots");
+    const last = lastGood.get(key);
+    if (last) {
+      res.json({ ...last, source: "live" });
+      return;
+    }
+    // Near the edge of the saved area: part of the answer beats none.
+    if (saved.covered && saved.elements.length) {
+      res.json(fromSaved());
+      return;
+    }
     res.status(502).json({ error: "Nearby places are temporarily unavailable." });
   }
 });

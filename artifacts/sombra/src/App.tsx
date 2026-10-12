@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/react';
 import { publishableKeyFromHost } from '@clerk/react/internal';
-import { Link, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
+import { Link, Redirect, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import { SessionProvider, basePath, useSession } from './lib/session';
 import Landing from './pages/Landing';
 import Plan from './pages/Plan';
@@ -8,7 +8,6 @@ import CheckIn from './pages/CheckIn';
 import Crew from './pages/Crew';
 import Settings from './pages/Settings';
 import About from './pages/About';
-import Tools from './pages/Tools';
 import BestTime from './pages/BestTime';
 import CoolSpots from './pages/CoolSpots';
 import CareCheck from './pages/CareCheck';
@@ -102,7 +101,6 @@ function usePageTitle(location: string) {
       '/app': t.today,
       '/app/check-in': t.checkIn,
       '/app/crew': currentMode(lang).group,
-      '/app/tools': f.toolsTitle,
       '/app/best-time': f.bestTitle,
       '/app/cool-spots': f.coolTitle,
       '/app/check-on': f.careTitle,
@@ -142,7 +140,7 @@ function Routes() {
       <Route path="/app" component={Plan} />
       <Route path="/app/check-in" component={CheckIn} />
       <Route path="/app/crew" component={Crew} />
-      <Route path="/app/tools" component={Tools} />
+      <Route path="/app/tools"><Redirect to="/app" replace /></Route>
       <Route path="/app/best-time" component={BestTime} />
       <Route path="/app/cool-spots" component={CoolSpots} />
       <Route path="/app/check-on" component={CareCheck} />

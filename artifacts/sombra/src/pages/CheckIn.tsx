@@ -11,6 +11,7 @@ import { useSession } from '../lib/session';
 import { audienceModeId, checkInCopy, fill, siteLabel } from '../lib/copy';
 import { fmtDay, fmtDuration, fmtTime, initial, isLevel, riskWord, waterText, workState } from '../lib/activity';
 import { AppShell } from '../components/AppShell';
+import { PageHead } from '../components/Story';
 import { Sheet } from '../components/Sheet';
 import { DangerScreen, FINE, ResultSheet, SymptomSheet } from '../components/CheckinFlow';
 
@@ -204,7 +205,7 @@ export default function CheckIn() {
   return (
     <AppShell>
       <div className="page">
-        <div className="page-head"><h1>{c.pageTitle}</h1><p>{c.pageSub}</p></div>
+        <PageHead story="out" title={c.pageTitle} lead={c.pageSub} />
 
         {accountId && pending && (
           <div className="notice sync-note" role="status">

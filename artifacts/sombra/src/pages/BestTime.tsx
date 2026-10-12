@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
 import { BellRing, CalendarClock, Droplet, Ban } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
+import { PageHead } from '../components/Story';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
 import { Segmented } from '../components/Controls';
 import { useSession } from '../lib/session';
@@ -98,10 +99,7 @@ export default function BestTime() {
   return (
     <AppShell>
       <div className="page">
-        <header className="page-head">
-          <h1>{f.bestTitle}</h1>
-          <p>{f.bestCard}</p>
-        </header>
+        <PageHead story="before" title={f.bestTitle} lead={f.bestCard} />
 
         <LocationPicker value={place} onChange={setPlace} />
 

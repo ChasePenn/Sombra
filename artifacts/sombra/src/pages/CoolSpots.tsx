@@ -1,7 +1,8 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
-import { BookOpen, Droplet, Navigation, Phone, ShoppingBag, Building2, Umbrella } from 'lucide-react';
+import { BookOpen, Droplet, Navigation, Stethoscope, Phone, ShoppingBag, Building2, Umbrella } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
+import { NextStep, PageHead } from '../components/Story';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
 import { Segmented } from '../components/Controls';
 import { useSession } from '../lib/session';
@@ -34,7 +35,7 @@ function nowForHours() {
 }
 
 export default function CoolSpots() {
-  const { lang } = useSession();
+  const { lang, t } = useSession();
   const f = featureCopy[lang];
   const [place, setPlace] = useInitialPlace();
   const [spots, setSpots] = useState<Spot[] | null>(null);
@@ -43,17 +44,27 @@ export default function CoolSpots() {
   const [filter, setFilter] = useState<Filter>('all');
   const [openOnly, setOpenOnly] = useState(false);
   const [focused, setFocused] = useState<number | null>(null);
+  const [updated, setUpdated] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     if (!place) return;
     let live = true;
     setState('loading');
-    fetch(`/api/places/cool?lat=${place.lat}&lon=${place.lon}`, { headers: { Accept: 'application/json' } })
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('places'))))
-      .then((data: { places: Spot[] }) => { if (live) { setSpots(data.places); setState('done'); } })
+    const load = () => fetch(`/api/places/cool?lat=${place.lat}&lon=${place.lon}`, { headers: { Accept: 'application/json' } })
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error('places'))));
+    // One quiet retry before showing an error: a busy moment usually passes in seconds.
+    load()
+      .catch(() => new Promise((wait) => setTimeout(wait, 2500)).then(load))
+      .then((data: { places: Spot[]; updated?: string }) => {
+        if (!live) return;
+        setSpots(data.places);
+        setUpdated(data.updated ?? null);
+        setState('done');
+      })
       .catch(() => live && setState('error'));
     return () => { live = false; };
-  }, [place]);
+  }, [place, attempt]);
 
   const shown = useMemo(() => {
     const now = nowForHours();
@@ -73,9 +84,7 @@ export default function CoolSpots() {
   return (
     <AppShell>
       <div className="page">
-        <header className="page-head">
-          <h1>{f.coolTitle}</h1>
-        </header>
+        <PageHead story="out" title={f.coolTitle} />
         <LocationPicker value={place} onChange={setPlace} />
 
         <aside className="relief-card">
@@ -94,13 +103,19 @@ export default function CoolSpots() {
         </div>
 
         {state === 'loading' && <p className="notice" role="status">{f.coolLoading}</p>}
-        {state === 'error' && <p className="error" role="alert">{f.coolFailed}</p>}
+        {state === 'error' && (
+          <div className="error" role="alert">
+            {f.coolFailed}
+            <button type="button" className="btn btn-quiet" onClick={() => setAttempt((n) => n + 1)}>{t.retry}</button>
+          </div>
+        )}
         {state === 'done' && shown.length === 0 && <p className="notice">{f.coolEmpty}</p>}
 
-        {state === 'done' && place && view === 'map' && shown.length > 0 && (
+        {/* The map always shows once there's a place, even with nothing on it, so people can see where they are. */}
+        {place && view === 'map' && state !== 'loading' && (
           <Suspense fallback={<div className="spot-map" />}>
             <SpotMap center={place} attribution={f.mapAttribution} onSelect={select}
-              spots={shown.map((s) => ({ id: s.id, lat: s.lat, lon: s.lon, label: label(s), color: kindColor[s.kind] }))} />
+              spots={state === 'done' ? shown.map((s) => ({ id: s.id, lat: s.lat, lon: s.lon, label: label(s), color: kindColor[s.kind] })) : []} />
           </Suspense>
         )}
 
@@ -126,7 +141,8 @@ export default function CoolSpots() {
             })}
           </ul>
         )}
-        <p className="fine-print">{f.coolSource}</p>
+        <NextStep href="/app/check-in" story="out" Icon={Stethoscope}>{f.nextCool}</NextStep>
+        <p className="fine-print">{updated ? fill(f.coolSourceDated, { date: new Intl.DateTimeFormat(lang, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${updated}T12:00:00Z`)) }) : f.coolSource}</p>
       </div>
     </AppShell>
   );

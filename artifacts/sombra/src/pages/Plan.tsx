@@ -7,7 +7,9 @@ import { AppShell } from '../components/AppShell';
 import Welcome from './Welcome';
 import { modeQuery } from '../lib/copy';
 import { ContextCards } from '../components/ContextCards';
-import { QuickTools } from '../components/QuickTools';
+import { Clock } from 'lucide-react';
+import { NextStep } from '../components/Story';
+import { featureCopy } from '../lib/features-copy';
 
 const PREFILL_KEYS = ['lat', 'lon', 'place', 'date', 'start', 'end', 'intensity'];
 
@@ -94,7 +96,7 @@ function PlannerFrame({ onSummary }: { onSummary: (maxCategory: number) => void 
 }
 
 export default function Plan() {
-  const { profile, profileLoaded, profileError, t, reloadProfile } = useSession();
+  const { profile, profileLoaded, profileError, t, lang, reloadProfile } = useSession();
   const [dismissed, setDismissed] = useState(store.isWelcomeDismissed);
   const [skipError, setSkipError] = useState(false);
   const [maxCategory, setMaxCategory] = useState<number | null>(null);
@@ -104,5 +106,7 @@ export default function Plan() {
     try { store.dismissWelcome(); } catch { setSkipError(true); }
     setDismissed(true);
   }} />;
-  return <AppShell>{skipError && <p className="error" role="alert">{t.somethingWrong}</p>}<ContextCards maxCategory={maxCategory} /><QuickTools variant="row" /><PlannerFrame onSummary={setMaxCategory} /></AppShell>;
+  return <AppShell>{skipError && <p className="error" role="alert">{t.somethingWrong}</p>}<ContextCards maxCategory={maxCategory} />
+    <div className="today-next"><NextStep href="/app/best-time" story="before" Icon={Clock}>{featureCopy[lang].todayBest}</NextStep></div>
+    <PlannerFrame onSummary={setMaxCategory} /></AppShell>;
 }
