@@ -2,11 +2,11 @@
   Downloads every cool spot sombra lists (water fountains, libraries, community centers,
   malls, shade shelters) for metro Phoenix and Tucson from OpenStreetMap, and saves them to
   src/data/places.json. The server answers from this file, so Cool spots works even when the
-  shared OpenStreetMap servers are busy. A monthly GitHub workflow runs this again.
+  shared OpenStreetMap servers are busy. A weekly GitHub workflow runs this again.
 
   node scripts/fetch-places.mjs [out-file]
 */
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -65,10 +65,35 @@ async function download(box) {
   throw last;
 }
 
+/*
+  The public map servers are often busy. A failed download keeps the current file (the app
+  keeps working with it) and only fails the run, which emails the owner, once the saved
+  copy is getting old. The workflow runs weekly, so one bad week is harmless.
+*/
+const STALE_DAYS = 40;
+async function giveUp(error) {
+  let ageDays = Infinity;
+  try {
+    const current = JSON.parse(await readFile(out, "utf8"));
+    ageDays = (Date.now() - Date.parse(`${current.updated}T12:00:00Z`)) / 86_400_000;
+  } catch { /* no saved copy yet */ }
+  if (ageDays < STALE_DAYS) {
+    console.log(`::warning::Couldn't refresh cool spots (${error.message}). Keeping the saved copy from ${Math.round(ageDays)} days ago; next week's run will try again.`);
+    process.exit(0);
+  }
+  console.log(`::error::Couldn't refresh cool spots (${error.message}) and the saved copy is ${Number.isFinite(ageDays) ? Math.round(ageDays) + " days old" : "missing"}.`);
+  process.exit(1);
+}
+
 const places = [];
 const seen = new Set();
 for (const region of REGIONS) {
-  const elements = await download(region.box);
+  let elements;
+  try {
+    elements = await download(region.box);
+  } catch (error) {
+    await giveUp(error);
+  }
   let count = 0;
   for (const el of elements) {
     const tags = el.tags ?? {};
@@ -86,7 +111,7 @@ for (const region of REGIONS) {
   }
   console.log(`::notice::${region.name}: ${count} places`);
   // Sanity check: a broken answer shouldn't replace good data.
-  if (count < region.min) throw new Error(`Only ${count} places for ${region.name}; not saving.`);
+  if (count < region.min) await giveUp(new Error(`only ${count} places for ${region.name}, which looks like a broken answer`));
 }
 
 places.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
