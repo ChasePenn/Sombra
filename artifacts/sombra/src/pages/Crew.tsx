@@ -8,6 +8,7 @@ import { fmtTime, initial, isLevel, latestFor, latestToday, levelRank } from '..
 import { useSession } from '../lib/session';
 import { intensityLabel, modeUi, type Intensity } from '../lib/copy';
 import { AppShell } from '../components/AppShell';
+import { PageHead } from '../components/Story';
 import { setGroupEnabled } from '../lib/local';
 import { Sheet } from '../components/Sheet';
 import { IntensityPicker, Switch } from '../components/Controls';
@@ -83,10 +84,8 @@ export default function Crew() {
   return (
     <AppShell>
       <div className="page">
-        <div className="page-head" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
-          <div><h1>{t.crew}</h1><p>{t.crewSub}</p></div>
-          {crew && crew.length > 0 && <button type="button" className="btn btn-secondary" style={{ minHeight: 48, padding: '0 14px' }} onClick={openNew}><Plus size={20} aria-hidden="true" />{t.addPerson}</button>}
-        </div>
+        <PageHead story="others" title={t.crew} lead={t.crewSub}
+          action={crew && crew.length > 0 ? <button type="button" className="btn btn-secondary" style={{ minHeight: 48, padding: '0 14px' }} onClick={openNew}><Plus size={20} aria-hidden="true" />{t.addPerson}</button> : undefined} />
         {rings.length > 0 && (
           <section className="rings-wrap" aria-labelledby="rings-h">
             <h2 id="rings-h" className="group-label" style={{ marginTop: 0 }}>{ci.crewToday}</h2>

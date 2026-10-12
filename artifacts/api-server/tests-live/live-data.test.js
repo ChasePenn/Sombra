@@ -105,3 +105,11 @@ test("cool spots near downtown Phoenix include real libraries or water", () => w
   assert.ok(places.every((p) => p.distanceM <= 3600), "every place should be within 3.6 km");
   assert.ok(places.some((p) => p.kind === "library" || p.kind === "water"), `expected a library or water spot downtown, got kinds: ${[...new Set(places.map((p) => p.kind))].join(", ")}`);
 }));
+
+test("the saved cool spots list was refreshed in the last two months", async () => {
+  const res = await fetch(`${base}/places/cool?lat=${PHOENIX.lat}&lon=${PHOENIX.lon}`);
+  const { source, updated } = await res.json();
+  assert.equal(source, "saved");
+  const ageDays = (Date.now() - Date.parse(`${updated}T12:00:00Z`)) / 86_400_000;
+  assert.ok(ageDays < 62, `cool spots data is from ${updated}; the monthly "Cool spots data" workflow may be failing`);
+});

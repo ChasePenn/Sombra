@@ -3,7 +3,7 @@ import { ChevronRight, Droplet } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { availableModes, modeQuery } from '../lib/copy';
 import { Icon } from '../components/Icon';
-import { QuickTools } from '../components/QuickTools';
+import { DayStory } from '../components/DayStory';
 import { featureCopy } from '../lib/features-copy';
 
 const modeTone: Record<string, string> = { work: 'tone-orange', school: 'tone-blue', everyday: 'tone-green' };
@@ -41,8 +41,8 @@ export default function Landing() {
       </div>
 
       <section className="landing-tools" aria-labelledby="landing-tools-title">
-        <h2 id="landing-tools-title">{featureCopy[lang].landingTools}</h2>
-        <QuickTools variant="cards" />
+        <h2 id="landing-tools-title">{featureCopy[lang].landingDay}</h2>
+        <DayStory />
       </section>
 
       <section className="landing-who" aria-labelledby="landing-who-title">

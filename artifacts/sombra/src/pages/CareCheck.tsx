@@ -1,12 +1,14 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Check, Lock, Phone, Plus, Trash2, TriangleAlert } from 'lucide-react';
+import { Link } from 'wouter';
+import { Check, ChevronRight, Droplet, Lock, Phone, Plus, Trash2, TriangleAlert, Users } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
+import { NextStep, PageHead } from '../components/Story';
 import { Sheet } from '../components/Sheet';
 import { PushControl } from '../components/PushControl';
 import { useSession } from '../lib/session';
-import { fill } from '../lib/copy';
+import { currentMode, fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
-import { getCareContacts, getLastPlace, saveCareContacts, type CareContact } from '../lib/local';
+import { getCareContacts, getLastPlace, isGroupEnabled, saveCareContacts, type CareContact } from '../lib/local';
 import { checkedTodayAt, markChecked, overdueMinutes } from '../lib/care';
 import { clock } from '../lib/time';
 
@@ -24,8 +26,11 @@ export default function CareCheck() {
   // Feedback after add / remove / mark, with Undo for removals.
   const [msg, setMsg] = useState<{ text: string; error?: boolean; undo?: CareContact[] } | null>(null);
 
+  const group = currentMode(lang).group;
+  const [groupOn, setGroupOn] = useState(isGroupEnabled);
+
   useEffect(() => {
-    const sync = () => setContacts(getCareContacts());
+    const sync = () => { setContacts(getCareContacts()); setGroupOn(isGroupEnabled()); };
     window.addEventListener('sombra:local', sync);
     return () => window.removeEventListener('sombra:local', sync);
   }, []);
@@ -73,10 +78,7 @@ export default function CareCheck() {
   return (
     <AppShell>
       <div className="page">
-        <header className="page-head">
-          <h1>{f.careTitle}</h1>
-          <p>{f.careSub}</p>
-        </header>
+        <PageHead story="others" title={f.careTitle} lead={f.careSub} />
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
         <PushControl variant="inline" />
         {heatWarning && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
@@ -113,6 +115,17 @@ export default function CareCheck() {
         </ul>
         <button type="button" className="btn btn-secondary btn-block" onClick={() => setAdding(true)}><Plus size={18} aria-hidden="true" />{f.careAdd}</button>
         <p className="fine-print care-tips">{f.careTips}</p>
+
+        {/* The group (crew, team) is the other half of looking out for people. It stays off until someone is added. */}
+        <Link href="/app/crew" className="tool-card tone-green">
+          <span className="mode-choice-icon"><Users size={24} strokeWidth={2.2} aria-hidden="true" /></span>
+          <span className="tool-copy">
+            <strong>{groupOn ? group : f.groupTitleOff}</strong>
+            <small>{fill(groupOn ? f.groupCardOn : f.groupCardOff, { group: group.toLowerCase() })}</small>
+          </span>
+          <ChevronRight size={20} aria-hidden="true" className="landing-mode-arrow" />
+        </Link>
+        <NextStep href="/app/cool-spots" story="out" Icon={Droplet}>{f.nextCare}</NextStep>
       </div>
 
       {adding && (

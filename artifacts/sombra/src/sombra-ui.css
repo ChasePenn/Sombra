@@ -268,19 +268,51 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .text-btn { background: none; border: 0; padding: 8px 4px; min-height: 44px; font: 700 .95rem var(--head); color: var(--mesquite-dark); cursor: pointer; text-decoration: underline; }
 .arizona-note { margin: 8px 0 12px; padding: 10px 12px; border-radius: 12px; background: #FFF4D6; color: var(--ink); font-size: .92rem; line-height: 1.4; }
 
-/* Quick tools: the four tools, up front on Today and the landing page */
-.quick-tools { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 4px 0 16px; }
-.quick-tool { display: grid; justify-items: center; align-content: start; gap: 6px; padding: 10px 4px 8px; min-height: 88px; background: #fff; border: 2px solid var(--line); border-radius: 18px; box-shadow: 0 3px 0 var(--line); color: var(--ink); text-decoration: none; text-align: center; transition: transform .08s; }
-.quick-tool:active { transform: translateY(2px); box-shadow: none; }
-.quick-icon { width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: var(--tone-orange-tint); color: var(--tone-orange); }
-.tone-blue .quick-icon { background: var(--tone-blue-tint); color: var(--tone-blue); }
-.tone-green .quick-icon { background: var(--tone-green-tint); color: var(--tone-green); }
-.tone-red .quick-icon { background: var(--tone-red-tint); color: var(--tone-red); }
-.quick-label { font: 700 .8rem/1.15 var(--head); }
-.quick-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-.quick-cards .quick-tool { justify-items: start; text-align: left; padding: 14px; min-height: 0; border-radius: 20px; }
-.quick-cards .quick-label { font-size: 1rem; }
-.quick-line { color: var(--ink-soft); font-size: .85rem; line-height: 1.3; }
+/* One day in the heat: every screen belongs to a part of the day, with one color each.
+   before = orange, out = blue, others = green, you = red. */
+.tone-orange { --tone: var(--tone-orange); --tint: var(--tone-orange-tint); }
+.tone-blue { --tone: var(--tone-blue); --tint: var(--tone-blue-tint); }
+.tone-green { --tone: var(--tone-green); --tint: var(--tone-green-tint); }
+.tone-red { --tone: var(--tone-red); --tint: var(--tone-red-tint); }
+.story-tag { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; font: 800 .74rem/1 var(--head); letter-spacing: .06em; text-transform: uppercase; color: var(--tone, var(--tone-orange)); }
+.story-tag::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.page-head-split { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.quick-icon { flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; background: var(--tint, var(--tone-orange-tint)); color: var(--tone, var(--tone-orange)); }
+
+/* Landing: the day as a short timeline */
 .landing-tools { margin-top: 34px; }
-.landing-tools h2 { font-size: 1.3rem; margin: 0 0 12px; }
-.quick-row { margin: 12px 16px 4px; }
+.landing-tools h2 { font-size: 1.3rem; margin: 0 0 14px; }
+.day-story { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.day-step { position: relative; padding: 0 0 14px 22px; }
+.day-step::before { content: ''; position: absolute; left: 4px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--tone); }
+.day-step:not(:last-child)::after { content: ''; position: absolute; left: 8px; top: 18px; bottom: 0; width: 2px; background: var(--line); }
+.day-step .story-tag::before { display: none; }
+.day-tools { display: grid; gap: 8px; }
+.quick-tool { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; row-gap: 2px; align-items: center; padding: 12px; background: #fff; border: 2px solid var(--line); border-radius: 18px; box-shadow: 0 3px 0 var(--line); color: var(--ink); text-decoration: none; transition: transform .08s; }
+.quick-tool .quick-icon { grid-row: span 2; }
+.quick-tool:active { transform: translateY(2px); box-shadow: none; }
+.quick-label { font: 700 1rem/1.15 var(--head); }
+.quick-line { color: var(--ink-soft); font-size: .85rem; line-height: 1.3; }
+
+/* The next step after a screen */
+.next-step { display: flex; align-items: center; gap: 12px; margin: 18px 0 8px; padding: 10px 14px 10px 10px; min-height: 60px; background: #fff; border: 2px solid var(--line); border-radius: 18px; box-shadow: 0 3px 0 var(--line); color: var(--ink); font: 700 .98rem/1.25 var(--head); text-decoration: none; }
+.next-step > span:nth-child(2) { flex: 1; }
+.next-step > svg:last-child { color: var(--ink-soft); flex: none; }
+.next-step:active { transform: translateY(2px); box-shadow: none; }
+.today-next { margin: 4px 16px 0; }
+.today-next .next-step { margin: 8px 0 4px; }
+
+/* A heat warning shown on every screen while it lasts */
+.heat-banner { display: flex; align-items: center; gap: 8px; margin: 0 16px 4px; padding: 10px 14px; border-radius: 14px; background: var(--r-veryhigh); color: #fff; box-shadow: 0 3px 0 #B5302F; font: 700 .92rem/1.25 var(--head); text-decoration: none; }
+
+/* Settings and About on the You tab */
+.link-list { display: grid; margin-top: 18px; background: #fff; border: 2px solid var(--line); border-radius: 18px; overflow: hidden; }
+.link-list a { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 14px; color: var(--ink); font: 700 1rem var(--head); text-decoration: none; }
+.link-list a + a { border-top: 2px solid var(--line); }
+.link-list a span { flex: 1; }
+.link-list a svg:last-child { color: var(--ink-soft); }
+
+/* Five tabs: Today, Map, check-in, People, You */
+.tabs-inner { grid-template-columns: 1fr 1fr 72px 1fr 1fr; padding: 0 8px 10px; }
+.tab { font-size: .74rem; }
+.care-tips + .tool-card { margin-top: 18px; }

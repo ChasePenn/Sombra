@@ -1,4 +1,4 @@
-import { Check, GraduationCap, HardHat, LayoutGrid, Settings, Sunrise, Users, type LucideIcon } from 'lucide-react';
+import { Check, CircleUserRound, GraduationCap, HardHat, Map, Settings, Sunrise, Users, type LucideIcon } from 'lucide-react';
 
 // Icons are bundled with the app (no icon-font CDN), so they always render, even offline.
 const icons: Record<string, LucideIcon> = {
@@ -8,7 +8,8 @@ const icons: Record<string, LucideIcon> = {
   gear: Settings,
   'users-three': Users,
   check: Check,
-  tools: LayoutGrid,
+  map: Map,
+  you: CircleUserRound,
 };
 
 export function Icon({ name, size = 24, strokeWidth = 2.2 }: { name: string; size?: number; strokeWidth?: number }) {

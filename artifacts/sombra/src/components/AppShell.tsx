@@ -8,6 +8,7 @@ import { Sheet } from './Sheet';
 import { ModePicker } from './ModePicker';
 import { InstallTip } from './InstallTip';
 import { featureCopy } from '../lib/features-copy';
+import { HeatBanner } from './HeatBanner';
 
 function Glyph({ name, size = 24 }: { name: string; size?: number }) {
   return <Icon name={name} size={size} strokeWidth={name === 'check' ? 3 : 2.2} />;
@@ -54,7 +55,6 @@ export function TopBar({ title }: { title?: string }) {
           <button type="button" className="lang-toggle" lang="en" aria-label={ui.englishLanguage} onClick={() => selectLanguage('en')}>English</button>
         )}
         <button type="button" className="mode-chip" aria-label={currentMode(lang).name} aria-haspopup="dialog" onClick={() => setModeOpen(true)}>{currentMode(lang).shortName}</button>
-        <Link href="/settings" className="icon-btn" aria-label={t.settings}><Glyph name="gear" /></Link>
       </div>
     </header>
     {error && <p className="error" role="alert">{t.somethingWrong}</p>}
@@ -67,11 +67,18 @@ export function TopBar({ title }: { title?: string }) {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { t, lang } = useSession();
+  const f = featureCopy[lang];
   const [loc] = useLocation();
-  const tabs = [
-    { href: '/app', label: t.today, icon: 'sun-horizon', active: loc === '/app' },
-    { href: '/app/tools', label: featureCopy[lang].toolsTitle, icon: 'tools', active: ['/app/tools', '/app/best-time', '/app/cool-spots', '/app/check-on', '/app/profile', '/app/crew'].some((p) => loc.startsWith(p)) },
-  ];
+  const on = (...paths: string[]) => paths.some((p) => loc === p || loc.startsWith(`${p}/`));
+  // Four places plus the check-in button, in the order of a day: plan, go out, others, you.
+  const tab = (href: string, label: string, icon: string, active: boolean) => (
+    <Link href={href} className="tab" aria-current={active ? 'page' : undefined}>
+      <Glyph name={icon} />
+      {label}
+    </Link>
+  );
+  // Today and Check on someone already show the heat warning in their own words.
+  const banner = !on('/app/check-on') && loc !== '/app';
   return (
     <div className="app-layout">
     <aside className="app-context">
@@ -86,20 +93,17 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="shell">
       <TopBar />
       <InstallTip />
+      {banner && <HeatBanner />}
       <main>{children}</main>
       <nav className="tabs" aria-label="sombra">
         <div className="tabs-inner">
-          <Link href={tabs[0].href} className="tab" aria-current={tabs[0].active ? 'page' : undefined}>
-            <Glyph name={tabs[0].icon} />
-            {tabs[0].label}
-          </Link>
-          <Link href="/app/check-in" className="checkin-tab" aria-label={t.checkIn} aria-current={loc.startsWith('/app/check-in') ? 'page' : undefined}>
+          {tab('/app', t.today, 'sun-horizon', loc === '/app' || on('/app/best-time'))}
+          {tab('/app/cool-spots', f.tabMap, 'map', on('/app/cool-spots'))}
+          <Link href="/app/check-in" className="checkin-tab" aria-label={t.checkIn} aria-current={on('/app/check-in') ? 'page' : undefined}>
             <Glyph name="check" size={32} />
           </Link>
-          <Link href={tabs[1].href} className="tab" aria-current={tabs[1].active ? 'page' : undefined}>
-            <Glyph name={tabs[1].icon} />
-            {tabs[1].label}
-          </Link>
+          {tab('/app/check-on', f.tabPeople, 'users-three', on('/app/check-on', '/app/crew'))}
+          {tab('/app/profile', f.tabYou, 'you', on('/app/profile', '/settings'))}
         </div>
       </nav>
     </div>

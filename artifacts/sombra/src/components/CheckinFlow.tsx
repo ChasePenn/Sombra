@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { Check, Mic, MicOff, Phone } from 'lucide-react';
+import { Link } from 'wouter';
+import { Check, Droplet, Mic, MicOff, Phone } from 'lucide-react';
 import { firstAid } from '@workspace/heat-safety/templates';
 import type { SessionContext } from '@workspace/heat-safety/session';
 import type { CheckinResult } from '../../public/js/checkin-service.js';
@@ -7,6 +8,7 @@ import { checkInCopy, fill, type Lang } from '../lib/copy';
 import { useSpeech } from '../lib/speech';
 import { fmtDuration, waterText } from '../lib/activity';
 import { Sheet } from './Sheet';
+import { featureCopy } from '../lib/features-copy';
 
 export const FINE = 'fine';
 
@@ -94,7 +96,10 @@ export function ResultSheet({ lang, result, ctx, name, saveError, onClose, close
         </section>
         <p className="recheck">{fill(c.recheck, { minutes: result.recheck_in_minutes })}</p>
         {saveError && <p className="error" role="alert">{c.saveError}</p>}
-        <div className="sheet-actions"><button type="button" className="btn btn-primary" onClick={onClose}>{c.done}</button></div>
+        <div className="sheet-actions">
+          {lvl === 'CAUTION' && <Link href="/app/cool-spots" className="btn btn-secondary"><Droplet size={18} aria-hidden="true" />{featureCopy[lang].nextCheck}</Link>}
+          <button type="button" className="btn btn-primary" onClick={onClose}>{c.done}</button>
+        </div>
       </div>
     </Sheet>
   );

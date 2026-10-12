@@ -15,8 +15,8 @@ const out = process.argv[2] ?? path.resolve(here, "../src/data/places.json");
 
 // south, west, north, east
 const REGIONS = [
-  { name: "Phoenix metro", box: [33.15, -112.65, 33.95, -111.45] },
-  { name: "Tucson", box: [32.0, -111.2, 32.5, -110.65] },
+  { name: "Phoenix metro", box: [33.15, -112.65, 33.95, -111.45], min: 400 },
+  { name: "Tucson", box: [32.0, -111.2, 32.5, -110.65], min: 100 },
 ];
 
 const SERVERS = [
@@ -86,14 +86,15 @@ for (const region of REGIONS) {
   }
   console.log(`::notice::${region.name}: ${count} places`);
   // Sanity check: a broken answer shouldn't replace good data.
-  if (count < 200) throw new Error(`Only ${count} places for ${region.name}; not saving.`);
+  if (count < region.min) throw new Error(`Only ${count} places for ${region.name}; not saving.`);
 }
 
 places.sort((a, b) => a[2] - b[2] || a[3] - b[3]);
 const body = {
   source: "OpenStreetMap contributors (ODbL)",
-  updated: new Date().toISOString().slice(0, 10),
-  regions: REGIONS,
+  // Phoenix date (UTC-7 all year).
+  updated: new Date(Date.now() - 7 * 3_600_000).toISOString().slice(0, 10),
+  regions: REGIONS.map(({ name, box }) => ({ name, box })),
   kinds: Object.keys(KIND_CODE),
   fields: ["id", "kind", "lat", "lon", "name", "openingHours"],
   places,

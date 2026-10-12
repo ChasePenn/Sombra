@@ -113,3 +113,60 @@ test("cool spots query uses a box about 3 km around the point", async () => {
   assert.ok(Math.abs(box[1] - -112.102) < 0.003 && Math.abs(box[3] - -112.038) < 0.003, q);
   assert.match(q, /drinking_water/);
 });
+
+const fakeSaved = {
+  updated: "2026-10-01",
+  regions: [{ name: "Test", box: [33, -113, 34, -111] }],
+  kinds: ["water", "library", "community", "mall", "shade"],
+  places: [[1, 1, 33.5, -112, "Burton Barr Library", "Mo-Th 09:00-21:00"], [2, 0, 33.51, -112.01, null, null], [3, 0, 33.9, -112, null, null]],
+};
+
+test("saved cool spots near a point come back shaped like map data", () => {
+  const inside = mod.snapshotElements(33.5, -112, fakeSaved);
+  assert.equal(inside.complete, true);
+  assert.deepEqual(inside.elements.map((e) => e.id), [1, 2]);
+  assert.deepEqual(inside.elements[0].tags, { amenity: "library", name: "Burton Barr Library", opening_hours: "Mo-Th 09:00-21:00" });
+  assert.deepEqual(inside.elements[1].tags, { amenity: "drinking_water" });
+  const places = mod.summarizePlaces(inside.elements, { lat: 33.5, lon: -112 });
+  assert.equal(places[0].kind, "library");
+});
+
+test("saved cool spots know when a search reaches past the saved area", () => {
+  const edge = mod.snapshotElements(33.99, -112, fakeSaved);
+  assert.equal(edge.complete, false);
+  assert.equal(edge.covered, true);
+  const outside = mod.snapshotElements(40, -100, fakeSaved);
+  assert.equal(outside.covered, false);
+  assert.equal(outside.elements.length, 0);
+});
+
+test("downtown Phoenix cool spots answer from the saved copy, even with the map servers down", async () => {
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error("map servers down"); };
+  const res = await originalFetch(`${baseUrl}/places/cool?lat=33.4484&lon=-112.074`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.source, "saved");
+  assert.match(body.updated, /^\d{4}-\d{2}-\d{2}$/);
+  assert.ok(body.places.length >= 3, `expected several downtown places, got ${body.places.length}`);
+  assert.ok(body.places.every((p) => p.distanceM <= 3600));
+  assert.equal(calls, 0, "no live lookup needed");
+});
+
+test("outside the saved area, a live lookup is used and its failure is reported", async () => {
+  const asked = [];
+  globalThis.fetch = async (url) => { asked.push(String(url)); return new Response("busy", { status: 429 }); };
+  const res = await originalFetch(`${baseUrl}/places/cool?lat=35.2&lon=-111.65`);
+  assert.equal(res.status, 502);
+  assert.ok(asked.length >= 2, "tried the backup servers too");
+  assert.equal(asked.filter((u) => u === mod.OVERPASS_URL).length, 1, "a busy main server isn't asked twice");
+});
+
+test("outside the saved area, live results come back marked live", async () => {
+  globalThis.fetch = async () => json({ elements: [{ id: 9, lat: 35.201, lon: -111.65, tags: { amenity: "library", name: "Flagstaff Library" } }] });
+  const res = await originalFetch(`${baseUrl}/places/cool?lat=35.21&lon=-111.66`);
+  assert.equal(res.status, 200);
+  const body = await res.json();
+  assert.equal(body.source, "live");
+  assert.equal(body.places[0].name, "Flagstaff Library");
+});
