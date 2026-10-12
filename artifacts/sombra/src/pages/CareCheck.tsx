@@ -1,4 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
+import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
 import { Check, ChevronRight, Droplet, Lock, Phone, Plus, Trash2, TriangleAlert, Users } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
@@ -39,7 +40,7 @@ export default function CareCheck() {
     // Show a stronger nudge when the National Weather Service has a heat alert for the last planned place.
     const place = getLastPlace();
     if (!place) return;
-    fetch(`/api/conditions?lat=${place.lat}&lon=${place.lon}`)
+    fetch(`/api/conditions?${roundedQuery(place)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { alerts: { kind: string }[] | null } | null) => setHeatWarning(Boolean(d?.alerts?.some((a) => a.kind === 'heat'))))
       .catch(() => undefined);

@@ -193,7 +193,9 @@ a.tool-card:active { transform: translateY(3px); box-shadow: none; }
 .relief-card p { font-weight: 700; font-size: .95rem; }
 .relief-card .btn { justify-self: start; min-height: 46px; }
 .spot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.spot { display: flex; align-items: center; gap: 12px; padding: 10px 6px 10px 12px; background: #fff; border: 2px solid var(--line); border-radius: 20px; }
+.spot { display: flex; align-items: center; gap: 6px; padding: 4px 6px 4px 4px; background: #fff; border: 2px solid var(--line); border-radius: 20px; }
+.spot-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 6px 4px 6px 8px; background: none; border: 0; border-radius: 16px; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.spot-main:focus-visible { outline: 3px solid var(--monsoon); outline-offset: 2px; }
 .spot .mode-choice-icon { width: 44px; height: 44px; border-radius: 14px; }
 .spot-copy { flex: 1; display: grid; min-width: 0; }
 .spot-copy strong { font: 700 1rem var(--head); line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -240,7 +242,7 @@ a.tool-card:active { transform: translateY(3px); box-shadow: none; }
 .check-wrap.is-on .check-item { border: 0; background: transparent; }
 .check-tip { padding: 0 14px 12px 52px; color: #7A2A2A; font-size: .92rem; line-height: 1.4; }
 .spot-controls { display: grid; gap: 10px; margin-bottom: 14px; }
-.spot-map { height: 320px; border-radius: 22px; overflow: hidden; border: 2px solid var(--line); margin-bottom: 12px; background: var(--mesquite-tint); z-index: 0; position: relative; }
+.spot-map { height: clamp(300px, 50vh, 480px); border-radius: 22px; overflow: hidden; border: 2px solid var(--line); margin-bottom: 8px; background: #EDE6DF; z-index: 0; position: relative; }
 .spot.is-focused { border-color: var(--mesquite); }
 .spot-open { color: var(--tone-green) !important; font-weight: 700; }
 .spot-closed { color: #9F292F !important; font-weight: 700; }
@@ -316,3 +318,24 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .tabs-inner { grid-template-columns: 1fr 1fr 72px 1fr 1fr; padding: 0 8px 10px; }
 .tab { font-size: .74rem; }
 .care-tips + .tool-card { margin-top: 18px; }
+
+/* Map: pins, the place card, the locate button and the live status line */
+.spot-filters { margin: 4px 0 12px; }
+.map-pin { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--pin); border: 3px solid #fff; box-shadow: 0 2px 6px rgba(58, 22, 7, .35); transition: transform .12s; }
+.map-pin svg { width: 18px; height: 18px; }
+.map-pin.is-selected { transform: scale(1.25); box-shadow: 0 0 0 4px rgba(255, 106, 43, .45), 0 3px 8px rgba(58, 22, 7, .4); }
+.map-pop { display: grid; gap: 4px; min-width: 160px; font-family: var(--body); }
+.map-pop strong { font: 700 1rem/1.25 var(--head); color: var(--ink); }
+.map-pop span { color: var(--ink-soft); font-size: .88rem; }
+.map-pop a { margin-top: 4px; justify-self: start; font: 700 .95rem var(--head); color: var(--mesquite-dark); }
+.leaflet-popup-content-wrapper { border-radius: 16px; }
+.map-locate { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; border: 2px solid var(--line); background: #fff; color: var(--ink); box-shadow: 0 2px 6px rgba(58, 22, 7, .2); cursor: pointer; }
+.map-locate.is-on { color: #2F86C9; border-color: #2F86C9; }
+.map-locate:focus-visible { outline: 3px solid var(--monsoon); outline-offset: 2px; }
+.map-me { filter: drop-shadow(0 1px 3px rgba(47, 134, 201, .6)); }
+.map-status { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-height: 28px; margin: 0 4px 10px; color: var(--ink-soft); font-size: .9rem; }
+.map-live { display: inline-flex; align-items: center; gap: 8px; color: #1F6FAD; font-weight: 700; }
+.map-live::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #2F86C9; box-shadow: 0 0 0 0 rgba(47, 134, 201, .6); animation: live-pulse 2s infinite; }
+@keyframes live-pulse { 70% { box-shadow: 0 0 0 8px rgba(47, 134, 201, 0); } 100% { box-shadow: 0 0 0 0 rgba(47, 134, 201, 0); } }
+@media (prefers-reduced-motion: reduce) { .map-live::before { animation: none; } .map-pin { transition: none; } }
+.place-problem { color: #9F292F; background: #FDECEC; border-radius: 12px; padding: 10px 12px; line-height: 1.4; }

@@ -279,7 +279,7 @@ export function summarizePlaces(elements: OverpassElement[], origin: { lat: numb
       return true;
     })
     .sort((a, b) => a.distanceM - b.distanceM)
-    .slice(0, 20);
+    .slice(0, 30);
 }
 
 /** A box about 3 km around the point. Box filters cost the Overpass server far less than radius searches. */

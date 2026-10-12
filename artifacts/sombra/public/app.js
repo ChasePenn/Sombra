@@ -8,6 +8,7 @@ import {
 import workRestTable from "../config/work_rest_table.json" with { type: "json" };
 import siteAdjustments from "../config/site_adjustments.json";
 import { getProfile, getShifts, getCrew, getCheckins, saveShift, setAccountSession } from "./js/store.js";
+import { GeoError, locate, platform, roundedQuery } from "./js/geo.js";
 
 const modeModules = import.meta.glob("../config/modes/*.json", { eager: true, import: "default" });
 const requestedModeId = new URLSearchParams(window.location.search).get("mode") || "work";
@@ -515,37 +516,34 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     locationInput.focus();
   });
 
-  useLocation.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      setLocationMessage("location.unavailable", true);
-      return;
-    }
+  useLocation.addEventListener("click", async () => {
     useLocation.disabled = true;
     useLocation.setAttribute("aria-busy", "true");
     setLocationMessage("location.finding");
-    navigator.geolocation.getCurrentPosition((position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const coordinateLocation = {
+    try {
+      const fix = await locate({ onRetry: () => setLocationMessage("location.retrying") });
+      setSelectedLocation({
         name: translate("ui.currentLocation"),
         admin1: "",
         country: "",
-        latitude,
-        longitude
-      };
-      useLocation.disabled = false;
-      useLocation.removeAttribute("aria-busy");
-      setSelectedLocation(coordinateLocation);
-    }, (error) => {
-      useLocation.disabled = false;
-      useLocation.removeAttribute("aria-busy");
-      const message = error.code === error.PERMISSION_DENIED
-        ? "location.permissionDeclined"
-        : error.code === error.TIMEOUT
-          ? "location.timeout"
-          : "location.failed";
+        // About 1 km is plenty for a forecast, and the exact spot stays on the phone.
+        latitude: Math.round(fix.lat * 100) / 100,
+        longitude: Math.round(fix.lon * 100) / 100
+      });
+      if (fix.stale) setLocationMessage("location.stale", false, { minutes: Math.max(1, Math.round((Date.now() - fix.at) / 60000)) });
+    } catch (error) {
+      const problem = error instanceof GeoError ? error.problem : "unavailable";
+      const blocked = { ios: "location.permissionDeclinedIos", android: "location.permissionDeclinedAndroid", desktop: "location.permissionDeclinedDesktop" };
+      const message = problem === "denied" ? blocked[platform()]
+        : problem === "timeout" ? "location.timeout"
+          : problem === "unsupported" ? "location.unavailable"
+            : problem === "insecure" ? "location.insecure"
+              : "location.failed";
       setLocationMessage(message, true);
-    }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+    } finally {
+      useLocation.disabled = false;
+      useLocation.removeAttribute("aria-busy");
+    }
   });
 
   const formatTime = (value, timezone = "America/Phoenix") => {
@@ -1161,7 +1159,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     latestConditions = null;
     conditionsPanel.hidden = true;
     try {
-      const response = await fetch(`/api/conditions?lat=${latitude}&lon=${longitude}`, { headers: { Accept: "application/json" } });
+      const response = await fetch(`/api/conditions?${roundedQuery({ lat: latitude, lon: longitude })}`, { headers: { Accept: "application/json" } });
       if (!response.ok) throw new Error("conditions");
       const data = await response.json();
       if (request !== conditionsRequest) return;

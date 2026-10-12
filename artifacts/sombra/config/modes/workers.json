@@ -64,6 +64,12 @@
         "finding": "Finding your location…",
         "permissionDeclined": "Location permission was declined. Search for a place instead.",
         "timeout": "Could not get your location in time. Try searching for a place.",
+        "retrying": "Still looking. Trying GPS…",
+        "permissionDeclinedIos": "Location is off for sombra. In Safari, tap aA in the address bar → Website Settings → Location → Allow. If it's still off: Settings → Privacy & Security → Location Services → Safari Websites → While Using.",
+        "permissionDeclinedAndroid": "Location is blocked for this site. Tap the icon left of the address → Permissions → Location → Allow, then try again.",
+        "permissionDeclinedDesktop": "Location is blocked for this site. Click the icon left of the address → Location → Allow, then try again.",
+        "insecure": "Location only works on the secure (https) address. Search for a place instead.",
+        "stale": "Using where you were {minutes} min ago.",
         "failed": "Could not get your location. Search for a place instead."
       },
       "validation": {
@@ -605,6 +611,12 @@
         "finding": "Buscando tu ubicación…",
         "permissionDeclined": "No se permitió el acceso a tu ubicación. Busca un lugar.",
         "timeout": "No pudimos obtener tu ubicación a tiempo. Busca un lugar.",
+        "retrying": "Seguimos buscando. Probando con GPS…",
+        "permissionDeclinedIos": "La ubicación está desactivada para sombra. En Safari, toca aA en la barra de dirección → Configuración del sitio web → Ubicación → Permitir. Si sigue desactivada: Ajustes → Privacidad y seguridad → Localización → Sitios web de Safari → Mientras se usa.",
+        "permissionDeclinedAndroid": "La ubicación está bloqueada para este sitio. Toca el ícono a la izquierda de la dirección → Permisos → Ubicación → Permitir, y vuelve a intentarlo.",
+        "permissionDeclinedDesktop": "La ubicación está bloqueada para este sitio. Haz clic en el ícono a la izquierda de la dirección → Ubicación → Permitir, y vuelve a intentarlo.",
+        "insecure": "La ubicación solo funciona en la dirección segura (https). Busca un lugar.",
+        "stale": "Usando dónde estabas hace {minutes} min.",
         "failed": "No pudimos obtener tu ubicación. Busca un lugar."
       },
       "validation": {
