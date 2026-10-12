@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { roundedQuery } from '../../public/js/geo.js';
 import { Phone, Check } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { fill } from '../lib/copy';
@@ -37,7 +38,7 @@ export function CareReminderHost() {
     const check = () => {
       const place = getLastPlace();
       if (!place || getCareContacts().length === 0) return;
-      fetch(`/api/conditions?lat=${place.lat}&lon=${place.lon}`)
+      fetch(`/api/conditions?${roundedQuery(place)}`)
         .then((r) => (r.ok ? r.json() : null))
         .then((d: { alerts: { kind: string }[] | null } | null) => setHeatWarning(Boolean(d?.alerts?.some((a) => a.kind === 'heat'))))
         .catch(() => undefined);

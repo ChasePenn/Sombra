@@ -281,14 +281,18 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
       await chooseLanguage(other);
       assert.equal(await page.evaluate(`document.querySelector("#form-error").textContent`), workerMode.locales[other].validation.location);
       await chooseLanguage(locale);
-      for (const [code, key] of [[1, "permissionDeclined"], [3, "timeout"], [2, "failed"]]) {
-        await page.evaluate(`window.__geoError = ${code}; document.querySelector("#use-location").click()`);
-        assert.equal(await page.evaluate(`document.querySelector("#location-status").textContent`), copy.location[key]);
+      // Blocked shows how to turn location back on (this is a desktop browser). A remembered
+      // recent position would be used instead of an error, so it's cleared first.
+      for (const [code, key] of [[1, "permissionDeclinedDesktop"], [3, "timeout"], [2, "failed"]]) {
+        await page.evaluate(`localStorage.removeItem("sombra.last-fix"); window.__geoError = ${code}; document.querySelector("#use-location").click()`);
+        await waitForCondition(page, `document.querySelector("#location-status").textContent === ${JSON.stringify(copy.location[key])}`);
         await chooseLanguage(other);
         assert.equal(await page.evaluate(`document.querySelector("#location-status").textContent`), workerMode.locales[other].location[key]);
         await chooseLanguage(locale);
       }
-      await page.evaluate(`window.__geoError = 0; document.querySelector("#use-location").click(); document.querySelector("#worker-name").value = ""; document.querySelector("#submit-shift").click()`);
+      await page.evaluate(`window.__geoError = 0; document.querySelector("#use-location").click()`);
+      await waitForCondition(page, `document.querySelector("#location-status").textContent === ${JSON.stringify(copy.location.selected)}`);
+      await page.evaluate(`document.querySelector("#worker-name").value = ""; document.querySelector("#submit-shift").click()`);
       assert.equal(await page.evaluate(`document.querySelector("#form-error").textContent`), copy.validation.workerName);
       await page.evaluate(`document.querySelector("#worker-name").value = "María López"; document.querySelectorAll('input[name="intensity"]').forEach(input => input.checked = false); document.querySelector("#submit-shift").click()`);
       assert.equal(await page.evaluate(`document.querySelector("#form-error").textContent`), copy.validation.intensity);
@@ -320,7 +324,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     await chooseLanguage("es");
     assert.equal(await page.evaluate(`document.querySelector("#location-status").textContent`), workerMode.locales.es.location.finding);
     await page.evaluate(`window.__geoPending = false; window.__finishGeo()`);
-    assert.equal(await page.evaluate(`document.querySelector("#location-status").textContent`), workerMode.locales.es.location.selected);
+    await waitForCondition(page, `document.querySelector("#location-status").textContent === ${JSON.stringify(workerMode.locales.es.location.selected)}`);
     await chooseLanguage("en");
     const visionSmoke = await page.evaluate(`(async () => {
       const { classifySitePhoto } = await import("/js/vision.js");

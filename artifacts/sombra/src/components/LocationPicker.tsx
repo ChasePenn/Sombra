@@ -4,8 +4,12 @@ import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { fill } from '../lib/copy';
 import { getLastPlace, setLastPlace, type Place } from '../lib/local';
+import { useLocate } from '../lib/location';
 
 type Result = { name: string; admin1?: string | null; latitude: number; longitude: number };
+
+/** "My location" is saved in whichever language was on at the time; show it in today's. */
+const isMyLocation = (name: string) => name === featureCopy.en.myLocation || name === featureCopy.es.myLocation;
 
 /** Shows the current place with a "Change" button; search or GPS when changing. */
 export function LocationPicker({ value, onChange }: { value: Place | null; onChange: (place: Place) => void }) {
@@ -17,7 +21,13 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
   const [status, setStatus] = useState('');
   const timer = useRef<number | undefined>(undefined);
 
-  useEffect(() => { if (!value) setEditing(true); }, [value]);
+  // No place: ask for one. A place arriving from elsewhere (live location on the map) closes the search.
+  const hadValue = useRef(Boolean(value));
+  useEffect(() => {
+    if (!value) setEditing(true);
+    else if (!hadValue.current) setEditing(false);
+    hadValue.current = Boolean(value);
+  }, [value]);
 
   useEffect(() => {
     window.clearTimeout(timer.current);
@@ -46,14 +56,11 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
     setStatus('');
   };
 
-  const locate = () => {
-    if (!('geolocation' in navigator)) { setStatus(f.locationFailed); return; }
-    setStatus(f.locating);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => choose({ lat: pos.coords.latitude, lon: pos.coords.longitude, name: f.myLocation }),
-      () => setStatus(f.locationFailed),
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
-    );
+  const finder = useLocate(lang);
+  const locate = async () => {
+    setStatus('');
+    const fix = await finder.run();
+    if (fix) choose({ lat: fix.lat, lon: fix.lon, name: f.myLocation });
   };
 
   if (!editing && value) {
@@ -61,9 +68,10 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
       <>
         <div className="place-row">
           <span className="place-icon" aria-hidden="true"><MapPin size={18} /></span>
-          <span className="place-name">{fill(f.near, { place: value.name })}</span>
+          <span className="place-name">{fill(f.near, { place: isMyLocation(value.name) ? f.myLocation : value.name })}</span>
           <button type="button" className="btn-quiet place-change" onClick={() => setEditing(true)}>{f.change}</button>
         </div>
+        {finder.state.kind === 'stale' && <p className="place-status" role="status">{finder.state.text}</p>}
         {!isInArizona(value.lat, value.lon) && <p className="arizona-note" role="note">{f.outsideArizona}</p>}
       </>
     );
@@ -88,7 +96,11 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
           ))}
         </ul>
       )}
-      <button type="button" className="btn btn-secondary btn-block" onClick={locate}><LocateFixed size={18} aria-hidden="true" />{f.useMyLocation}</button>
+      <button type="button" className="btn btn-secondary btn-block" onClick={locate} disabled={finder.state.kind === 'busy'} aria-busy={finder.state.kind === 'busy'}>
+        <LocateFixed size={18} aria-hidden="true" />{f.useMyLocation}
+      </button>
+      {finder.state.kind === 'busy' && <p className="place-status" role="status">{finder.state.text}</p>}
+      {finder.state.kind === 'failed' && <p className="place-status place-problem" role="alert">{finder.state.text}</p>}
       {status && <p className="place-status" role="status">{status}</p>}
     </div>
   );

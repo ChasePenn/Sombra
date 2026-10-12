@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
 import { Clock, Droplet, PhoneCall, TriangleAlert } from 'lucide-react';
 import { useSession } from '../lib/session';
@@ -26,7 +27,7 @@ export function ContextCards({ maxCategory }: { maxCategory: number | null }) {
     const place = getLastPlace();
     if (!place) return;
     let live = true;
-    fetch(`/api/conditions?lat=${place.lat}&lon=${place.lon}`, { headers: { Accept: 'application/json' } })
+    fetch(`/api/conditions?${roundedQuery(place)}`, { headers: { Accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { alerts: Alert[] | null } | null) => { if (live) setHeatAlert(d?.alerts?.find((a) => a.kind === 'heat') ?? null); })
       .catch(() => undefined);

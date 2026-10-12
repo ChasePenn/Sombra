@@ -52,9 +52,9 @@ else
 fi
 
 if command -v chromium >/dev/null 2>&1 || [ -n "${CHROME_BIN:-}" ]; then
-  step "Planner browser test" bash -c "cd artifacts/sombra && node --test --test-reporter=tap tests/*.browser.test.js"
+  step "Browser tests (planner, push, map)" bash -c "cd artifacts/sombra && node --test --test-reporter=tap tests/*.browser.test.js"
 else
-  skip "Planner browser test" "needs Chromium or CHROME_BIN"
+  skip "Browser tests (planner, push, map)" "needs Chromium or CHROME_BIN"
 fi
 
 echo

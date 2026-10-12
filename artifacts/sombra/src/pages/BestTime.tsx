@@ -69,7 +69,7 @@ export default function BestTime() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
-            workerName: profile?.name || 'sombra', locationName: place.name, latitude: place.lat, longitude: place.lon,
+            workerName: profile?.name || 'sombra', locationName: place.name, latitude: Math.round(place.lat * 100) / 100, longitude: Math.round(place.lon * 100) / 100,
             intensity, startTime: '05:00', endTime: '22:00', date, newToHeat: Boolean(profile?.newToHeat),
           }),
         });

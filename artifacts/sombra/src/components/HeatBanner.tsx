@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
 import { TriangleAlert } from 'lucide-react';
 import { getLastPlace } from '../lib/local';
@@ -26,7 +27,7 @@ export function HeatBanner() {
       const key = `${place.lat},${place.lon}`;
       const hit = seen.get(key);
       if (hit && Date.now() - hit.at < 600_000) { setAlert(hit.alert); return; }
-      fetch(`/api/conditions?lat=${place.lat}&lon=${place.lon}`, { headers: { Accept: 'application/json' } })
+      fetch(`/api/conditions?${roundedQuery(place)}`, { headers: { Accept: 'application/json' } })
         .then((r) => (r.ok ? r.json() : null))
         .then((d: { alerts: Alert[] | null } | null) => {
           if (!d) return;
