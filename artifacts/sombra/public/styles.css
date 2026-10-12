@@ -951,3 +951,5 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 .results-actions .button { flex: 1 1 auto; min-width: 0; white-space: normal; }
 .arizona-note { margin: 8px 0 0; padding: 10px 12px; border-radius: 12px; background: #FFF4D6; color: var(--ink, #2A1206); font-size: 14px; line-height: 1.4; }
 .arizona-note[hidden] { display: none; }
+/* The location field has its own clear button; hide the browser's duplicate one. */
+#location-search::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; display: none; }

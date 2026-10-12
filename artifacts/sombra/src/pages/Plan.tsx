@@ -7,6 +7,7 @@ import { AppShell } from '../components/AppShell';
 import Welcome from './Welcome';
 import { modeQuery } from '../lib/copy';
 import { ContextCards } from '../components/ContextCards';
+import { QuickTools } from '../components/QuickTools';
 
 const PREFILL_KEYS = ['lat', 'lon', 'place', 'date', 'start', 'end', 'intensity'];
 
@@ -103,5 +104,5 @@ export default function Plan() {
     try { store.dismissWelcome(); } catch { setSkipError(true); }
     setDismissed(true);
   }} />;
-  return <AppShell>{skipError && <p className="error" role="alert">{t.somethingWrong}</p>}<ContextCards maxCategory={maxCategory} /><PlannerFrame onSummary={setMaxCategory} /></AppShell>;
+  return <AppShell>{skipError && <p className="error" role="alert">{t.somethingWrong}</p>}<ContextCards maxCategory={maxCategory} /><QuickTools variant="row" /><PlannerFrame onSummary={setMaxCategory} /></AppShell>;
 }
