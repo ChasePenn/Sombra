@@ -56,7 +56,8 @@ async function download(box) {
         return data.elements;
       } catch (err) {
         last = err;
-        console.warn(`try failed: ${err.message}`);
+        // "::warning::" shows the reason on the GitHub run page.
+        console.warn(`::warning::try failed: ${err.message}`);
       }
     }
     await wait(20_000);
@@ -83,7 +84,7 @@ for (const region of REGIONS) {
     places.push([el.id, KIND_CODE[kind], Math.round(lat * 1e5) / 1e5, Math.round(lon * 1e5) / 1e5, tags.name ?? null, tags.opening_hours ?? null]);
     count++;
   }
-  console.log(`${region.name}: ${count} places`);
+  console.log(`::notice::${region.name}: ${count} places`);
   // Sanity check: a broken answer shouldn't replace good data.
   if (count < 200) throw new Error(`Only ${count} places for ${region.name}; not saving.`);
 }
