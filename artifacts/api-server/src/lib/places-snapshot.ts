@@ -2,7 +2,7 @@ import saved from "../data/places.json";
 
 /*
   The saved copy of cool spots for metro Phoenix and Tucson (scripts/fetch-places.mjs,
-  refreshed monthly). Answering from it means Cool spots doesn't depend on the busy public
+  refreshed weekly). Answering from it means Cool spots doesn't depend on the busy public
   OpenStreetMap servers while someone is standing in the heat waiting for it.
 */
 

@@ -80,6 +80,9 @@ async function newPage({ geolocation, allow = true, tilesDown = false }) {
       const lon = Number(url.searchParams.get("lon"));
       return route.fulfill({ json: { places: placesAround(lat, lon), source: "saved", updated: "2026-10-12" } });
     }
+    if (url.pathname === "/api/weather/geocode") {
+      return route.fulfill({ json: [{ name: "Tempe", admin1: "Arizona", latitude: 33.4255, longitude: -111.94 }] });
+    }
     if (url.pathname === "/api/conditions") { asked.push(url.search); return route.fulfill({ json: { alerts: [], air: null } }); }
     if (url.pathname.startsWith("/api/")) return route.fulfill({ status: 404, json: { error: "not mocked" } });
     return route.continue();
@@ -162,6 +165,50 @@ test("if the main map tiles won't load, a second map style is used", { skip }, a
     while (tiles.carto === 0 && Date.now() < deadline) await page.waitForTimeout(100);
     assert.ok(tiles.osm >= 4, "tried the main tiles first");
     assert.ok(tiles.carto > 0, "switched to the backup tiles");
+  } finally {
+    await context.close();
+  }
+});
+
+test("a searched place stays put while live location keeps running", { skip }, async () => {
+  const { context, page, asked } = await newPage({ geolocation: { latitude: 33.4484, longitude: -112.074, accuracy: 15 } });
+  try {
+    await page.goto(`${origin}/app/cool-spots`);
+    await page.waitForSelector("path.map-me", { timeout: 15_000 });
+    await page.getByRole("button", { name: "Change" }).click();
+    await page.locator("#place-search").fill("Tempe");
+    await page.getByRole("button", { name: /Tempe/ }).click();
+    await page.getByText("Near Tempe, Arizona").waitFor({ timeout: 5000 });
+    const deadline = Date.now() + 5000;
+    while (!asked.some((q) => q.includes("lat=33.43&lon=-111.94")) && Date.now() < deadline) await page.waitForTimeout(100);
+    assert.ok(asked.some((q) => q.includes("lat=33.43&lon=-111.94")), "Tempe's spots were asked for");
+    // The phone moves to a new area; the search choice must not be replaced.
+    await context.setGeolocation({ latitude: 33.466, longitude: -112.057, accuracy: 12 });
+    await page.waitForTimeout(2500);
+    assert.equal(asked.some((q) => q.includes("lat=33.47&lon=-112.06")), false, "didn't jump back to the phone's area");
+    await page.getByText("Near Tempe, Arizona").waitFor({ timeout: 1000 });
+    // "Back to me" / the target button returns to following.
+    await page.locator(".map-locate").click();
+    const until = Date.now() + 10_000;
+    while (!asked.some((q) => q.includes("lat=33.47&lon=-112.06")) && Date.now() < until) await page.waitForTimeout(100);
+    assert.ok(asked.some((q) => q.includes("lat=33.47&lon=-112.06")), "following again loads the phone's area");
+  } finally {
+    await context.close();
+  }
+});
+
+test("allowing location from the target button starts the live dot", { skip }, async () => {
+  const { context, page } = await newPage({ allow: false, geolocation: { latitude: 33.4484, longitude: -112.074, accuracy: 15 } });
+  try {
+    await context.addInitScript(() => localStorage.setItem("sombra.last-place", JSON.stringify({ lat: 33.4255, lon: -111.94, name: "Tempe, Arizona" })));
+    await page.goto(`${origin}/app/cool-spots`);
+    await page.waitForSelector(".map-locate", { timeout: 15_000 });
+    // The person says yes to the prompt.
+    await context.grantPermissions(["geolocation"], { origin });
+    await page.locator(".map-locate").click();
+    await page.waitForSelector("path.map-me", { timeout: 15_000 });
+    await page.getByText("Following you as you move").waitFor({ timeout: 5000 });
+    await page.getByText("Near My location").waitFor({ timeout: 5000 });
   } finally {
     await context.close();
   }

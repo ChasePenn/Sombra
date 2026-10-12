@@ -8,7 +8,7 @@ export { snapshotElements };
   Outdoor conditions beyond heat:
   - GET /conditions   official National Weather Service alerts + UV index and air quality
   - GET /places/cool  nearby water refill spots, libraries, malls and shelters (OpenStreetMap).
-                      Metro Phoenix and Tucson answer from a saved monthly copy; elsewhere asks
+                      Metro Phoenix and Tucson answer from a saved copy refreshed weekly; elsewhere asks
                       the live map servers and falls back to the last good answer.
   Each upstream source is optional: if one fails, the others are still returned.
 */

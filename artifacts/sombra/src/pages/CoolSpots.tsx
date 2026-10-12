@@ -129,18 +129,27 @@ export default function CoolSpots() {
 
   // --- Live location -------------------------------------------------------
 
+  const followingRef = useRef(following);
+  followingRef.current = following;
+  const waitTimer = useRef<number | undefined>(undefined);
+
   const onFix = useCallback((fix: Fix) => {
+    window.clearTimeout(waitTimer.current);
     setMe(fix);
     setLive('on');
     setLiveProblem(null);
-    // Walked into a new 1 km cell: look up spots there.
+    // Walked into a new 1 km cell while following: look up spots there. If the person
+    // searched for somewhere else or is looking around the map, their choice stays.
     const current = placeRef.current;
-    if (!current || cellOf(current) !== cellOf(fix)) setPlace({ lat: fix.lat, lon: fix.lon, name: f.myLocation });
+    if (!current || (followingRef.current && cellOf(current) !== cellOf(fix))) setPlace({ lat: fix.lat, lon: fix.lon, name: f.myLocation });
   }, [f.myLocation, setPlace]);
 
-  const stopLive = useCallback(() => { stopRef.current?.(); stopRef.current = null; }, []);
+  const stopLive = useCallback(() => { window.clearTimeout(waitTimer.current); stopRef.current?.(); stopRef.current = null; }, []);
   const startLive = useCallback(() => {
     stopLive();
+    // Allowed, but nothing arrives (Location Services off for the whole phone, or no signal
+    // indoors): say so instead of showing nothing. Following keeps trying in the background.
+    waitTimer.current = window.setTimeout(() => setLiveProblem(geoMessage('unavailable', lang)), 20_000);
     stopRef.current = follow(onFix, (problem) => {
       // Phones lose GPS for a moment all the time (tunnels, buildings); the browser keeps
       // trying on its own, so only a revoked permission actually stops following.
@@ -152,13 +161,23 @@ export default function CoolSpots() {
     });
   }, [onFix, stopLive, lang]);
 
+  // Follow again from the last known position, without waiting for the phone to move.
+  const backToMe = useCallback(() => {
+    setFollowing(true);
+    followingRef.current = true;
+    if (!me) return;
+    const current = placeRef.current;
+    if (!current || cellOf(current) !== cellOf(me)) setPlace({ lat: me.lat, lon: me.lon, name: f.myLocation });
+  }, [me, setPlace, f.myLocation]);
+
   // The target button: find the person (with clear help if that fails), then follow them.
   const locateMe = useCallback(async () => {
-    if (live === 'on' && me) { setFollowing(true); return; }
+    if (live === 'on' && me) { backToMe(); return; }
     setLiveProblem(null);
     const fix = await finder.run();
     if (!fix) return;
     setFollowing(true);
+    followingRef.current = true; // onFix below runs before the next render
     if (fix.stale) {
       // An older position: show it, but don't claim to be following.
       setMe(fix);
@@ -168,7 +187,7 @@ export default function CoolSpots() {
     }
     onFix(fix);
     startLive();
-  }, [finder, live, me, onFix, startLive, setPlace, f.myLocation]);
+  }, [finder, live, me, onFix, startLive, setPlace, f.myLocation, backToMe]);
 
   // If location is already allowed, show the dot straight away; never prompt on arrival.
   useEffect(() => {
@@ -227,6 +246,8 @@ export default function CoolSpots() {
 
   const fromMap = useCallback((id: number) => {
     setSelected(id);
+    // Looking at a spot: don't pull the map away from it on the next GPS update.
+    setFollowing(false);
     document.getElementById(`spot-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, []);
   const fromList = (id: number) => {
@@ -275,7 +296,7 @@ export default function CoolSpots() {
               {finder.state.kind === 'stale' && <span>{finder.state.text}</span>}
               {finder.state.kind !== 'busy' && live === 'on' && following && <span className="map-live">{f.mapLive}</span>}
               {live === 'on' && !following && me && (
-                <button type="button" className="text-btn" onClick={() => setFollowing(true)}>{f.mapRecenter}</button>
+                <button type="button" className="text-btn" onClick={backToMe}>{f.mapRecenter}</button>
               )}
               {live === 'paused' && !liveProblem && <span>{f.mapPaused}</span>}
             </div>

@@ -14,7 +14,7 @@ on:
 jobs:
   send:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,5 +29,14 @@ jobs:
             exit 0
           fi
           # The secret header is optional; the endpoint is safe to call without it.
-          curl -fsS --max-time 90 -X POST "${site%/}/api/push/run" ${PUSH_CRON_SECRET:+-H "x-push-cron: $PUSH_CRON_SECRET"}
-          echo
+          # A sleeping server can take a while to wake, so try three times. A miss only
+          # delays reminders to the next run 5 minutes later, so it's a warning, not a
+          # failure (a failure would email the owner every 5 minutes).
+          for try in 1 2 3; do
+            if curl -fsS --max-time 60 -X POST "${site%/}/api/push/run" ${PUSH_CRON_SECRET:+-H "x-push-cron: $PUSH_CRON_SECRET"}; then
+              echo
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::warning::The server at $site didn't answer after three tries; reminders will go out on a later run."

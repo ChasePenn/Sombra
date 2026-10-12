@@ -1,11 +1,12 @@
 name: Cool spots data
 
 # Refreshes the saved list of cool spots (src/data/places.json) from OpenStreetMap once a
-# month. The app answers from that file, so it doesn't depend on the busy public map
-# servers while people are using it. Run it by hand to get a copy without committing.
+# week. If the map servers are busy it keeps the saved copy and only fails (and emails)
+# when that copy is over 40 days old. The app answers from that file, so it doesn't depend
+# on the busy public map servers while people are using it. Run it by hand to get a copy without committing.
 on:
   schedule:
-    - cron: "17 11 1 * *" # the 1st of each month, early morning in Phoenix
+    - cron: "17 11 * * 1" # Mondays, early morning in Phoenix
   workflow_dispatch:
     inputs:
       commit:
