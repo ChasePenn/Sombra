@@ -1,5 +1,5 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, Droplet, Navigation, Phone, ShoppingBag, Building2, Umbrella, Stethoscope } from 'lucide-react';
+import { BookOpen, Droplet, Droplets, House, Navigation, Phone, ShoppingBag, Building2, Snowflake, Umbrella, Stethoscope } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { NextStep, PageHead } from '../components/Story';
@@ -13,18 +13,52 @@ import { geoMessage, useLocate } from '../lib/location';
 import { follow, metersBetween, permission, platform, roundedQuery, type Fix } from '../../public/js/geo.js';
 import { isOpenNow } from '../../lib/opening-hours.js';
 import type { MapKind } from '../components/SpotMap';
+import { pickCoolDown, walkMinutes, type CoolPick } from '../../lib/cool-now.js';
 
 const SpotMap = lazy(() => import('../components/SpotMap'));
 
 type Kind = MapKind;
 type Spot = { id: number; kind: Kind; name: string | null; lat: number; lon: number; openingHours: string | null; distanceM: number };
-type Filter = 'all' | 'water' | 'indoor' | 'shade';
-type Loaded = { places: Spot[]; updated: string | null };
+/** An official Heat Relief Network site (Maricopa Association of Governments). */
+type Relief = {
+  id: number; type: 'cooling' | 'hydration' | 'respite'; name: string; org: string | null; address: string | null; phone: string | null;
+  lat: number; lon: number; start: string | null; end: string | null; hours: Array<[number, number] | null>; status: number;
+  pets: boolean | null; accessible: boolean | null; distanceM: number;
+};
+type Season = { open: number; until: string | null; lastEnd: string | null };
+type Filter = 'all' | 'official' | 'water' | 'indoor' | 'shade';
+type Loaded = { places: Spot[]; updated: string | null; relief?: Relief[]; reliefSeason?: Season | null };
+/** One row on the map and list, from either source. */
+type Item = {
+  id: number; kind: Kind; name: string | null; lat: number; lon: number; distanceM: number; open: boolean | null;
+  official: boolean; phone: string | null; org: string | null; closesAt: number | null; note: string | null;
+  accessible: boolean | null; pets: boolean | null;
+};
 
-const kindIcon: Record<Kind, LucideIcon> = { water: Droplet, library: BookOpen, community: Building2, mall: ShoppingBag, shade: Umbrella };
-const kindTone: Record<Kind, string> = { water: 'tone-blue', library: 'tone-orange', community: 'tone-green', mall: 'tone-brown', shade: 'tone-green' };
-const kindColor: Record<Kind, string> = { water: '#2F86C9', library: '#FF6A2B', community: '#2FA36B', mall: '#3A1607', shade: '#2FA36B' };
-const filterKinds: Record<Filter, Kind[]> = { all: ['water', 'library', 'community', 'mall', 'shade'], water: ['water'], indoor: ['library', 'community', 'mall'], shade: ['shade'] };
+const kindIcon: Record<Kind, LucideIcon> = { water: Droplet, library: BookOpen, community: Building2, mall: ShoppingBag, shade: Umbrella, cooling: Snowflake, hydration: Droplets, respite: House };
+const kindTone: Record<Kind, string> = { water: 'tone-blue', library: 'tone-orange', community: 'tone-green', mall: 'tone-brown', shade: 'tone-green', cooling: 'tone-blue', hydration: 'tone-blue', respite: 'tone-green' };
+const kindColor: Record<Kind, string> = { water: '#2F86C9', library: '#FF6A2B', community: '#2FA36B', mall: '#3A1607', shade: '#2FA36B', cooling: '#1F5FA8', hydration: '#1F5FA8', respite: '#23805A' };
+const filterKinds: Record<Filter, Kind[]> = {
+  all: ['water', 'library', 'community', 'mall', 'shade', 'cooling', 'hydration', 'respite'],
+  official: ['cooling', 'hydration', 'respite'],
+  water: ['water', 'hydration'],
+  indoor: ['library', 'community', 'mall', 'cooling', 'respite'],
+  shade: ['shade'],
+};
+
+/** Open right now by the site's published hours. Sites that open only during heat warnings are "unknown". */
+function reliefOpen(r: Relief, now: { day: number; minutes: number }) {
+  if (r.status === 4) return { open: null, closesAt: null };
+  const today = r.hours[now.day];
+  if (!today) return { open: false, closesAt: null };
+  const open = now.minutes >= today[0] && now.minutes < today[1];
+  return { open, closesAt: open ? today[1] : null };
+}
+
+const clockText = (minutes: number, lang: 'en' | 'es') => {
+  const d = new Date(Date.UTC(2026, 0, 1, Math.floor(minutes / 60) % 24, minutes % 60));
+  return minutes >= 1440 ? (lang === 'es' ? 'medianoche' : 'midnight') : new Intl.DateTimeFormat(lang === 'es' ? 'es-US' : 'en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'UTC' }).format(d);
+};
 
 // The server only ever sees a point rounded to about 1 km; this is that cell.
 const cellOf = (p: { lat: number; lon: number }) => `${Math.round(p.lat * 100) / 100},${Math.round(p.lon * 100) / 100}`;
@@ -90,6 +124,11 @@ export default function CoolSpots() {
   const placeRef = useRef<Place | null>(place);
   placeRef.current = place;
   const mapBox = useRef<HTMLDivElement>(null);
+  // Cool down now: off -> finding (location) -> waiting (spots for here) -> shown.
+  const [coolNow, setCoolNow] = useState<'off' | 'finding' | 'waiting' | 'shown'>('off');
+  const [pick, setPick] = useState<CoolPick>(null);
+  const [pickFromPlace, setPickFromPlace] = useState(false);
+  const coolBox = useRef<HTMLDivElement>(null);
 
   const setPlace = useCallback((next: Place) => { setPlaceState(next); setLastPlace(next); }, [setPlaceState]);
 
@@ -108,9 +147,9 @@ export default function CoolSpots() {
     // One quiet retry before showing an error: a busy moment usually passes in seconds.
     load()
       .catch(() => new Promise((wait) => setTimeout(wait, 2500)).then(load))
-      .then((data: { places: Spot[]; updated?: string }) => {
+      .then((data: { places: Spot[]; updated?: string | null; relief?: Relief[]; reliefSeason?: Season }) => {
         if (!alive) return;
-        const value = { places: data.places, updated: data.updated ?? null };
+        const value: Loaded = { places: data.places ?? [], updated: data.updated ?? null, relief: data.relief ?? [], reliefSeason: data.reliefSeason ?? null };
         writeCache(cell, value);
         setLoaded(value);
         setState('done');
@@ -189,6 +228,51 @@ export default function CoolSpots() {
     startLive();
   }, [finder, live, me, onFix, startLive, setPlace, f.myLocation, backToMe]);
 
+  // One tap: find the person, load spots around them, and point at the single best place.
+  const startCoolNow = useCallback(async () => {
+    setCoolNow('finding');
+    setPick(null);
+    let fix: Fix | null = me && Date.now() - me.at < 2 * 60_000 ? me : null;
+    if (!fix) fix = await finder.run();
+    if (fix) {
+      setPickFromPlace(false);
+      setMe(fix);
+      setFollowing(true);
+      followingRef.current = true;
+      const current = placeRef.current;
+      if (!current || cellOf(current) !== cellOf(fix)) setPlace({ lat: fix.lat, lon: fix.lon, name: f.myLocation });
+      if (!fix.stale && !stopRef.current) startLive();
+    } else if (placeRef.current) {
+      // Location didn't work: use the place they picked, and say so.
+      setPickFromPlace(true);
+    } else {
+      setCoolNow('off');
+      return;
+    }
+    setCoolNow('waiting');
+  }, [me, finder, setPlace, f.myLocation, startLive]);
+
+  useEffect(() => {
+    if (coolNow !== 'shown') return;
+    coolBox.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('now')) {
+      params.delete('now');
+      const rest = params.toString();
+      window.history.replaceState(window.history.state, '', `${window.location.pathname}${rest ? `?${rest}` : ''}`);
+    }
+  }, [coolNow]);
+
+  // Arriving from "Cool down now" elsewhere (heat warning card, a caution check-in).
+  useEffect(() => {
+    // The link is cleaned up once the answer shows, so a page reload on the way (switching
+    // to the person's mode) still ends in an answer.
+    if (new URLSearchParams(window.location.search).get('now') !== '1') return;
+    void startCoolNow();
+    // Once, on arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // If location is already allowed, show the dot straight away; never prompt on arrival.
   useEffect(() => {
     let alive = true;
@@ -220,25 +304,61 @@ export default function CoolSpots() {
     return place;
   }, [me, place]);
 
-  const shown = useMemo(() => {
+  // Everything near here, official sites first in line when two are the same place.
+  const items = useMemo<Item[]>(() => {
     const now = nowForHours();
-    return (loaded?.places ?? [])
-      .map((s) => ({ ...s, distanceM: origin ? Math.round(metersBetween(origin, s)) : s.distanceM, open: isOpenNow(s.openingHours, now) }))
+    const official: Item[] = (loaded?.relief ?? []).map((r) => ({
+      id: -r.id, kind: r.type, name: r.name, lat: r.lat, lon: r.lon,
+      distanceM: origin ? Math.round(metersBetween(origin, r)) : r.distanceM,
+      ...reliefOpen(r, now),
+      official: true, phone: r.phone, org: r.org, accessible: r.accessible, pets: r.pets,
+      note: r.status === 4 ? f.reliefWarnOnly : r.status === 2 || r.status === 3 ? f.reliefHoursChange : null,
+    }));
+    const mapped: Item[] = (loaded?.places ?? [])
+      // A library that's also an official cooling center shows once, as the official site.
+      .filter((s) => !official.some((o) => metersBetween(o, s) < 80))
+      .map((s) => ({
+        id: s.id, kind: s.kind, name: s.name, lat: s.lat, lon: s.lon,
+        distanceM: origin ? Math.round(metersBetween(origin, s)) : s.distanceM,
+        open: isOpenNow(s.openingHours, now), closesAt: null,
+        official: false, phone: null, org: null, note: null, accessible: null, pets: null,
+      }));
+    return [...official, ...mapped];
+  }, [loaded, origin, f.reliefWarnOnly, f.reliefHoursChange]);
+
+  const shown = useMemo(() => {
+    return items
       .filter((s) => filterKinds[filter].includes(s.kind))
       // Water fountains and shade shelters are always available; buildings must be known to be open.
       .filter((s) => !openOnly || s.open === true || ((s.kind === 'water' || s.kind === 'shade') && s.open !== false))
       .sort((a, b) => a.distanceM - b.distanceM);
-  }, [loaded, filter, openOnly, origin]);
+  }, [items, filter, openOnly]);
 
-  const label = (s: Spot) => s.name ?? f[`kind_${s.kind}`];
-  const detail = (s: Spot & { open: boolean | null }) => [
+  // When the spots for here are in, choose.
+  useEffect(() => {
+    if (coolNow !== 'waiting' || !place || state === 'loading') return;
+    if (state === 'done' && loaded && (pickFromPlace || !me || cellOf(me) === cellOf(place))) {
+      setPick(pickCoolDown(items));
+      setCoolNow('shown');
+    } else if (state === 'error') {
+      setPick(null);
+      setCoolNow('shown');
+    }
+  }, [coolNow, state, loaded, items, place, me, pickFromPlace]);
+
+  const label = (s: Item) => s.name ?? f[`kind_${s.kind}`];
+  const openText = (s: Item) => s.open === true
+    ? (s.closesAt != null ? fill(f.openUntil, { time: clockText(s.closesAt, lang) }) : f.openNow)
+    : s.open === false ? f.closedNow : null;
+  const detail = (s: Item) => [
     s.name ? f[`kind_${s.kind}`] : null,
     fill(f.away, { d: distance(s.distanceM, lang) }),
-    s.open === true ? f.openNow : s.open === false ? f.closedNow : null,
+    openText(s),
   ].filter(Boolean).join(' · ');
 
   const mapSpots = useMemo(() => shown.map((s) => ({
     id: s.id, lat: s.lat, lon: s.lon, kind: s.kind, color: kindColor[s.kind], label: label(s), detail: detail(s), directions: directionsUrl(s, s.distanceM),
+    official: s.official, phone: s.phone,
   })),
   // Rebuild markers when the list or language changes, not on every distance tick.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -257,6 +377,12 @@ export default function CoolSpots() {
     mapBox.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
+  const season = loaded?.reliefSeason ?? null;
+  const longDate = (d: string) => new Intl.DateTimeFormat(lang, { month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${d}T12:00:00Z`));
+  const seasonText = season?.open
+    ? (season.until ? fill(f.heatReliefUntil, { date: longDate(season.until) }) : f.heatRelief)
+    : season?.lastEnd ? fill(f.heatReliefEnded, { date: longDate(season.lastEnd) }) : f.heatReliefGeneric;
+
   const updatedText = loaded?.updated
     ? fill(f.coolSourceDated, { date: new Intl.DateTimeFormat(lang, { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${loaded.updated}T12:00:00Z`)) })
     : f.coolSource;
@@ -265,10 +391,62 @@ export default function CoolSpots() {
     <AppShell>
       <div className="page">
         <PageHead story="out" title={f.coolTitle} />
+
+        <div ref={coolBox} className="cool-now">
+          {coolNow !== 'shown' && (
+            <button type="button" className="btn cool-now-btn btn-block" onClick={() => void startCoolNow()} disabled={coolNow === 'finding' || coolNow === 'waiting'} aria-busy={coolNow === 'finding' || coolNow === 'waiting'}>
+              <Snowflake size={24} aria-hidden="true" />
+              <span><strong>{coolNow === 'off' ? f.coolNow : f.coolNowFinding}</strong>{coolNow === 'off' && <small>{f.coolNowHint}</small>}</span>
+            </button>
+          )}
+          {coolNow === 'shown' && (
+            <section className="cool-now-card" aria-labelledby="cool-now-title" aria-live="polite">
+              <div className="cool-now-head">
+                <h2 id="cool-now-title">{f.coolNowTitle}</h2>
+                <button type="button" className="text-btn" onClick={() => setCoolNow('off')}>{f.coolNowClose}</button>
+              </div>
+              {pick ? (
+                <>
+                  <p className="cool-now-name">{label(pick.best as Item)}</p>
+                  <p className="cool-now-meta">
+                    {[pick.best.name ? f[`kind_${pick.best.kind}`] : null, fill(f.coolNowWalk, { min: walkMinutes(pick.best.distanceM) }), openText(pick.best as Item)].filter(Boolean).join(' · ')}
+                  </p>
+                  {pick.hoursUnknown && <p className="cool-now-note">{f.coolNowHoursUnknown}</p>}
+                  {(pick.best as Item).note && <p className="cool-now-note">{(pick.best as Item).note}</p>}
+                  <div className="cool-now-actions">
+                    <a className="btn btn-primary" href={directionsUrl(pick.best, pick.best.distanceM)} target="_blank" rel="noreferrer"><Navigation size={20} aria-hidden="true" />{f.coolNowGo}</a>
+                    {pick.best.phone && <a className="btn btn-secondary" href={`tel:${pick.best.phone.replace(/[^\d+]/g, '')}`}><Phone size={20} aria-hidden="true" />{f.careCall}</a>}
+                  </div>
+                  {pick.others.length > 0 && (
+                    <>
+                      <h3 className="cool-now-sub">{f.coolNowOthers}</h3>
+                      <ul className="cool-now-others">
+                        {pick.others.map((o) => (
+                          <li key={o.id}>
+                            <a href={directionsUrl(o, o.distanceM)} target="_blank" rel="noreferrer">
+                              <span><strong>{label(o as Item)}</strong><small>{[o.name ? f[`kind_${o.kind}`] : null, fill(f.coolNowWalk, { min: walkMinutes(o.distanceM) })].filter(Boolean).join(' · ')}</small></span>
+                              <Navigation size={18} aria-hidden="true" />
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                  {pickFromPlace && place && <p className="cool-now-note">{fill(f.coolNowFrom, { place: place.name })}</p>}
+                </>
+              ) : (
+                <p className="cool-now-name cool-now-none">{f.coolNowNone}</p>
+              )}
+              <p className="cool-now-warn"><a href="tel:911">{f.coolNowWarn}</a></p>
+            </section>
+          )}
+          {coolNow !== 'shown' && finder.state.kind === 'failed' && !place && <p className="place-status place-problem" role="alert">{finder.state.text}</p>}
+        </div>
+
         <LocationPicker value={place} onChange={(p) => { setFollowing(false); setPlace(p); }} />
 
         <div className="chips spot-filters" role="group" aria-label={f.coolTitle}>
-          {([['all', f.filterAll], ['water', f.filterWater], ['indoor', f.filterIndoor], ['shade', f.filterShade]] as [Filter, string][]).map(([value, text]) => (
+          {([['all', f.filterAll], ...(items.some((i) => i.official) ? [['official', f.filterOfficial]] : []), ['water', f.filterWater], ['indoor', f.filterIndoor], ['shade', f.filterShade]] as [Filter, string][]).map(([value, text]) => (
             <button key={value} type="button" className="chip" aria-pressed={filter === value} onClick={() => setFilter(value)}>{text}</button>
           ))}
           <button type="button" className="chip" aria-pressed={openOnly} onClick={() => setOpenOnly(!openOnly)}>{f.openNowOnly}</button>
@@ -285,7 +463,7 @@ export default function CoolSpots() {
                 spots={state === 'done' ? mapSpots : []}
                 selected={selected}
                 selectTick={selectTick}
-                labels={{ attribution: f.mapAttribution, locate: f.mapLocate, you: f.mapYou, directions: f.directions, map: f.coolTitle }}
+                labels={{ attribution: f.mapAttribution, locate: f.mapLocate, you: f.mapYou, directions: f.directions, call: f.careCall, map: f.coolTitle }}
                 onSelect={fromMap}
                 onLocate={() => void locateMe()}
                 onUserMove={() => setFollowing(false)}
@@ -320,16 +498,25 @@ export default function CoolSpots() {
             {shown.map((s) => {
               const Icon = kindIcon[s.kind];
               return (
-                <li key={s.id} id={`spot-${s.id}`} className={`spot ${kindTone[s.kind]} ${selected === s.id ? 'is-focused' : ''}`}>
+                <li key={s.id} id={`spot-${s.id}`} className={`spot ${kindTone[s.kind]} ${s.official ? 'is-official' : ''} ${selected === s.id ? 'is-focused' : ''}`}>
                   <button type="button" className="spot-main" onClick={() => fromList(s.id)} aria-label={`${label(s)}, ${fill(f.away, { d: distance(s.distanceM, lang) })}. ${f.showOnMap}`}>
                     <span className="mode-choice-icon"><Icon size={22} aria-hidden="true" /></span>
                     <span className="spot-copy">
                       <strong>{label(s)}</strong>
                       <small>{s.name ? `${f[`kind_${s.kind}`]} · ` : ''}{fill(f.away, { d: distance(s.distanceM, lang) })}</small>
-                      {s.open === true && <small className="spot-open">{f.openNow}</small>}
+                      {s.open === true && <small className="spot-open">{openText(s)}</small>}
                       {s.open === false && <small className="spot-closed">{f.closedNow}</small>}
+                      {s.note && <small className="spot-note">{s.note}</small>}
+                      {s.official && (s.accessible || s.pets) && (
+                        <small className="spot-extra">{[s.accessible ? f.accessibleShort : null, s.pets ? f.petsOk : null].filter(Boolean).join(' · ')}</small>
+                      )}
                     </span>
                   </button>
+                  {s.phone && (
+                    <a className="icon-btn spot-go" aria-label={`${f.careCall}: ${label(s)}`} href={`tel:${s.phone.replace(/[^\d+]/g, '')}`}>
+                      <Phone size={20} />
+                    </a>
+                  )}
                   <a className="icon-btn spot-go" aria-label={`${f.directions}: ${label(s)}`}
                     href={directionsUrl(s, s.distanceM)} target="_blank" rel="noreferrer">
                     <Navigation size={20} />
@@ -343,11 +530,11 @@ export default function CoolSpots() {
         <NextStep href="/app/check-in" story="out" Icon={Stethoscope}>{f.nextCool}</NextStep>
 
         <aside className="relief-card">
-          {/* The Heat Relief Network runs May 1 to Sept 30. */}
-          <p>{Number(phoenixNow().slice(5, 7)) >= 5 && Number(phoenixNow().slice(5, 7)) <= 9 ? f.heatRelief : f.heatReliefOff}</p>
+          {/* What the official network says about its own season, not a guess from the calendar. */}
+          <p>{seasonText}</p>
           <a href="tel:211" className="btn btn-secondary"><Phone size={18} aria-hidden="true" />{f.call211}</a>
         </aside>
-        <p className="fine-print">{updatedText}</p>
+        <p className="fine-print">{updatedText}{items.some((i) => i.official) ? ` ${f.reliefSource}` : ''}</p>
       </div>
     </AppShell>
   );

@@ -16,7 +16,7 @@ sombra turns the forecast for your exact spot into an hour-by-hour plan: when to
 - **What to bring.** A packing checklist built from your plan: how much water, sun protection, gloves for hot roofs, a mask on dusty days.
 - **Best time to go.** Pick an activity and how long it takes; sombra finds the safest window in the next two days and the hours to avoid.
 - **My heat profile.** Optional health factors (age, pregnancy, heart conditions, certain medicines) add extra caution. Saved only on the phone.
-- **Cool spots nearby.** Water refills, libraries, malls and shade within 3 km (OpenStreetMap), plus Arizona's 2-1-1 heat relief line.
+- **Cool spots nearby, and Cool down now.** A live map of water refills, libraries, malls and shade (OpenStreetMap) plus the official Heat Relief Network cooling centers and hydration stations, with today's hours. One tap on *Cool down now* picks the nearest open place with AC (else water or shade) and opens walking directions.
 - **Check on someone.** Daily reminders to check on an older relative or neighbor, with a call button and a stronger nudge during heat warnings.
 - **Reminders when the app is closed.** Web Push notifications for check-ins on loved ones, Best time windows and official heat warnings. The server never receives names; the phone fills them in.
 - **Solo or group.** Works for one person by default; turn on a crew, team or group when you need it.
@@ -53,7 +53,8 @@ Tests: `pnpm run release-check` runs everything that works offline (add `DATABAS
 
 - Weather and air quality: [Open-Meteo](https://open-meteo.com/)
 - Alerts: [National Weather Service API](https://www.weather.gov/documentation/services-web-api)
-- Cool spots: [OpenStreetMap](https://www.openstreetmap.org/) via the Overpass API
+- Cool spots: [OpenStreetMap](https://www.openstreetmap.org/) via the Overpass API (a saved copy for metro Phoenix and Tucson, refreshed weekly)
+- Official cooling centers: [Heat Relief Network](https://azmag.gov/Programs/Heat-Relief-Network), Maricopa Association of Governments (live public feed, with a weekly saved copy as backup)
 - WBGT: Liljegren et al. (2008), as used by the [OSHA outdoor WBGT calculator](https://osha.prod.pace.dol.gov/heat-exposure/wbgt-calculator)
 - Work/rest and water: U.S. Army TB MED 507
 - Heat illness first aid: OSHA and CDC heat illness guidance

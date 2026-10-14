@@ -1,6 +1,7 @@
 import { Router, type IRouter, type Request } from "express";
 import { WEATHER_TIMEZONE } from "../config/weather";
 import { snapshotElements } from "../lib/places-snapshot";
+import { getRelief, inSeason, type ReliefData } from "../lib/heat-relief";
 
 export { snapshotElements };
 
@@ -327,39 +328,69 @@ async function loadPlaces(lat: number, lon: number) {
 // The last good live answer for each spot, served if the map servers are down later.
 const lastGood = new Map<string, { places: ReturnType<typeof summarizePlaces>; updated: string }>();
 
-router.get("/places/cool", async (req, res): Promise<void> => {
-  const point = parseCoordinates(req);
-  if (!point) {
-    res.status(400).json({ error: "Choose a location first." });
-    return;
-  }
+/** Official sites near a point, plus where the season stands across the metro. */
+export function reliefNear(data: ReliefData, point: { lat: number; lon: number }, today: string) {
+  const open = data.sites.filter((site) => inSeason(site, today));
+  const nearby = open
+    .map((site) => ({ ...site, distanceM: Math.round(distanceMeters(point, site)) }))
+    .filter((site) => site.distanceM <= 25_000)
+    .sort((a, b) => a.distanceM - b.distanceM)
+    .slice(0, 12);
+  const ends = open.map((site) => site.end).filter((d): d is string => Boolean(d)).sort();
+  const lastEnd = data.sites.map((site) => site.end).filter((d): d is string => Boolean(d)).sort().at(-1) ?? null;
+  return {
+    relief: nearby,
+    reliefSeason: {
+      // How many sites are in season today anywhere in the metro, and until when.
+      open: open.length,
+      until: ends.at(-1) ?? null,
+      // Off-season: when the last season ended, so the app can say so honestly.
+      lastEnd: open.length ? null : lastEnd,
+    },
+    reliefUpdated: data.updated,
+  };
+}
+
+async function placesAnswer(point: { lat: number; lon: number }, log: Request["log"]): Promise<{ status: number; body: Record<string, unknown> }> {
   const saved = snapshotElements(point.lat, point.lon);
-  const fromSaved = () => ({ places: summarizePlaces(saved.elements, point), source: "saved", updated: saved.updated });
-  if (saved.complete) {
-    res.json(fromSaved());
-    return;
-  }
+  const fromSaved = () => ({ status: 200, body: { places: summarizePlaces(saved.elements, point), source: "saved", updated: saved.updated } });
+  if (saved.complete) return fromSaved();
   const key = `places:${point.lat},${point.lon}`;
   try {
     const places = await cached(key, () => loadPlaces(point.lat, point.lon), PLACES_TTL_MS);
     const updated = lastGood.get(key)?.places === places ? lastGood.get(key)!.updated : phoenixNowIso().slice(0, 10);
     lastGood.set(key, { places, updated });
     if (lastGood.size > 500) lastGood.delete(lastGood.keys().next().value as string);
-    res.json({ places, source: "live", updated });
+    return { status: 200, body: { places, source: "live", updated } };
   } catch (error) {
-    req.log.error({ err: error }, "Unable to load nearby cool spots");
+    log.error({ err: error }, "Unable to load nearby cool spots");
     const last = lastGood.get(key);
-    if (last) {
-      res.json({ ...last, source: "live" });
-      return;
-    }
+    if (last) return { status: 200, body: { ...last, source: "live" } };
     // Near the edge of the saved area: part of the answer beats none.
-    if (saved.covered && saved.elements.length) {
-      res.json(fromSaved());
+    if (saved.covered && saved.elements.length) return fromSaved();
+    return { status: 502, body: { error: "Nearby places are temporarily unavailable." } };
+  }
+}
+
+router.get("/places/cool", async (req, res): Promise<void> => {
+  const point = parseCoordinates(req);
+  if (!point) {
+    res.status(400).json({ error: "Choose a location first." });
+    return;
+  }
+  // Official sites never fail the request: getRelief falls back to a saved copy.
+  const [answer, relief] = await Promise.all([placesAnswer(point, req.log), getRelief()]);
+  const official = reliefNear(relief, point, phoenixNowIso().slice(0, 10));
+  if (answer.status !== 200) {
+    // Map servers down but official sites known: still useful.
+    if (official.relief.length) {
+      res.json({ places: [], source: "none", updated: null, ...official });
       return;
     }
-    res.status(502).json({ error: "Nearby places are temporarily unavailable." });
+    res.status(answer.status).json(answer.body);
+    return;
   }
+  res.json({ ...answer.body, ...official });
 });
 
 export default router;

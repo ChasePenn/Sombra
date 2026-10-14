@@ -19,6 +19,7 @@ export default function About() {
     ['Open-Meteo', 'https://open-meteo.com/', c.srcWeather],
     ['National Weather Service', 'https://www.weather.gov/documentation/services-web-api', c.srcAlerts],
     ['OpenStreetMap', 'https://www.openstreetmap.org/copyright', c.srcPlaces],
+    ['Heat Relief Network (MAG)', 'https://azmag.gov/Programs/Heat-Relief-Network', c.srcRelief],
     ['OSHA', 'https://www.osha.gov/heat-exposure', c.srcWbgt],
     ['TB MED 507', 'https://hprc-online.org/resources/tb-med-507-heat-stress-control-and-heat-casualty-management-pdf', c.srcRest],
     ['CDC', 'https://www.cdc.gov/heat-health/', c.srcFirstAid],

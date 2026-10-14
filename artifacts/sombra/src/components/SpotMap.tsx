@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export type MapKind = 'water' | 'library' | 'community' | 'mall' | 'shade';
-export type MapSpot = { id: number; lat: number; lon: number; label: string; detail: string; kind: MapKind; color: string; directions: string };
+export type MapKind = 'water' | 'library' | 'community' | 'mall' | 'shade' | 'cooling' | 'hydration' | 'respite';
+export type MapSpot = { id: number; lat: number; lon: number; label: string; detail: string; kind: MapKind; color: string; directions: string; official?: boolean; phone?: string | null };
 type Point = { lat: number; lon: number };
 export type Me = Point & { accuracy: number };
 
@@ -14,6 +14,9 @@ const GLYPH: Record<MapKind, string> = {
   community: '<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/>',
   mall: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>',
   shade: '<path d="M22 12a10 10 0 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/><path d="M12 2v1"/>',
+  cooling: '<path d="M12 2v20M2 12h20M4.9 4.9l14.2 14.2M19.1 4.9 4.9 19.1"/><path d="m9 3 3 3 3-3M9 21l3-3 3 3M3 9l3 3-3 3M21 9l-3 3 3 3"/>',
+  hydration: '<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>',
+  respite: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
 };
 const CROSSHAIR = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>';
 
@@ -29,15 +32,18 @@ const escape = (text: string) => text.replace(/[&<>"']/g, (c) => ({ '&': '&amp;'
 function pinIcon(spot: MapSpot, selected: boolean) {
   return L.divIcon({
     className: '',
-    html: `<span class="map-pin${selected ? ' is-selected' : ''}" style="--pin:${spot.color}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYPH[spot.kind]}</svg></span>`,
+    // Official sites are rounded squares, so they stand out by shape and not only by color.
+    html: `<span class="map-pin${spot.official ? ' is-official' : ''}${selected ? ' is-selected' : ''}" style="--pin:${spot.color}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${GLYPH[spot.kind]}</svg></span>`,
     iconSize: [36, 36],
     iconAnchor: [18, 18],
     popupAnchor: [0, -16],
   });
 }
 
-function popupHtml(spot: MapSpot, directionsLabel: string) {
-  return `<div class="map-pop"><strong>${escape(spot.label)}</strong><span>${escape(spot.detail)}</span><a href="${escape(spot.directions)}" target="_blank" rel="noreferrer">${escape(directionsLabel)}</a></div>`;
+function popupHtml(spot: MapSpot, labels: { directions: string; call: string }) {
+  const tel = spot.phone ? spot.phone.replace(/[^\d+]/g, '') : '';
+  const call = tel ? `<a href="tel:${escape(tel)}">${escape(labels.call)}</a>` : '';
+  return `<div class="map-pop"><strong>${escape(spot.label)}</strong><span>${escape(spot.detail)}</span><div class="map-pop-actions"><a href="${escape(spot.directions)}" target="_blank" rel="noreferrer">${escape(labels.directions)}</a>${call}</div></div>`;
 }
 
 /**
@@ -51,7 +57,7 @@ export default function SpotMap({ center, me, following, spots, selected, select
   spots: MapSpot[];
   selected: number | null;
   selectTick?: number;
-  labels: { attribution: string; locate: string; you: string; directions: string; map: string };
+  labels: { attribution: string; locate: string; you: string; directions: string; call: string; map: string };
   onSelect: (id: number) => void;
   onLocate: () => void;
   onUserMove: () => void;
@@ -148,7 +154,7 @@ export default function SpotMap({ center, me, following, spots, selected, select
     markers.current.clear();
     spots.forEach((s) => {
       const marker = L.marker([s.lat, s.lon], { icon: pinIcon(s, false), keyboard: true, title: s.label, alt: s.label, riseOnHover: true })
-        .bindPopup(popupHtml(s, labels.directions), { closeButton: true, autoPanPadding: [24, 24] })
+        .bindPopup(popupHtml(s, labels), { closeButton: true, autoPanPadding: [24, 24] })
         .addTo(layer);
       marker.on('click', () => handlers.current.onSelect(s.id));
       markers.current.set(s.id, marker);

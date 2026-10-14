@@ -113,3 +113,17 @@ test("the saved cool spots list was refreshed in the last 45 days", async () => 
   const ageDays = (Date.now() - Date.parse(`${updated}T12:00:00Z`)) / 86_400_000;
   assert.ok(ageDays < 45, `cool spots data is from ${updated}; the weekly "Cool spots data" workflow may be failing`);
 });
+
+test("official Heat Relief Network sites come from the live feed", () => withRetries(async () => {
+  const res = await fetch(`${base}/places/cool?lat=${PHOENIX.lat}&lon=${PHOENIX.lon}`);
+  const { relief, reliefSeason, reliefUpdated } = await res.json();
+  assert.ok(Array.isArray(relief), "relief list present (it can be empty off-season)");
+  assert.ok(reliefSeason && Number.isInteger(reliefSeason.open), "season summary present");
+  const today = new Date(Date.now() - 7 * 3_600_000).toISOString().slice(0, 10);
+  // The saved copy is only a fallback; today's date means the live feed answered.
+  assert.equal(reliefUpdated, today, `official sites came from the saved copy (${reliefUpdated}); the MAG feed may be down or changed`);
+  for (const site of relief) {
+    assert.ok(site.name && Number.isFinite(site.lat) && Number.isFinite(site.lon), `bad site ${JSON.stringify(site).slice(0, 120)}`);
+    assert.equal(site.hours.length, 7);
+  }
+}));
