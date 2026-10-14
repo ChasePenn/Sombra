@@ -1,4 +1,4 @@
-{"source":"OpenStreetMap contributors (ODbL)","updated":"2026-10-12","regions":[{"name":"Phoenix metro","box":[33.15,-112.65,33.95,-111.45]},{"name":"Tucson","box":[32,-111.2,32.5,-110.65]}],"kinds":["water","library","community","mall","shade"],"fields":["id","kind","lat","lon","name","openingHours"],"places":[[7978335742,4,32.05021,-110.7064,null,null],
+{"source":"OpenStreetMap contributors (ODbL)","updated":"2026-10-13","regions":[{"name":"Phoenix metro","box":[33.15,-112.65,33.95,-111.45]},{"name":"Tucson","box":[32,-111.2,32.5,-110.65]}],"kinds":["water","library","community","mall","shade"],"fields":["id","kind","lat","lon","name","openingHours"],"places":[[7978335742,4,32.05021,-110.7064,null,null],
 [13604226336,0,32.05981,-110.72481,null,null],
 [11495032643,0,32.08432,-110.80339,null,null],
 [14031733301,1,32.08574,-110.75872,"W. Anne Gibson-Esmond Station Library",null],
