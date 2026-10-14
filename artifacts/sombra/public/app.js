@@ -779,19 +779,25 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
       strings: activeModeLocale(),
       formatTime: (time) => formatTime(time, timezone),
     });
-    summaryPanel.dataset.category = String(summary.activeCategory);
+    // During the plan: the heat right now. Before it starts: the hottest it will get, so a
+    // cool 7 AM start never makes an Extreme afternoon look like a "Low heat" day.
+    const started = summary.currentHourIndex >= 0;
+    const heroCategory = started ? summary.activeCategory : summary.peakCategory;
+    const heroRisk = started ? summary.activeRisk : summary.peakRisk;
+    summaryPanel.dataset.category = String(heroCategory);
     summaryTitle.textContent = translate(summary.isToday ? "results.today" : "results.shift");
     summaryGreeting.textContent = summary.greeting;
-    summaryRisk.textContent = translate("summary.riskWord", { risk: summary.activeRisk });
-    summaryRiskLabel.textContent = translate(summary.currentHourIndex >= 0 ? "results.heatLevel" : "results.startingHeatLevel");
+    summaryRisk.textContent = translate(`summary.headline.${heroCategory}`);
+    summaryRiskLabel.textContent = translate(started ? "results.heatLevel" : "results.peakHeatLevel");
     const coolerAdvice = summary.isToday &&
       selectedMode.rules?.coolerAdviceCategory !== undefined &&
       Math.max(...schedule.hours.map((hour) => hour.category)) >= selectedMode.rules.coolerAdviceCategory
       ? activeModeLocale().ui.coolerAdvice
       : null;
     summaryAdvice.textContent = [summary.message, coolerAdvice].filter(Boolean).join(" ");
-    summaryHottest.textContent = summary.hottest;
-    const activeHour = schedule.hours[summary.currentHourIndex >= 0 ? summary.currentHourIndex : 0];
+    summaryHottest.textContent = started ? summary.hottest : "";
+    summaryHottest.hidden = !started;
+    const activeHour = schedule.hours[started ? summary.currentHourIndex : summary.peakIndex];
     // Show the air temperature people know next to the heat-stress number, so 84°F isn't read as the weather.
     const activeWeather = activeForecast?.hours?.find((weather) => weather.time === activeHour.time);
     const wbgtRounded = Math.round(Number(activeHour.wbgtF));
@@ -799,17 +805,17 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
       ? translate("extras.readingLine", { air: Math.round(activeWeather.airTempF), wbgt: wbgtRounded })
       : translate("extras.readingWbgt", { wbgt: wbgtRounded });
     todayMeta.textContent = translate(
-      summary.currentHourIndex >= 0 ? "results.currentAt" : "results.startingAt",
+      started ? "results.currentAt" : "results.peakAt",
       {
         time: formatTime(activeHour.time, timezone),
         location: activeForecast?.locationName || activeShiftPayload?.locationName || "",
       },
     );
     hourStripTitle.textContent = translate(summary.isToday ? "results.restOfToday" : "results.restOfShift");
-    heatGauge.dataset.category = String(summary.activeCategory);
-    heatGauge.setAttribute("aria-label", translate("results.heatGauge", { risk: summary.activeRisk }));
+    heatGauge.dataset.category = String(heroCategory);
+    heatGauge.setAttribute("aria-label", translate("results.heatGauge", { risk: heroRisk }));
     [...heatGauge.children].forEach((segment, index) => {
-      segment.classList.toggle("active", index <= summary.activeCategory);
+      segment.classList.toggle("active", index <= heroCategory);
     });
     summaryPanel.hidden = false;
     void renderCrewStatus(activeShiftPayload?.workerName || document.querySelector("#worker-name").value.trim());

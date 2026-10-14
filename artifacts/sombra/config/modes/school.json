@@ -116,7 +116,7 @@
         "pickWorkerSub": "Choose a person on the team.",
         "changeWorker": "Change person",
         "noWorkers": "Add your name or your team in Settings to check in quickly.",
-        "pageSub": "Log activity, breaks, and water. Tell us how you feel.",
+        "pageSub": "Track breaks and water, and check how you feel.",
         "startWork": "Start activity",
         "finishWork": "Finish activity",
         "working": "Active",
@@ -138,7 +138,7 @@
         "greetingStyle": "friendly",
         "siteLabel": "Escuela o lugar de práctica",
         "emptyState": "Agrega a tu equipo para planear juntos.",
-        "stopBanner": "Muevan la práctica al interior o reprogramen."
+        "stopBanner": "Mueve la práctica adentro o cámbiala de hora."
       },
       "app": {
         "landingSub": "Una forma clara de prepararse para el calor antes de practicar o tocar en la banda.",
@@ -171,7 +171,7 @@
         "workerName": "Estudiante o participante",
         "workerNamePlaceholder": "Nombre para este plan",
         "newToHeatQuestion": "¿Es nuevo en la actividad con calor durante las últimas 2 semanas?",
-        "stopBanner": "Muevan la práctica al interior o reprogramen."
+        "stopBanner": "Mueve la práctica adentro o cámbiala de hora."
       },
       "taskIntensities": [
         {
@@ -228,7 +228,7 @@
         "pickWorkerSub": "Elige a una persona del equipo.",
         "changeWorker": "Cambiar persona",
         "noWorkers": "Agrega tu nombre o equipo en Configuración para hacer registros rápidamente.",
-        "pageSub": "Registra la actividad, los descansos y el agua. Cuéntanos cómo te sientes.",
+        "pageSub": "Lleva la cuenta de descansos y agua, y revisa cómo te sientes.",
         "startWork": "Empezar actividad",
         "finishWork": "Terminar actividad",
         "working": "En actividad",

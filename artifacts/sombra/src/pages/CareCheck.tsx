@@ -81,8 +81,9 @@ export default function CareCheck() {
       <div className="page">
         <PageHead story="others" title={f.careTitle} lead={f.careSub} />
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
-        <PushControl variant="inline" />
-        {heatWarning && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
+        {/* Reminder and heat-warning notes only matter once someone is on the list. */}
+        {contacts.length > 0 && <PushControl variant="inline" />}
+        {heatWarning && contacts.length > 0 && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
 
         {msg && (
           <p className={msg.error ? 'error' : 'notice success-msg'} role={msg.error ? 'alert' : 'status'}>
@@ -115,7 +116,7 @@ export default function CareCheck() {
           })}
         </ul>
         <button type="button" className="btn btn-secondary btn-block" onClick={() => setAdding(true)}><Plus size={18} aria-hidden="true" />{f.careAdd}</button>
-        <p className="fine-print care-tips">{f.careTips}</p>
+        {contacts.length > 0 && <p className="fine-print care-tips">{f.careTips}</p>}
 
         {/* The group (crew, team) is the other half of looking out for people. It stays off until someone is added. */}
         <Link href="/app/crew" className="tool-card tone-green">

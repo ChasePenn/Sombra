@@ -134,6 +134,10 @@ export function buildShiftSummary({
       .replace("{time}", formatTime(hottestHour.time))
       .replace("{risk}", strings.risk[String(hottestHour.category)] ?? hottestHour.label),
     hottestHour,
+    // Before the plan starts, the hottest hour is what matters most, not the first one.
+    peakIndex: hours.indexOf(hottestHour),
+    peakCategory: hottestHour.category,
+    peakRisk: strings.risk[String(hottestHour.category)] ?? hottestHour.label,
     isToday: Boolean(currentHourIndex >= 0 || (localNow && localNow.date === date)),
   };
 }

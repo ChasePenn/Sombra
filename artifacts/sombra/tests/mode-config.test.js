@@ -112,3 +112,31 @@ test("all planner and results copy referenced by the UI exists in each audience 
     assert.equal(indexHtml.includes(example), false, `Task example should come from the mode config: ${example}`);
   }
 });
+
+test("School and Everyday never show work words (shift, crew, worker, job site)", () => {
+  const words = {
+    en: /\b(shifts?|work(ing|ed|er|ers)?|crews?|jobs?|jobsites?|employers?|deliver(y|ies))\b/i,
+    es: /\b(turnos?|trabaj\w*|cuadrillas?|obras?|entregas?)\b/i,
+  };
+  // Activity examples like "yard work" describe what people do, not a job.
+  const allowed = new Set(["taskIntensities.1.example"]);
+  const strings = (value, path = "", out = []) => {
+    if (typeof value === "string") out.push([path, value]);
+    else if (value && typeof value === "object") for (const [key, child] of Object.entries(value)) strings(child, path ? `${path}.${key}` : key, out);
+    return out;
+  };
+  for (const id of ["school", "everyday"]) {
+    const mode = resolveAudienceMode(modeModules, id);
+    for (const lang of ["en", "es"]) {
+      const found = strings(mode.locales[lang]).filter(([path, text]) => !allowed.has(path) && words[lang].test(text));
+      assert.deepEqual(found, [], `${id} (${lang}) shows work wording`);
+    }
+  }
+});
+
+test("Work mode still talks about shifts", () => {
+  const work = resolveAudienceMode(modeModules, "work");
+  assert.equal(work.locales.en.ui.submit, "Plan my shift");
+  assert.equal(work.locales.es.ui.submit, "Planificar mi turno");
+  assert.match(work.locales.en.summary.normalUntil, /Work normally/);
+});

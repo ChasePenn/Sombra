@@ -11,16 +11,16 @@ export function resolveAudienceMode(modeModules, modeId) {
   const mergeLocale = (language) => {
     const original = base?.locales?.[language] ?? {};
     const override = selected.locales[language] ?? {};
-    return {
-      ...original,
-      ...override,
-      app: { ...original.app, ...override.app },
-      about: { ...original.about, ...override.about },
-      ui: { ...original.ui, ...override.ui },
-      surface: { ...original.surface, ...override.surface },
-      shade: { ...original.shade, ...override.shade },
-      checkIn: { ...original.checkIn, ...override.checkIn },
-    };
+    // Each section (ui, results, summary, ...) merges key by key, so a mode only lists the
+    // words it changes. Lists (like taskIntensities) are replaced whole.
+    const merged = { ...original, ...override };
+    for (const [section, value] of Object.entries(override)) {
+      const from = original[section];
+      if (value && typeof value === "object" && !Array.isArray(value) && from && typeof from === "object" && !Array.isArray(from)) {
+        merged[section] = { ...from, ...value };
+      }
+    }
+    return merged;
   };
   const mode = selected.id === "workers"
     ? selected

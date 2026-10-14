@@ -44,7 +44,12 @@
         "importBody": "Copy what's saved on this phone into your account?",
         "signInTitle": "Sign in to save your plans and crew",
         "signInSub": "Your account keeps your profile, crew, and saved shifts on every device.",
-        "signUpSub": "Save your plans and crew. Guest mode still works without one."
+        "signUpSub": "Save your plans and crew. Guest mode still works without one.",
+        "plannerTitle": "Shift planner",
+        "workType": "Work type",
+        "reminders": "Shift check-in reminders",
+        "reminderBody": "Time to check in. Follow your shift’s break and water plan.",
+        "previewAdvice": "Work 20 min, then rest 40 in the shade."
       },
       "ui": {
         "documentTitle": "sombra — Heat plan for work",
@@ -60,7 +65,15 @@
         "workerName": "Worker name",
         "workerNamePlaceholder": "Name for this shift",
         "newToHeatQuestion": "New to working in heat in the last 2 weeks?",
-        "stopBanner": "Stop work and move to a cool place."
+        "stopBanner": "Stop work and move to a cool place.",
+        "plannerLabel": "Shift planner",
+        "shiftDetails": "Shift details",
+        "shiftDetailsHelp": "Add details for this shift.",
+        "shiftDate": "Shift date",
+        "shiftHours": "Shift hours",
+        "localTimeHelp": "Local time at the work location",
+        "submit": "Plan my shift",
+        "intensity": "How hard is the work?"
       },
       "taskIntensities": [
         {
@@ -117,7 +130,7 @@
         "pickWorkerSub": "Choose a person, or type a name.",
         "changeWorker": "Change person",
         "noWorkers": "Add your name in Settings or add crew to check in quickly.",
-        "pageSub": "Track work, breaks, and water. Check in on how you feel.",
+        "pageSub": "Track work time, breaks, and water. Check how you feel.",
         "startWork": "Start work",
         "finishWork": "Finish work",
         "working": "Working",
@@ -125,7 +138,61 @@
         "numbers": "{hours} worked, {water}, {breaks} breaks",
         "crewToday": "Today",
         "crewTap": "Tap a person to check them in.",
-        "editCrew": "Manage crew"
+        "editCrew": "Manage crew",
+        "waterUnknown": "Recommended amount unknown. Plan today's shift to see it.",
+        "site": "Site",
+        "rem_checkinBody": "A new work hour started for {name}. How are you feeling?"
+      },
+      "location": {
+        "selected": "Work location selected."
+      },
+      "validation": {
+        "location": "Choose a work location from the suggestions, or use your current location.",
+        "workerName": "Enter the worker's name to continue.",
+        "intensity": "Choose an intensity that best matches the work.",
+        "shiftTimes": "Enter both the shift start and end times.",
+        "shiftDate": "Choose whether the shift is today or tomorrow.",
+        "newToHeat": "Let us know whether the worker is new to working in the heat."
+      },
+      "results": {
+        "shift": "Your shift",
+        "planMyShift": "Plan my shift",
+        "scheduleTechnicalPolicy": "The table assumes workers are used to the heat. Below 78°F, category 0 is an app assumption, not a TB MED 507 value. Workers new to the heat move up one category. Water guidance is capped at {hourly} cups per hour and {daily} cups per day.",
+        "forecastCaption": "Hourly forecast for the work shift",
+        "siteComparisonCaption": "Hourly WBGT before and after site adjustment",
+        "scheduleAria": "Hourly work and rest schedule",
+        "printBrief": "Print shift brief",
+        "shiftHours": "Shift: {start} to {end}{nextDay}",
+        "forecastSite": "Site WBGT",
+        "workNormally": "Work normally",
+        "workMinutes": "{minutes} min work",
+        "work": "Work",
+        "schedule": "Work and rest",
+        "restOfShift": "For this shift",
+        "stopWork": "Too hot for heavy work. Move it earlier if you can.",
+        "schedulePolicy": "Work and rest times follow the U.S. Army heat guide (TB MED 507).",
+        "sitePhotoLabel": "Take or choose a photo of the work area",
+        "sitePhotoReady": "On-device model ready. Choose a photo of the work area.",
+        "siteChooseStart": "Choose the surface and shade at your work area.",
+        "siteSurfaceQuestion": "What surface is closest to the work area?",
+        "siteShadeQuestion": "How much direct sun reaches the work area?",
+        "siteRecalculating": "Updating the hourly plan for this work area.",
+        "siteAppliedStatus": "Your plan now reflects this work area.",
+        "sitePlanFirst": "Plan a shift first so sombra has a forecast to adjust.",
+        "siteBeforeAfterTitle": "How this work area changes the heat",
+        "siteAtWorkArea": "At your work area",
+        "siteAdjusted": "Adjusted for your site",
+        "siteAdjustedNeutralSentence": "{surface} in {shade}: we adjusted your plan for this work area.",
+        "forecastMissingHours": "No hourly conditions came back for this shift. Try different shift hours.",
+        "scheduleUnavailable": "The work and rest plan is unavailable. Please try again.",
+        "newToHeat": "New to working in heat",
+        "heatExperienced": "Used to working in heat",
+        "savedPlanLoadFailed": "Your saved shift could not be loaded. You can still enter a new plan."
+      },
+      "summary": {
+        "normalUntil": "Work normally until {time}.",
+        "normalShift": "Work normally during this shift. Keep water nearby.",
+        "tooHot": "Too hot for heavy work after {time}. Move it earlier if you can."
       }
     },
     "es": {
@@ -157,7 +224,12 @@
         "importBody": "¿Copiar a tu cuenta lo que está guardado en este teléfono?",
         "signInTitle": "Inicia sesión para guardar tus planes y cuadrilla",
         "signInSub": "Tu cuenta guarda tu perfil, cuadrilla y turnos en todos tus dispositivos.",
-        "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar sombra sin una cuenta."
+        "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar sombra sin una cuenta.",
+        "plannerTitle": "Planificador de turnos",
+        "workType": "Tipo de trabajo",
+        "reminders": "Recordatorios durante el turno",
+        "reminderBody": "Es hora de registrarte. Sigue el plan de descansos y agua de tu turno.",
+        "previewAdvice": "Trabaja 20 min y descansa 40 en la sombra."
       },
       "ui": {
         "documentTitle": "sombra — Plan de calor para el trabajo",
@@ -173,7 +245,15 @@
         "workerName": "Nombre del trabajador",
         "workerNamePlaceholder": "Nombre para este turno",
         "newToHeatQuestion": "¿Es nuevo en el trabajo con calor durante las últimas 2 semanas?",
-        "stopBanner": "Deja de trabajar y ve a un lugar fresco."
+        "stopBanner": "Deja de trabajar y ve a un lugar fresco.",
+        "plannerLabel": "Planificador de turnos",
+        "shiftDetails": "Detalles del turno",
+        "shiftDetailsHelp": "Agrega los detalles de este turno.",
+        "shiftDate": "Fecha del turno",
+        "shiftHours": "Horario del turno",
+        "localTimeHelp": "Hora local del lugar de trabajo",
+        "submit": "Planificar mi turno",
+        "intensity": "¿Qué tan pesado es el trabajo?"
       },
       "taskIntensities": [
         {
@@ -230,7 +310,7 @@
         "pickWorkerSub": "Elige a una persona o escribe un nombre.",
         "changeWorker": "Cambiar persona",
         "noWorkers": "Agrega tu nombre en Configuración o agrega personas para hacer registros rápidamente.",
-        "pageSub": "Registra el trabajo, los descansos y el agua. Consulta cómo te sientes.",
+        "pageSub": "Lleva la cuenta del trabajo, los descansos y el agua. Revisa cómo te sientes.",
         "startWork": "Empezar a trabajar",
         "finishWork": "Terminar el trabajo",
         "working": "Trabajando",
@@ -238,7 +318,61 @@
         "numbers": "{hours} trabajadas, {water}, {breaks} descansos",
         "crewToday": "Hoy",
         "crewTap": "Toca a una persona para registrar cómo se siente.",
-        "editCrew": "Administrar cuadrilla"
+        "editCrew": "Administrar cuadrilla",
+        "waterUnknown": "Cantidad recomendada desconocida. Planifica el turno de hoy para verla.",
+        "site": "Lugar",
+        "rem_checkinBody": "Empezó una nueva hora de trabajo para {name}. ¿Cómo te sientes?"
+      },
+      "location": {
+        "selected": "Lugar de trabajo seleccionado."
+      },
+      "validation": {
+        "location": "Elige un lugar de las sugerencias o usa tu ubicación actual.",
+        "workerName": "Escribe el nombre del trabajador para continuar.",
+        "intensity": "Elige la intensidad que mejor describa el trabajo.",
+        "shiftTimes": "Escribe la hora de inicio y de fin del turno.",
+        "shiftDate": "Elige si el turno es hoy o mañana.",
+        "newToHeat": "Indica si el trabajador es nuevo en el trabajo con calor."
+      },
+      "results": {
+        "shift": "Tu turno",
+        "planMyShift": "Planificar mi turno",
+        "scheduleTechnicalPolicy": "La tabla supone que los trabajadores están acostumbrados al calor. Debajo de 78°F, la categoría 0 es una suposición de la aplicación, no un valor de TB MED 507. Los trabajadores nuevos en el calor suben una categoría. La guía de agua tiene un límite de {hourly} vasos por hora y {daily} vasos por día.",
+        "forecastCaption": "Pronóstico por hora para el turno de trabajo",
+        "siteComparisonCaption": "WBGT por hora antes y después del ajuste del lugar",
+        "scheduleAria": "Plan de trabajo y descanso por hora",
+        "printBrief": "Imprimir resumen del turno",
+        "shiftHours": "Turno: de {start} a {end}{nextDay}",
+        "forecastSite": "WBGT en el lugar",
+        "workNormally": "Trabaja normalmente",
+        "workMinutes": "{minutes} min de trabajo",
+        "work": "Trabajo",
+        "schedule": "Trabajo y descanso",
+        "restOfShift": "Para este turno",
+        "stopWork": "Hace demasiado calor para trabajo pesado. Hazlo más temprano si puedes.",
+        "schedulePolicy": "Los tiempos de trabajo y descanso siguen la guía de calor del Ejército de EE. UU. (TB MED 507).",
+        "sitePhotoLabel": "Toma o elige una foto del área de trabajo",
+        "sitePhotoReady": "El modelo del dispositivo está listo. Elige una foto del área de trabajo.",
+        "siteChooseStart": "Elige el suelo y la sombra de tu área de trabajo.",
+        "siteSurfaceQuestion": "¿Qué superficie se parece más al área de trabajo?",
+        "siteShadeQuestion": "¿Cuánto sol directo llega al área de trabajo?",
+        "siteRecalculating": "Actualizando el plan por hora para esta área de trabajo.",
+        "siteAppliedStatus": "Tu plan ahora refleja esta área de trabajo.",
+        "sitePlanFirst": "Primero planifica un turno para que sombra tenga un pronóstico que ajustar.",
+        "siteBeforeAfterTitle": "Cómo cambia el calor en esta área",
+        "siteAtWorkArea": "En tu área de trabajo",
+        "siteAdjusted": "Ajustado a tu lugar",
+        "siteAdjustedNeutralSentence": "{surface} a {shade}: ajustamos tu plan para esta área de trabajo.",
+        "forecastMissingHours": "No recibimos condiciones por hora para este turno. Prueba con otras horas.",
+        "scheduleUnavailable": "El plan de trabajo y descanso no está disponible. Inténtalo de nuevo.",
+        "newToHeat": "Nuevo en el trabajo con calor",
+        "heatExperienced": "Con experiencia en el calor",
+        "savedPlanLoadFailed": "No se pudo cargar tu turno guardado. Aún puedes ingresar un plan nuevo."
+      },
+      "summary": {
+        "normalUntil": "Trabaja normalmente hasta las {time}.",
+        "normalShift": "Trabaja normalmente durante este turno. Ten agua cerca.",
+        "tooHot": "Hace demasiado calor para trabajo pesado después de las {time}. Hazlo más temprano si puedes."
       }
     }
   }

@@ -11,6 +11,7 @@ import { useSession } from '../lib/session';
 import { audienceModeId, checkInCopy, fill, siteLabel } from '../lib/copy';
 import { fmtDay, fmtDuration, fmtTime, initial, isLevel, riskWord, waterText, workState } from '../lib/activity';
 import { AppShell } from '../components/AppShell';
+import { pushIsOn } from '../lib/push';
 import { PageHead } from '../components/Story';
 import { Sheet } from '../components/Sheet';
 import { DangerScreen, FINE, ResultSheet, SymptomSheet } from '../components/CheckinFlow';
@@ -235,15 +236,20 @@ export default function CheckIn() {
              <button className="btn btn-quiet" onClick={reload}>{t.retry}</button>
            </> : session && ctx ? (
             <>
-              <dl className="stats">
-                <div className="stat stat-big"><dt>{c.worked}</dt><dd className="num">{fmtDuration(ctx.hoursWorked, lang)}</dd></div>
-                <div className="stat stat-big"><dt>{c.water}</dt><dd className="num">{waterText(ctx, lang)}</dd></div>
-                <div className="stat"><dt>{c.breaks}</dt><dd>{fill(c.breaksCount, { count: ctx.breaksTaken })}</dd></div>
-                 <div className="stat"><dt>{c.site}</dt><dd>{ctx.siteType ? siteLabel(lang,ctx.siteType) : c.siteUnknown}</dd></div>
-                <div className="stat"><dt>{c.heatNow}</dt><dd>{riskWord(ctx.currentCategory, lang)}</dd></div>
-                <div className="stat"><dt>{c.heatNext}</dt><dd>{riskWord(ctx.nextCategory, lang)}</dd></div>
-              </dl>
-              {ctx.recommendedCups === null && <p className="seg-hint">{c.waterUnknown}</p>}
+              {/* Before anything is logged, the tiles would all read zero or unknown, so they wait. */}
+              {(state !== 'notStarted' || ctx.waterCups > 0 || ctx.breaksTaken > 0) && (
+                <>
+                  <dl className="stats">
+                    <div className="stat stat-big"><dt>{c.worked}</dt><dd className="num">{fmtDuration(ctx.hoursWorked, lang)}</dd></div>
+                    <div className="stat stat-big"><dt>{c.water}</dt><dd className="num">{waterText(ctx, lang)}</dd></div>
+                    <div className="stat"><dt>{c.breaks}</dt><dd>{fill(c.breaksCount, { count: ctx.breaksTaken })}</dd></div>
+                    {ctx.siteType && <div className="stat"><dt>{c.site}</dt><dd>{siteLabel(lang, ctx.siteType)}</dd></div>}
+                    {ctx.currentCategory != null && <div className="stat"><dt>{c.heatNow}</dt><dd>{riskWord(ctx.currentCategory, lang)}</dd></div>}
+                    {ctx.nextCategory != null && <div className="stat"><dt>{c.heatNext}</dt><dd>{riskWord(ctx.nextCategory, lang)}</dd></div>}
+                  </dl>
+                  {ctx.recommendedCups === null && <p className="seg-hint">{c.waterUnknown}</p>}
+                </>
+              )}
               {session.breaks.length > 0 && (
                 <ul className="break-list" aria-label={c.breaks}>
                   {session.breaks.map((b) => <li key={b.start}>{fmtTime(b.start, lang)} – {b.end ? fmtTime(b.end, lang) : c.onBreak}</li>)}
@@ -253,7 +259,7 @@ export default function CheckIn() {
                 {state === 'notStarted' && <button type="button" className="btn btn-primary btn-block" disabled={trackBusy} onClick={() => track('start')}><Play size={20} aria-hidden="true" />{c.startWork}</button>}
                 {state === 'working' && <button type="button" className="btn btn-secondary" disabled={trackBusy} onClick={() => track('start-break')}><Coffee size={20} aria-hidden="true" />{c.startBreak}</button>}
                 {state === 'onBreak' && <button type="button" className="btn btn-secondary" disabled={trackBusy} onClick={() => track('end-break')}><Play size={20} aria-hidden="true" />{c.endBreak}</button>}
-                 <button type="button" className="btn btn-water" disabled={trackBusy} onClick={() => track('water')}><Droplet size={20} aria-hidden="true" />{c.addCup}</button>
+                 <button type="button" className={`btn btn-water${state === 'notStarted' || state === 'finished' ? ' btn-block' : ''}`} disabled={trackBusy} onClick={() => track('water')}><Droplet size={20} aria-hidden="true" />{c.addCup}</button>
                 {(state === 'working' || state === 'onBreak') && <button type="button" className="btn btn-quiet btn-block" disabled={trackBusy} onClick={() => track('end')}><Square size={18} aria-hidden="true" />{c.finishWork}</button>}
               </div>
               {trackErr && <p className="error" role="alert">{c.trackError}</p>}
@@ -261,7 +267,8 @@ export default function CheckIn() {
            ) : sessionLoadError ? <div className="error" role="alert">{c.trackError}<button className="btn btn-quiet" onClick={reload}>{t.retry}</button></div> : <div className="skel" style={{ padding: 0 }} aria-hidden="true"><span style={{ height: 72 }} /><span style={{ height: 54 }} /></div>)}
 
           <button type="button" className="btn btn-bark btn-block" onClick={openSymptoms}><ClipboardCheck size={22} aria-hidden="true" />{c.openSheet}</button>
-          <p className="seg-hint">{c.remindersOpen}</p>
+          {/* Only worth saying when closed-app reminders are off. */}
+          {!pushIsOn() && <p className="seg-hint">{c.remindersOpen}</p>}
         </section>
 
         <h2 className="group-label">{c.history}</h2>

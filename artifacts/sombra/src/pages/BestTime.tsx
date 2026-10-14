@@ -88,13 +88,13 @@ export default function BestTime() {
   };
 
   const advice = (w: NonNullable<Window>) => {
-    if (w.work === 'NL') return lang === 'es' ? 'Ritmo normal. Ten agua cerca.' : 'Normal pace. Keep water nearby.';
-    return lang === 'es'
-      ? `Trabaja ${w.work} min y descansa ${w.restMinutes} en la sombra cada hora.`
-      : `Go ${w.work} min, then rest ${w.restMinutes} in the shade each hour.`;
+    if (w.work === 'NL') return f.bestNormal;
+    // "Work 30 min" only in Work mode; everyone else is just active.
+    return fill(audienceModeId === 'work' ? f.bestPaceWork : f.bestPace, { on: w.work, off: w.restMinutes });
   };
   const span = (w: { date: string; start: string; end: string }) => `${dayLabel(w.date)} ${clock(w.start, lang)}–${clock(w.end, lang)}`;
-  const liters = (qt: number) => Math.max(0.5, Math.round(qt * 0.946 * 2) / 2).toLocaleString(lang);
+  // Cups, the same unit as the hourly plan (4 cups to a quart).
+  const cups = (qt: number) => Math.max(1, Math.round(qt * 4)).toLocaleString(lang);
 
   return (
     <AppShell>
@@ -132,7 +132,7 @@ export default function BestTime() {
                   <strong className="best-span">{span(result.best)}</strong>
                   <span className="best-risk">{fill(f.bestRisk, { risk: f.riskWords[result.best.category] })}</span>
                   <p className="best-advice">{advice(result.best)}</p>
-                  <p className="best-water"><Droplet size={16} aria-hidden="true" fill="currentColor" />{fill(f.bringWater, { liters: liters(result.best.waterQt) })}</p>
+                  <p className="best-water"><Droplet size={16} aria-hidden="true" fill="currentColor" />{fill(f.bringWater, { cups: cups(result.best.waterQt) })}</p>
                   {result.best.category >= 4 && <p className="best-warn">{f.noSafe}</p>}
                 </div>
                 {result.alternatives.length > 0 && (

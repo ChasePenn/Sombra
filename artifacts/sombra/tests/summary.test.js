@@ -3,7 +3,14 @@ import { readFile } from "node:fs/promises";
 import { test } from "node:test";
 import { buildShiftSummary, groupScheduleHours } from "../lib/summary.js";
 
-const workerMode = JSON.parse(await readFile(new URL("../config/modes/workers.json", import.meta.url), "utf8"));
+import { resolveAudienceMode } from "../lib/modes.js";
+
+// Work mode's words ("Work normally", "shift") sit on top of the shared copy.
+const load = async (id) => JSON.parse(await readFile(new URL(`../config/modes/${id}.json`, import.meta.url), "utf8"));
+const workerMode = resolveAudienceMode({
+  "../config/modes/workers.json": await load("workers"),
+  "../config/modes/work.json": await load("work"),
+}, "work");
 const en = workerMode.locales.en;
 const es = workerMode.locales.es;
 const hour = (time, category = 0, overrides = {}) => ({

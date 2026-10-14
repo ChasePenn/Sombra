@@ -24,6 +24,14 @@ const Ctx = createContext<Session | null>(null);
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { isLoaded, isSignedIn, userId } = useAuth();
   const accountId = isLoaded && isSignedIn ? userId ?? null : null;
+  // If sign-in can't load (no signal, an ad blocker), carry on as a guest after a few
+  // seconds instead of leaving screens waiting. A sign-in that loads later still switches over.
+  const [authGaveUp, setAuthGaveUp] = useState(false);
+  useEffect(() => {
+    if (isLoaded) return;
+    const timer = window.setTimeout(() => setAuthGaveUp(true), 5000);
+    return () => window.clearTimeout(timer);
+  }, [isLoaded]);
   const [profile, setProfile] = useState<SombraProfile | null>(null);
   const [profileLoaded, setProfileLoaded] = useState(false);
   const [profileError, setProfileError] = useState(false);
@@ -91,7 +99,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     <Ctx.Provider
       value={{
         accountId,
-        authLoaded: isLoaded,
+        authLoaded: isLoaded || authGaveUp,
         profile,
         profileLoaded,
         profileError,
