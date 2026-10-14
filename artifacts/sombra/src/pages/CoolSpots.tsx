@@ -343,7 +343,8 @@ export default function CoolSpots() {
         <NextStep href="/app/check-in" story="out" Icon={Stethoscope}>{f.nextCool}</NextStep>
 
         <aside className="relief-card">
-          <p>{f.heatRelief}</p>
+          {/* The Heat Relief Network runs May 1 to Sept 30. */}
+          <p>{Number(phoenixNow().slice(5, 7)) >= 5 && Number(phoenixNow().slice(5, 7)) <= 9 ? f.heatRelief : f.heatReliefOff}</p>
           <a href="tel:211" className="btn btn-secondary"><Phone size={18} aria-hidden="true" />{f.call211}</a>
         </aside>
         <p className="fine-print">{updatedText}</p>

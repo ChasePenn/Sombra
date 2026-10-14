@@ -317,7 +317,7 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 /* Five tabs: Today, Map, check-in, People, You */
 .tabs-inner { grid-template-columns: 1fr 1fr 72px 1fr 1fr; padding: 0 8px 10px; }
 .tab { font-size: .74rem; }
-.care-tips + .tool-card { margin-top: 18px; }
+.care-tips + .tool-card, .btn-block + .tool-card { margin-top: 18px; }
 
 /* Map: pins, the place card, the locate button and the live status line */
 .spot-filters { margin: 4px 0 12px; }
