@@ -54,6 +54,15 @@ function placesAround(lat, lon) {
   ];
 }
 
+/** One official cooling center, open all day every day, a little farther than the library. */
+function reliefAround(lat, lon) {
+  return [{
+    id: 501, type: "cooling", name: "Valley Cooling Center", org: "City of Phoenix", address: "1 Main St", phone: "602-555-0100",
+    lat: lat - 0.007, lon: lon + 0.005, start: "2026-05-01", end: "2026-10-31", hours: Array(7).fill([0, 1440]), status: 1,
+    pets: true, accessible: true, distanceM: 900,
+  }];
+}
+
 async function newPage({ geolocation, allow = true, tilesDown = false }) {
   const context = await browser.newContext({
     permissions: allow ? ["geolocation"] : [],
@@ -78,7 +87,7 @@ async function newPage({ geolocation, allow = true, tilesDown = false }) {
       asked.push(url.search);
       const lat = Number(url.searchParams.get("lat"));
       const lon = Number(url.searchParams.get("lon"));
-      return route.fulfill({ json: { places: placesAround(lat, lon), source: "saved", updated: "2026-10-12" } });
+      return route.fulfill({ json: { places: placesAround(lat, lon), source: "saved", updated: "2026-10-12", relief: reliefAround(lat, lon), reliefSeason: { open: 158, until: "2026-10-31", lastEnd: null }, reliefUpdated: "2026-10-13" } });
     }
     if (url.pathname === "/api/weather/geocode") {
       return route.fulfill({ json: [{ name: "Tempe", admin1: "Arizona", latitude: 33.4255, longitude: -111.94 }] });
@@ -208,7 +217,32 @@ test("allowing location from the target button starts the live dot", { skip }, a
     await page.locator(".map-locate").click();
     await page.waitForSelector("path.map-me", { timeout: 15_000 });
     await page.getByText("Following you as you move").waitFor({ timeout: 5000 });
-    await page.getByText("Near My location").waitFor({ timeout: 5000 });
+    await page.getByText("Near you", { exact: true }).waitFor({ timeout: 5000 });
+  } finally {
+    await context.close();
+  }
+});
+
+test("Cool down now points at the best open place with AC, with directions and a call button", { skip }, async () => {
+  const { context, page } = await newPage({ geolocation: { latitude: 33.4484, longitude: -112.074, accuracy: 15 } });
+  try {
+    // Arriving from the heat warning card or a caution check-in.
+    await page.goto(`${origin}/app/cool-spots?now=1`);
+    const card = page.locator(".cool-now-card");
+    await card.waitFor({ timeout: 15_000 });
+    const text = await card.innerText();
+    // The official center (about 0.6 mi) wins over the library (24/7) thanks to its head start,
+    // and both beat the closer fountain because they have AC.
+    assert.match(text, /Valley Cooling Center/, text);
+    assert.match(text, /Official cooling center · \d+ min walk · Open until midnight/, text);
+    assert.match(await card.locator("a.btn-primary").getAttribute("href"), /travelmode=walking/);
+    assert.equal(await card.locator('a[href^="tel:602"]').count(), 1, "call button for the official site");
+    assert.match(text, /Other options/);
+    assert.match(text, /Call 911/);
+    assert.ok(!page.url().includes("now=1"), "the one-time link is cleaned up");
+    // The official site is on the map and in the list, marked as official.
+    assert.ok(await page.locator(".map-pin.is-official").count() >= 1);
+    assert.match(await page.locator(".relief-card").innerText(), /open through October 31/);
   } finally {
     await context.close();
   }

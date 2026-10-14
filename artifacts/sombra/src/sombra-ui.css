@@ -339,3 +339,35 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 @keyframes live-pulse { 70% { box-shadow: 0 0 0 8px rgba(47, 134, 201, 0); } 100% { box-shadow: 0 0 0 0 rgba(47, 134, 201, 0); } }
 @media (prefers-reduced-motion: reduce) { .map-live::before { animation: none; } .map-pin { transition: none; } }
 .place-problem { color: #9F292F; background: #FDECEC; border-radius: 12px; padding: 10px 12px; line-height: 1.4; }
+
+/* Cool down now: the one big button, and the answer card */
+.cool-now { margin: 0 0 14px; scroll-margin-top: 80px; }
+.cool-now-btn { display: flex; align-items: center; justify-content: flex-start; gap: 14px; min-height: 72px; padding: 12px 18px; border: 0; border-radius: 22px; background: #1F5FA8; color: #fff; box-shadow: 0 5px 0 #163F6F; text-align: left; }
+.cool-now-btn span { display: grid; gap: 2px; }
+.cool-now-btn strong { font: 800 1.2rem/1.15 var(--head); }
+.cool-now-btn small { font-size: .9rem; opacity: .92; }
+.cool-now-btn:active { transform: translateY(3px); box-shadow: none; }
+.cool-now-btn[disabled] { opacity: .85; }
+.cool-now-card { padding: 16px; border-radius: 22px; background: #E7F0FA; border: 2px solid #BFD6EE; }
+.cool-now-head { display: flex; align-items: center; justify-content: space-between; }
+.cool-now-head h2 { margin: 0; font: 800 .8rem/1 var(--head); letter-spacing: .06em; text-transform: uppercase; color: #1F5FA8; }
+.cool-now-name { margin: 6px 0 2px; font: 800 1.45rem/1.2 var(--head); color: var(--ink); }
+.cool-now-none { font-size: 1.1rem; }
+.cool-now-meta { margin: 0 0 12px; color: var(--ink-soft); font-weight: 700; }
+.cool-now-note { margin: 8px 0 0; color: var(--ink-soft); font-size: .9rem; }
+.cool-now-actions { display: flex; gap: 8px; }
+.cool-now-actions .btn { flex: 1; }
+.cool-now-sub { margin: 16px 0 6px; font: 700 .95rem var(--head); }
+.cool-now-others { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cool-now-others a { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 14px; background: #fff; color: var(--ink); text-decoration: none; }
+.cool-now-others span { display: grid; }
+.cool-now-others small { color: var(--ink-soft); }
+.cool-now-warn { margin: 14px 0 0; font-size: .92rem; font-weight: 700; }
+.cool-now-warn a { color: #9F292F; }
+
+/* Official Heat Relief Network sites */
+.map-pin.is-official { border-radius: 10px; }
+.spot.is-official { border-color: #BFD6EE; }
+.spot-note { color: #8A4B08 !important; font-weight: 700; }
+.spot-extra { color: var(--ink-soft); }
+.map-pop-actions { display: flex; gap: 14px; margin-top: 4px; }

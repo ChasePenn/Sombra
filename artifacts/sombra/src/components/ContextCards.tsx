@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
-import { Clock, Droplet, PhoneCall, TriangleAlert } from 'lucide-react';
+import { Clock, PhoneCall, Snowflake, TriangleAlert } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
@@ -44,7 +44,7 @@ export function ContextCards({ maxCategory }: { maxCategory: number | null }) {
           <h2><TriangleAlert size={20} aria-hidden="true" />{fill(f.ctxHeatTitle, { event: heatAlert.event })}</h2>
           <p>{untilText(heatAlert.ends, lang) ? fill(f.ctxHeatUntil, { time: untilText(heatAlert.ends, lang) }) : f.ctxHeatBody}</p>
           <div className="ctx-actions">
-            <Link href="/app/cool-spots" className="btn btn-white"><Droplet size={18} aria-hidden="true" />{f.ctxCool}</Link>
+            <Link href="/app/cool-spots?now=1" className="btn btn-white"><Snowflake size={18} aria-hidden="true" />{f.ctxCool}</Link>
             {dueContact && <Link href="/app/check-on" className="btn btn-white"><PhoneCall size={18} aria-hidden="true" />{fill(f.ctxCheck, { name: dueContact.name })}</Link>}
           </div>
         </section>

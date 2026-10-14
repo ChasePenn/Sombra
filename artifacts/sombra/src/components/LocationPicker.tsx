@@ -68,7 +68,7 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
       <>
         <div className="place-row">
           <span className="place-icon" aria-hidden="true"><MapPin size={18} /></span>
-          <span className="place-name">{fill(f.near, { place: isMyLocation(value.name) ? f.myLocation : value.name })}</span>
+          <span className="place-name">{isMyLocation(value.name) ? f.nearYou : fill(f.near, { place: value.name })}</span>
           <button type="button" className="btn-quiet place-change" onClick={() => setEditing(true)}>{f.change}</button>
         </div>
         {finder.state.kind === 'stale' && <p className="place-status" role="status">{finder.state.text}</p>}

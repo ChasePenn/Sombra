@@ -142,7 +142,7 @@ test("saved cool spots know when a search reaches past the saved area", () => {
 
 test("downtown Phoenix cool spots answer from the saved copy, even with the map servers down", async () => {
   let calls = 0;
-  globalThis.fetch = async () => { calls++; throw new Error("map servers down"); };
+  globalThis.fetch = async (url) => { if (String(url).includes("interpreter")) calls++; throw new Error("map servers down"); };
   const res = await originalFetch(`${baseUrl}/places/cool?lat=33.4484&lon=-112.074`);
   assert.equal(res.status, 200);
   const body = await res.json();
@@ -150,12 +150,15 @@ test("downtown Phoenix cool spots answer from the saved copy, even with the map 
   assert.match(body.updated, /^\d{4}-\d{2}-\d{2}$/);
   assert.ok(body.places.length >= 3, `expected several downtown places, got ${body.places.length}`);
   assert.ok(body.places.every((p) => p.distanceM <= 3600));
-  assert.equal(calls, 0, "no live lookup needed");
+  assert.equal(calls, 0, "no live map lookup needed");
+  // Official sites come along too (here from the saved copy, since every fetch fails).
+  assert.ok(Array.isArray(body.relief));
+  assert.ok(body.reliefSeason && typeof body.reliefSeason.open === "number");
 });
 
 test("outside the saved area, a live lookup is used and its failure is reported", async () => {
   const asked = [];
-  globalThis.fetch = async (url) => { asked.push(String(url)); return new Response("busy", { status: 429 }); };
+  globalThis.fetch = async (url) => { if (String(url).includes("interpreter")) asked.push(String(url)); return new Response("busy", { status: 429 }); };
   const res = await originalFetch(`${baseUrl}/places/cool?lat=35.2&lon=-111.65`);
   assert.equal(res.status, 502);
   assert.ok(asked.length >= 2, "tried the backup servers too");
@@ -163,10 +166,21 @@ test("outside the saved area, a live lookup is used and its failure is reported"
 });
 
 test("outside the saved area, live results come back marked live", async () => {
-  globalThis.fetch = async () => json({ elements: [{ id: 9, lat: 35.201, lon: -111.65, tags: { amenity: "library", name: "Flagstaff Library" } }] });
+  globalThis.fetch = async (url) => String(url).includes("arcgis") ? json({ features: [] }) : json({ elements: [{ id: 9, lat: 35.201, lon: -111.65, tags: { amenity: "library", name: "Flagstaff Library" } }] });
   const res = await originalFetch(`${baseUrl}/places/cool?lat=35.21&lon=-111.66`);
   assert.equal(res.status, 200);
   const body = await res.json();
   assert.equal(body.source, "live");
   assert.equal(body.places[0].name, "Flagstaff Library");
+});
+
+test("official sites near a point: in season only, nearest first, with the season's end", () => {
+  const site = (id, lat, start, end) => ({ id, type: "cooling", name: `Site ${id}`, org: null, address: null, phone: null, lat, lon: -112.07, start, end, hours: [], status: 1, pets: null, accessible: null });
+  const data = { updated: "2026-10-13", sites: [site(1, 33.46, "2026-05-01", "2026-10-31"), site(2, 33.45, "2026-05-01", "2026-10-16"), site(3, 33.45, "2026-05-01", "2026-09-30"), site(4, 34.9, "2026-05-01", "2026-10-31")] };
+  const near = mod.reliefNear(data, { lat: 33.45, lon: -112.07 }, "2026-10-20");
+  assert.deepEqual(near.relief.map((s) => s.id), [1], "ended sites and far-away sites are left out");
+  assert.deepEqual(near.reliefSeason, { open: 2, until: "2026-10-31", lastEnd: null });
+  const off = mod.reliefNear(data, { lat: 33.45, lon: -112.07 }, "2026-11-05");
+  assert.equal(off.relief.length, 0);
+  assert.deepEqual(off.reliefSeason, { open: 0, until: null, lastEnd: "2026-10-31" });
 });

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'wouter';
-import { Check, Droplet, Mic, MicOff, Phone } from 'lucide-react';
+import { Check, Mic, MicOff, Phone, Snowflake } from 'lucide-react';
 import { firstAid } from '@workspace/heat-safety/templates';
 import type { SessionContext } from '@workspace/heat-safety/session';
 import type { CheckinResult } from '../../public/js/checkin-service.js';
@@ -97,7 +97,7 @@ export function ResultSheet({ lang, result, ctx, name, saveError, onClose, close
         <p className="recheck">{fill(c.recheck, { minutes: result.recheck_in_minutes })}</p>
         {saveError && <p className="error" role="alert">{c.saveError}</p>}
         <div className="sheet-actions">
-          {lvl === 'CAUTION' && <Link href="/app/cool-spots" className="btn btn-secondary"><Droplet size={18} aria-hidden="true" />{featureCopy[lang].nextCheck}</Link>}
+          {lvl === 'CAUTION' && <Link href="/app/cool-spots?now=1" className="btn btn-secondary"><Snowflake size={18} aria-hidden="true" />{featureCopy[lang].coolNow}</Link>}
           <button type="button" className="btn btn-primary" onClick={onClose}>{c.done}</button>
         </div>
       </div>
