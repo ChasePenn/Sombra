@@ -512,11 +512,7 @@ export default function CoolSpots() {
                       )}
                     </span>
                   </button>
-                  {s.phone && (
-                    <a className="icon-btn spot-go" aria-label={`${f.careCall}: ${label(s)}`} href={`tel:${s.phone.replace(/[^\d+]/g, '')}`}>
-                      <Phone size={20} />
-                    </a>
-                  )}
+                  {/* Calling is on the map card and in Cool down now; one button keeps the row readable. */}
                   <a className="icon-btn spot-go" aria-label={`${f.directions}: ${label(s)}`}
                     href={directionsUrl(s, s.distanceM)} target="_blank" rel="noreferrer">
                     <Navigation size={20} />

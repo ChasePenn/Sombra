@@ -28,14 +28,17 @@ const modules = import.meta.glob<Mode>('../../config/modes/*.json', { eager: tru
 const configuredModes = Object.values(modules).filter((entry) => entry.id && entry.id !== 'workers');
 const configuredModeIds = new Set(configuredModes.map((entry) => entry.id));
 let savedMode = 'work';
+let storedModeChosen = false;
 try {
   const stored = window.localStorage.getItem('sombra.mode');
   const normalizedStored = stored === 'workers' ? 'work' : stored;
-  if (normalizedStored && /^[a-z][a-z0-9-]*$/.test(normalizedStored) && configuredModeIds.has(normalizedStored)) savedMode = normalizedStored;
+  if (normalizedStored && /^[a-z][a-z0-9-]*$/.test(normalizedStored) && configuredModeIds.has(normalizedStored)) { savedMode = normalizedStored; storedModeChosen = true; }
 } catch { /* The work mode remains available if local preferences cannot be read. */ }
 const requestedMode = new URLSearchParams(window.location.search).get('mode') || savedMode;
 const normalizedMode = requestedMode === 'workers' ? 'work' : requestedMode;
 export const audienceModeId: AudienceModeId = configuredModeIds.has(normalizedMode) ? normalizedMode : 'work';
+/** Whether the person (or a link) picked a mode, rather than Work being the default. */
+export const modeWasChosen = storedModeChosen || new URLSearchParams(window.location.search).has('mode');
 export const modeQuery = audienceModeId === 'work' ? '' : `?mode=${encodeURIComponent(audienceModeId)}`;
 const mode = resolveAudienceMode(
   Object.fromEntries(Object.entries(modules).map(([key, value]) => [key.replace('../../', '../'), value])),

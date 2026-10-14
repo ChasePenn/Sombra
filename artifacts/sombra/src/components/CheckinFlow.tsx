@@ -97,8 +97,9 @@ export function ResultSheet({ lang, result, ctx, name, saveError, onClose, close
         <p className="recheck">{fill(c.recheck, { minutes: result.recheck_in_minutes })}</p>
         {saveError && <p className="error" role="alert">{c.saveError}</p>}
         <div className="sheet-actions">
-          {lvl === 'CAUTION' && <Link href="/app/cool-spots?now=1" className="btn btn-secondary"><Snowflake size={18} aria-hidden="true" />{featureCopy[lang].coolNow}</Link>}
-          <button type="button" className="btn btn-primary" onClick={onClose}>{c.done}</button>
+          {/* When someone feels unwell, getting cool is the main next step. */}
+          {lvl === 'CAUTION' && <Link href="/app/cool-spots?now=1" className="btn btn-primary"><Snowflake size={18} aria-hidden="true" />{featureCopy[lang].coolNow}</Link>}
+          <button type="button" className={`btn ${lvl === 'CAUTION' ? 'btn-secondary' : 'btn-primary'}`} onClick={onClose}>{c.done}</button>
         </div>
       </div>
     </Sheet>

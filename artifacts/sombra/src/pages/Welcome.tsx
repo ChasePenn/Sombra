@@ -1,9 +1,9 @@
 import { Icon as ModeIcon } from '../components/Icon';
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import * as store from '../../public/js/store.js';
 import { useSession } from '../lib/session';
 import { IntensityPicker, LanguagePicker } from '../components/Controls';
-import { audienceModeId, availableModes, currentMode, navigateToMode, type Intensity } from '../lib/copy';
+import { audienceModeId, availableModes, currentMode, modeWasChosen, type Intensity } from '../lib/copy';
 
 export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
   const { t, previewLang, setPreviewLang, setProfile } = useSession();
@@ -26,6 +26,23 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
     el.scrollTo({ left: i * el.clientWidth, behavior: reduce ? 'auto' : 'smooth' });
     setIdx(i);
   };
+  // Picking a mode reloads the app in that mode; then go straight on to the name step.
+  const choose = (id: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('mode', id);
+    url.searchParams.set('welcome', 'name');
+    window.location.assign(url.toString());
+  };
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('welcome') !== 'name') return;
+    url.searchParams.delete('welcome');
+    window.history.replaceState(window.history.state, '', url);
+    const timer = window.setTimeout(() => go(last), 60);
+    return () => window.clearTimeout(timer);
+    // Once, on arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const onScroll = () => {
     const el = track.current;
     if (el) setIdx(Math.round(el.scrollLeft / el.clientWidth));
@@ -69,12 +86,12 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
                       className={`mode-choice tone-${({ work: 'orange', school: 'blue', everyday: 'green' } as Record<string, string>)[mode.id] ?? 'orange'}`}
                       type="button"
                       key={mode.id}
-                      aria-pressed={audienceModeId === mode.id}
-                      onClick={() => navigateToMode(mode.id)}
+                      aria-pressed={modeWasChosen && audienceModeId === mode.id}
+                      onClick={() => choose(mode.id)}
                     >
                       <span className="mode-choice-icon"><ModeIcon name={mode.icon} size={26} /></span>
                       <span className="mode-choice-copy"><strong>{mode.name}</strong><small>{mode.description}</small></span>
-                      <span className="mode-choice-mark" aria-hidden="true">{audienceModeId === mode.id ? '✓' : ''}</span>
+                      <span className="mode-choice-mark" aria-hidden="true">{modeWasChosen && audienceModeId === mode.id ? '✓' : ''}</span>
                     </button>
                   ))}
                 </div>
@@ -107,7 +124,8 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
             <button key={s.title} type="button" aria-label={s.title} aria-current={idx === i ? 'step' : undefined} onClick={() => go(i)}><span /></button>
           ))}
         </div>
-        {idx < last && <button type="button" className="btn btn-primary btn-block" onClick={() => go(idx + 1)}>{t.next}</button>}
+        {/* Nothing is picked for you: Next waits for a choice (Skip still works). */}
+        {idx < last && <button type="button" className="btn btn-primary btn-block" onClick={() => go(idx + 1)} disabled={idx === 0 && !modeWasChosen}>{t.next}</button>}
       </div>
     </div>
   );

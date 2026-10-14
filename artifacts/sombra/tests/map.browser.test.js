@@ -247,3 +247,20 @@ test("Cool down now points at the best open place with AC, with directions and a
     await context.close();
   }
 });
+
+test("the planner starts from your place, and from tomorrow once today's hours are over", { skip }, async () => {
+  for (const [utc, expectTomorrow] of [["2026-07-10T04:30:00Z", true], ["2026-07-10T15:00:00Z", false]]) {
+    const { context, page } = await newPage({ allow: false });
+    try {
+      await page.clock.setFixedTime(new Date(utc)); // 9:30 PM and 8:00 AM in Phoenix
+      await context.addInitScript(() => localStorage.setItem("sombra.last-place", JSON.stringify({ lat: 33.45, lon: -112.07, name: "My location" })));
+      await page.goto(`${origin}/planner.html?mode=everyday`);
+      await page.waitForSelector("#location-search");
+      await page.waitForFunction(() => document.querySelector("#location-search").value !== "", null, { timeout: 5000 });
+      assert.equal(await page.inputValue("#location-search"), "Current location");
+      assert.equal(await page.isChecked("#shift-date-tomorrow"), expectTomorrow, `at ${utc}`);
+    } finally {
+      await context.close();
+    }
+  }
+});
