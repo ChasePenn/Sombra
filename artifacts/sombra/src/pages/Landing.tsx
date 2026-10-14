@@ -1,7 +1,7 @@
 import { Link, Redirect } from 'wouter';
 import { ChevronRight, Droplet } from 'lucide-react';
 import { useSession } from '../lib/session';
-import { availableModes, modeQuery } from '../lib/copy';
+import { availableModes, modeQuery, modeWasChosen } from '../lib/copy';
 import { Icon } from '../components/Icon';
 import { DayStory } from '../components/DayStory';
 import { featureCopy } from '../lib/features-copy';
@@ -20,7 +20,8 @@ export default function Landing() {
 
       <section className="landing-hero">
         <h1>{t.tagline}</h1>
-        <p className="landing-sub">{t.landingSub}</p>
+        {/* Before anyone picks a mode, say what sombra does for everyone. */}
+        <p className="landing-sub">{modeWasChosen ? t.landingSub : featureCopy[lang].landingSubAll}</p>
       </section>
 
       {/* A small, static preview of the real app so people see what they get before tapping anything. */}

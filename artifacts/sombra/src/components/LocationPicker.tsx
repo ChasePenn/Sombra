@@ -9,7 +9,9 @@ import { useLocate } from '../lib/location';
 type Result = { name: string; admin1?: string | null; latitude: number; longitude: number };
 
 /** "My location" is saved in whichever language was on at the time; show it in today's. */
-const isMyLocation = (name: string) => name === featureCopy.en.myLocation || name === featureCopy.es.myLocation;
+// The planner saves the same idea as "Current location", so both count.
+const MINE = new Set([featureCopy.en.myLocation, featureCopy.es.myLocation, 'Current location', 'Ubicación actual']);
+const isMyLocation = (name: string) => MINE.has(name);
 
 /** Shows the current place with a "Change" button; search or GPS when changing. */
 export function LocationPicker({ value, onChange }: { value: Place | null; onChange: (place: Place) => void }) {

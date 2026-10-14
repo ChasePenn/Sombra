@@ -610,6 +610,27 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
   };
   refreshShiftDates();
   applyPrefill();
+  // Someone arriving cold shouldn't have to fix the form before it's useful:
+  // - once today's default hours are over, plan for tomorrow instead of hours already gone;
+  // - if they already shared where they are elsewhere in sombra (the map), start from there.
+  const applyColdStartDefaults = () => {
+    if (prefill || formTouched) return;
+    const nowParts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: "America/Phoenix", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
+      .formatToParts(new Date()).map(({ type, value }) => [type, value]));
+    const nowClock = `${nowParts.hour}:${nowParts.minute}`;
+    const end = document.querySelector("#end-time").value;
+    const start = document.querySelector("#start-time").value;
+    if (todayDateInput.checked && end && start < end && nowClock >= end) tomorrowDateInput.checked = true;
+    if (selectedLocation) return;
+    try {
+      const last = JSON.parse(localStorage.getItem("sombra.last-place") || "null");
+      if (!last || !Number.isFinite(last.lat) || !Number.isFinite(last.lon)) return;
+      const mine = !last.name || ["My location", "Mi ubicación", "Current location", "Ubicación actual"].includes(last.name);
+      setSelectedLocation({ name: mine ? translate("ui.currentLocation") : String(last.name).slice(0, 120), admin1: "", country: "", latitude: last.lat, longitude: last.lon });
+      setLocationMessage("");
+    } catch { /* no saved place: the person picks one */ }
+  };
+  applyColdStartDefaults();
   const formatValue = (value, suffix = "") => {
     const number = Number(value);
     return Number.isFinite(number) ? `${Math.round(number)}${suffix}` : "—";
@@ -804,7 +825,9 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     summaryWbgt.textContent = Number.isFinite(activeWeather?.airTempF)
       ? translate("extras.readingLine", { air: Math.round(activeWeather.airTempF), wbgt: wbgtRounded })
       : translate("extras.readingWbgt", { wbgt: wbgtRounded });
-    todayMeta.textContent = translate(
+    // Plans can be for today or tomorrow; say which, so tomorrow's heat is never read as today's.
+    const dayWord = started ? "" : `${translate(summary.isToday ? "ui.today" : "ui.tomorrow")} · `;
+    todayMeta.textContent = dayWord + translate(
       started ? "results.currentAt" : "results.peakAt",
       {
         time: formatTime(activeHour.time, timezone),
