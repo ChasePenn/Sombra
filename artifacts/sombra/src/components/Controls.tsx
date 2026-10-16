@@ -28,7 +28,7 @@ export function LanguagePicker({ label, value, onChange }: { label: string; valu
 export function Switch({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
   return (
     <span className="switch-hit">
-      <button type="button" role="switch" className="switch" aria-checked={checked} aria-label={label} onClick={() => onChange(!checked)} />
+      <button type="button" role="switch" className="switch" aria-checked={Boolean(checked)} aria-label={label} onClick={() => onChange(!checked)} />
     </span>
   );
 }

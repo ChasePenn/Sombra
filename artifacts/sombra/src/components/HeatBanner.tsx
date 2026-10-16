@@ -45,9 +45,11 @@ export function HeatBanner() {
 
   if (!alert) return null;
   return (
-    <Link href="/app" className="heat-banner" role="status">
-      <TriangleAlert size={18} aria-hidden="true" />
-      <span>{alert.event}</span>
-    </Link>
+    <div role="status">
+      <Link href="/app" className="heat-banner">
+        <TriangleAlert size={18} aria-hidden="true" />
+        <span>{alert.event}</span>
+      </Link>
+    </div>
   );
 }

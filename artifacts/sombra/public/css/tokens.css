@@ -4,8 +4,9 @@
   --line: #F0E2D8;
   --canvas: #FBF4EF;
   --card: #FFFFFF;
-  --mesquite: #FF6A2B;
-  --mesquite-dark: #D94E14;
+  /* Burnt orange: white text on it, and it as text on white or cream, both pass WCAG AA (4.5:1). */
+  --mesquite: #B8430E;
+  --mesquite-dark: #8E3307;
   --mesquite-tint: #FFE6D9;
   --pear: #3A1607;
   --pear-dark: #1A0902;
@@ -19,7 +20,7 @@
   --r-elevated: #F2C230;
   --r-high: #F28C28;
   --r-high-dark: #C96A12;
-  --r-veryhigh: #E5484D;
+  --r-veryhigh: #C62F35;
   --r-extreme: #2A2A2A;
 
   --brand: var(--mesquite);

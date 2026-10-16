@@ -178,7 +178,7 @@
         "shiftDate": "Fecha de la actividad",
         "shiftHours": "Horario de la actividad",
         "localTimeHelp": "Hora local en el lugar de la actividad",
-        "newToHeatQuestion": "¿Es nuevo en las actividades al aire libre con calor durante las últimas 2 semanas?",
+        "newToHeatQuestion": "¿Empezaste a hacer actividades al aire libre con calor en las últimas 2 semanas?",
         "stopBanner": "Evita la actividad física durante el calor extremo.",
         "coolerAdvice": "Más fresco antes de las 9 a. m. y después de las 7 p. m."
       },
@@ -236,7 +236,7 @@
         "pickWorker": "¿Quién va a hacer el registro?",
         "pickWorkerSub": "Elige a alguien del grupo.",
         "changeWorker": "Cambiar persona",
-        "noWorkers": "Agrega personas en Configuración para hacer registros rápidamente.",
+        "noWorkers": "Agrega personas en Ajustes para hacer registros rápidamente.",
         "pageSub": "Lleva la cuenta de descansos y agua, y revisa cómo se sienten todos.",
         "startWork": "Empezar actividad",
         "finishWork": "Terminar actividad",
