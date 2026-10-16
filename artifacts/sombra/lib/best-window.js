@@ -73,7 +73,9 @@ export function findBestWindows({ hours, durationHours, intensity, newToHeat, ca
     if (alternatives.length >= 2) break;
     const overlaps = [best, ...alternatives].some((chosen) => chosen && chosen.date === candidate.date &&
       hourNumber(candidate.start) < hourNumber(chosen.end) && hourNumber(chosen.start) < hourNumber(candidate.end));
-    if (!overlaps && best && candidate.category <= best.category + 1) alternatives.push(candidate);
+    // "Other good times" must still be good: never High heat or worse unless nothing better exists.
+    const goodEnough = candidate.category <= best?.category + 1 && (candidate.category < 3 || candidate.category <= best?.category);
+    if (!overlaps && best && goodEnough) alternatives.push(candidate);
   }
 
   // Stretches of Very high or Extreme heat (category 4+) to stay out of.

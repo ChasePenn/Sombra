@@ -170,7 +170,7 @@
         "locationHelp": "Elige la escuela, cancha o lugar de práctica al aire libre.",
         "workerName": "Estudiante o participante",
         "workerNamePlaceholder": "Nombre para este plan",
-        "newToHeatQuestion": "¿Es nuevo en la actividad con calor durante las últimas 2 semanas?",
+        "newToHeatQuestion": "¿Empezaste a hacer actividad con calor en las últimas 2 semanas?",
         "stopBanner": "Mueve la práctica adentro o cámbiala de hora."
       },
       "taskIntensities": [
@@ -227,7 +227,7 @@
         "pickWorker": "¿Quién va a hacer el registro?",
         "pickWorkerSub": "Elige a una persona del equipo.",
         "changeWorker": "Cambiar persona",
-        "noWorkers": "Agrega tu nombre o equipo en Configuración para hacer registros rápidamente.",
+        "noWorkers": "Agrega tu nombre o equipo en Ajustes para hacer registros rápidamente.",
         "pageSub": "Lleva la cuenta de descansos y agua, y revisa cómo te sientes.",
         "startWork": "Empezar actividad",
         "finishWork": "Terminar actividad",

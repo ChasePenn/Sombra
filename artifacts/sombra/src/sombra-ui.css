@@ -219,8 +219,8 @@ a.tool-card:active { transform: translateY(3px); box-shadow: none; }
 .care-card { background: #fff; border: 2px solid var(--line); border-radius: 22px; padding: 12px 12px 14px 14px; display: grid; gap: 12px; }
 .care-card.is-done { border-color: #BFE5CF; }
 .care-top { display: flex; align-items: center; gap: 12px; }
-.care-avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--tone-green-tint); color: var(--tone-green); font: 700 1rem var(--head); flex: none; }
-.care-card.is-done .care-avatar { background: var(--r-low); color: #fff; }
+.care-avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--tone-green-tint); color: #1C7A4C; font: 700 1rem var(--head); flex: none; }
+.care-card.is-done .care-avatar { background: #1C7A4C; color: #fff; }
 .care-copy { flex: 1; display: grid; }
 .care-copy strong { font: 700 1.05rem var(--head); }
 .care-copy small { color: var(--ink-soft); font-size: .88rem; }
@@ -371,3 +371,11 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .spot-note { color: #8A4B08 !important; font-weight: 700; }
 .spot-extra { color: var(--ink-soft); }
 .map-pop-actions { display: flex; gap: 14px; margin-top: 4px; }
+
+/* Readable text versions of the four day colors (the bright ones stay for icons and dots). */
+.story-tag.tone-orange, .tone-orange .story-tag { color: #B4440E; }
+.story-tag.tone-blue, .tone-blue .story-tag { color: #1F6FAD; }
+.story-tag.tone-green, .tone-green .story-tag { color: #1C7A4C; }
+.story-tag.tone-red, .tone-red .story-tag { color: #C0312F; }
+.story-tag::before { background: currentColor; }
+.spot-open { color: #1C7A4C !important; }

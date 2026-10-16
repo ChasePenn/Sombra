@@ -44,3 +44,12 @@ test("returns no window when the activity is longer than what is left today", ()
   const { best } = findBestWindows({ ...base, durationHours: 4, now: "2026-07-10T18:30", hours: today });
   assert.equal(best, null);
 });
+
+test("other good times are never High heat when the best time is cooler", () => {
+  // Elevated in the early morning, High mid-morning, Extreme after.
+  const wbgt = { "05:00": 83, "06:00": 83, "07:00": 84, "08:00": 84, "09:00": 86, "10:00": 86, "11:00": 91, "12:00": 92, "13:00": 92, "14:00": 92 };
+  const hours = Object.entries(wbgt).map(([time, wbgtF]) => ({ date: "2026-07-11", time, wbgtF }));
+  const result = findBestWindows({ hours, durationHours: 2, intensity: "moderate", newToHeat: false, table, now: "2026-07-10T20:00" });
+  assert.ok(result.best);
+  assert.ok(result.alternatives.every((w) => w.category < 3 || w.category <= result.best.category), JSON.stringify(result.alternatives));
+});
