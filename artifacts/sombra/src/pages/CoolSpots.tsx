@@ -396,7 +396,7 @@ export default function CoolSpots() {
           {coolNow !== 'shown' && (
             <button type="button" className="btn cool-now-btn btn-block" onClick={() => void startCoolNow()} disabled={coolNow === 'finding' || coolNow === 'waiting'} aria-busy={coolNow === 'finding' || coolNow === 'waiting'}>
               <Snowflake size={24} aria-hidden="true" />
-              <span><strong>{coolNow === 'off' ? f.coolNow : f.coolNowFinding}</strong>{coolNow === 'off' && <small>{f.coolNowHint}</small>}</span>
+              <span><strong>{coolNow === 'off' ? f.coolNow : f.coolNowFinding}</strong></span>
             </button>
           )}
           {coolNow === 'shown' && (

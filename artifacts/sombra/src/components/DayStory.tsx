@@ -1,47 +1,31 @@
 import { Link } from 'wouter';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
-import { storyTone, useStoryLabel, type Story } from './Story';
 import { Calendar, Clock, Drop, Heart, Phone, Thermometer, type IconComponent } from './Icon';
 
-type Tool = { href: string; Icon: IconComponent; label: string; line: string };
+type Tool = { href: string; Icon: IconComponent; label: string; tone: 'orange' | 'ink' };
 
-/**
- * Everything sombra does, laid out as one day: before you go, while you're out, looking
- * out for others, your body. Each tool still works on its own; this shows how they fit.
- */
+/** Everything sombra does, in the order of a day outside. The titles say enough on their own. */
 export function DayStory() {
-  const { lang } = useSession();
-  const f = featureCopy[lang];
-  const label = useStoryLabel();
-  const steps: Array<{ story: Story; tools: Tool[] }> = [
-    { story: 'before', tools: [
-      { href: '/app', Icon: Calendar, label: f.quickPlan, line: f.quickPlanLine },
-      { href: '/app/best-time', Icon: Clock, label: f.quickBest, line: f.quickBestLine },
-    ] },
-    { story: 'out', tools: [
-      { href: '/app/check-in', Icon: Thermometer, label: f.quickCheck, line: f.quickCheckLine },
-      { href: '/app/cool-spots', Icon: Drop, label: f.quickCool, line: f.quickCoolLine },
-    ] },
-    { story: 'others', tools: [{ href: '/app/check-on', Icon: Phone, label: f.quickCare, line: f.quickCareLine }] },
-    { story: 'you', tools: [{ href: '/app/profile', Icon: Heart, label: f.quickProfile, line: f.quickProfileLine }] },
+  const f = featureCopy[useSession().lang];
+  const tools: Tool[] = [
+    { href: '/app', Icon: Calendar, label: f.quickPlan, tone: 'orange' },
+    { href: '/app/best-time', Icon: Clock, label: f.quickBest, tone: 'orange' },
+    { href: '/app/check-in', Icon: Thermometer, label: f.quickCheck, tone: 'ink' },
+    { href: '/app/cool-spots', Icon: Drop, label: f.quickCool, tone: 'ink' },
+    { href: '/app/check-on', Icon: Phone, label: f.quickCare, tone: 'orange' },
+    { href: '/app/profile', Icon: Heart, label: f.quickProfile, tone: 'ink' },
   ];
   return (
-    <ol className="day-story">
-      {steps.map(({ story, tools }) => (
-        <li key={story} className={`day-step ${storyTone[story]}`}>
-          <span className="story-tag">{label(story)}</span>
-          <div className="day-tools">
-            {tools.map(({ href, Icon, label: name, line }) => (
-              <Link key={href} href={href} className="quick-tool">
-                <span className="quick-icon"><Icon size={22} strokeWidth={2.2} aria-hidden="true" /></span>
-                <span className="quick-label">{name}</span>
-                <small className="quick-line">{line}</small>
-              </Link>
-            ))}
-          </div>
+    <ul className="day-tools-list">
+      {tools.map(({ href, Icon, label, tone }) => (
+        <li key={href}>
+          <Link href={href} className="quick-tool">
+            <span className={`badge badge-${tone}`}><Icon size={22} strokeWidth={2.4} aria-hidden="true" /></span>
+            <span className="quick-label">{label}</span>
+          </Link>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }

@@ -124,7 +124,7 @@ export default function Settings() {
         <div className="group">
           <PushControl variant="settings" />
           <div className="row">
-            <span className="row-main">{t.reminders}<small>{t.remindersHint}</small></span>
+            <span className="row-main">{t.reminders}</span>
             <Switch label={t.reminders} checked={draft.notificationsEnabled} onChange={toggleNotif} />
           </div>
           <button type="button" className="row" onClick={test} disabled={!draft.notificationsEnabled} style={{ opacity: draft.notificationsEnabled ? 1 : 0.55, color: 'var(--mesquite)', fontWeight: 700 }}>{t.testReminder}</button>
@@ -150,7 +150,7 @@ export default function Settings() {
 
         <h2 className="group-label">{t.about}</h2>
         <div className="group">
-          <Link href="/about" className="row"><span className="row-main">{t.aboutSombra}<small>{t.sourcesPrivacy}</small></span><ChevronRight size={20} aria-hidden="true" /></Link>
+          <Link href="/about" className="row"><span className="row-main">{t.aboutSombra}</span><ChevronRight size={20} aria-hidden="true" /></Link>
           <Link href="/privacy" className="row"><span className="row-main">{legalUi[lang].privacy}</span><ChevronRight size={20} aria-hidden="true" /></Link>
           <Link href="/terms" className="row"><span className="row-main">{legalUi[lang].terms}</span><ChevronRight size={20} aria-hidden="true" /></Link>
         </div>

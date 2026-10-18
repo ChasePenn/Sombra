@@ -99,7 +99,7 @@ export default function BestTime() {
   return (
     <AppShell>
       <div className="page">
-        <PageHead story="before" title={f.bestTitle} lead={f.bestCard} />
+        <PageHead story="before" title={f.bestTitle} />
 
         <LocationPicker value={place} onChange={setPlace} />
 
@@ -110,7 +110,6 @@ export default function BestTime() {
               <button key={p} type="button" className="chip" aria-pressed={activityIndex === i} onClick={() => setActivityIndex(i)}>{p}</button>
             ))}
           </div>
-          <p className="seg-hint">{fill(f.countsAs, { level: f.effortWord[intensity] })}</p>
         </div>
         <div className="field">
           <span className="label">{f.howLong}</span>

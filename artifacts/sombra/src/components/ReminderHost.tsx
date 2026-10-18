@@ -102,7 +102,6 @@ export function ReminderHost() {
           <button type="button" className="btn btn-primary" onClick={() => act('primary')} disabled={busy}>{primary}</button>
           <button type="button" className="btn btn-quiet" onClick={() => act('dismiss')} disabled={busy}>{c.later}</button>
         </div>
-        <p className="seg-hint">{c.remindersOpen}</p>
       </div>
     </Sheet>
   );

@@ -19,11 +19,9 @@ export function useStoryLabel() {
 }
 
 export function PageHead({ story, title, lead, action }: { story: Story; title: string; lead?: string; action?: ReactNode }) {
-  const label = useStoryLabel();
   return (
     <header className={`page-head ${action ? 'page-head-split' : ''}`}>
       <div>
-        <span className={`story-tag ${storyTone[story]}`}>{label(story)}</span>
         <h1>{title}</h1>
         {lead && <p>{lead}</p>}
       </div>

@@ -79,7 +79,7 @@ export default function CareCheck() {
   return (
     <AppShell>
       <div className="page">
-        <PageHead story="others" title={f.careTitle} lead={f.careSub} />
+        <PageHead story="others" title={f.careTitle} />
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
         {/* Reminder and heat-warning notes only matter once someone is on the list. */}
         {contacts.length > 0 && <PushControl variant="inline" />}
@@ -123,7 +123,6 @@ export default function CareCheck() {
           <span className="mode-choice-icon"><Users size={24} strokeWidth={2.2} aria-hidden="true" /></span>
           <span className="tool-copy">
             <strong>{groupOn ? group : f.groupTitleOff}</strong>
-            <small>{fill(groupOn ? f.groupCardOn : f.groupCardOff, { group: group.toLowerCase() })}</small>
           </span>
           <ChevronRight size={20} aria-hidden="true" className="landing-mode-arrow" />
         </Link>

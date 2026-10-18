@@ -206,7 +206,7 @@ export default function CheckIn() {
   return (
     <AppShell>
       <div className="page">
-        <PageHead story="out" title={c.pageTitle} lead={c.pageSub} />
+        <PageHead story="out" title={c.pageTitle} />
 
         {accountId && pending && (
           <div className="notice sync-note" role="status">
@@ -241,7 +241,7 @@ export default function CheckIn() {
                 <>
                   <dl className="stats">
                     <div className="stat stat-big"><dt>{c.worked}</dt><dd className="num">{fmtDuration(ctx.hoursWorked, lang)}</dd></div>
-                    <div className="stat stat-big"><dt>{c.water}</dt><dd className="num">{waterText(ctx, lang)}</dd></div>
+                    <div className="stat stat-big"><dt>{c.water}</dt><dd key={ctx.waterCups} className={`num${ctx.waterCups > 0 ? ' pop' : ''}`}>{waterText(ctx, lang)}</dd></div>
                     <div className="stat"><dt>{c.breaks}</dt><dd>{fill(c.breaksCount, { count: ctx.breaksTaken })}</dd></div>
                     {ctx.siteType && <div className="stat"><dt>{c.site}</dt><dd>{siteLabel(lang, ctx.siteType)}</dd></div>}
                     {ctx.currentCategory != null && <div className="stat"><dt>{c.heatNow}</dt><dd>{riskWord(ctx.currentCategory, lang)}</dd></div>}
@@ -268,7 +268,6 @@ export default function CheckIn() {
 
           <button type="button" className="btn btn-bark btn-block" onClick={openSymptoms}><Clipboard size={22} aria-hidden="true" />{c.openSheet}</button>
           {/* Only worth saying when closed-app reminders are off. */}
-          {!pushIsOn() && <p className="seg-hint">{c.remindersOpen}</p>}
         </section>
 
         <h2 className="group-label">{c.history}</h2>
