@@ -1,16 +1,32 @@
 {
   "name": "sombra · heat safety",
+  "id": "/app",
   "short_name": "sombra",
   "description": "Stay safe outside in the Phoenix heat.",
   "start_url": "/app",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FBF4EF",
-  "theme_color": "#FF6A2B",
+  "background_color": "#FFF6EE",
+  "theme_color": "#FFF6EE",
   "icons": [
-    { "src": "/brand/sombra-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "/brand/sombra-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "/brand/sombra-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/brand/sombra-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/sombra-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/sombra-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

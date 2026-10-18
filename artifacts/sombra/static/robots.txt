@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://sombraheat.com/sitemap.xml

@@ -1,11 +1,11 @@
 name: Send due reminders
 
 # Wakes sombra's server every 5 minutes so push reminders go out even when nobody has the
-# app open (the Replit deployment sleeps between visits). GitHub may run scheduled jobs a
+# app open (the server sleeps between visits). GitHub may run scheduled jobs a
 # few minutes late, so a reminder can arrive roughly 5-15 minutes after its time.
 #
 # The only setting: the deployed site's address, in .github/sombra-url (one line, e.g.
-# https://sombra.example.app). Until it's filled in, this job does nothing.
+# https://sombraheat.com). Until it's filled in, this job does nothing.
 on:
   schedule:
     - cron: "*/5 * * * *"
