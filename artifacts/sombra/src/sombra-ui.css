@@ -434,7 +434,7 @@ body { background: var(--canvas); }
 .hero-card {
   position: relative; display: grid; gap: 4px; margin: 26px 4px 18px; padding: 18px 20px;
   border-radius: 10px; background: var(--r-veryhigh); color: #fff;
-  box-shadow: 0 5px 0 #8F1F24; transform: rotate(-1.5deg);
+  box-shadow: 0 5px 0 #8F1F24;
 }
 .hero-card strong { font: 800 2rem/1.05 var(--head); letter-spacing: -0.02em; }
 .hero-stress { font-weight: 700; font-size: .95rem; }
@@ -473,7 +473,7 @@ body { background: var(--canvas); }
 .story-tag, .map-live::before, .day-step::before { display: none !important; }
 
 /* Moments that confirm something happened. Off for people who ask for less motion. */
-@keyframes sombra-stamp { 0% { transform: scale(1.35) rotate(-6deg); opacity: 0; } 60% { transform: scale(.95) rotate(-2deg); opacity: 1; } 100% { transform: scale(1) rotate(-2deg); } }
+@keyframes sombra-stamp { 0% { transform: scale(1.35); opacity: 0; } 60% { transform: scale(.95); opacity: 1; } 100% { transform: scale(1); } }
 @keyframes sombra-pop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
 .lvl-ok-stamp { display: inline-block; animation: sombra-stamp .38s ease-out both; }
 .pop { animation: sombra-pop .3s ease-out; }
@@ -498,3 +498,33 @@ body { background: var(--canvas); }
 @media (prefers-reduced-motion: reduce) { .btn-bark:active { transform: none; } }
 .mode-bar-option[aria-checked="true"] { background: var(--sun-dark); border-color: var(--sun-dark); }
 .feat-icon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--sun); color: #fff; }
+
+/* Landing: a tilted mini plan, styled like the real hour cards */
+.hero-plan {
+  display: grid; margin: 26px 4px 20px; padding: 6px 12px; border-radius: 10px;
+  background: var(--card); border: 2px solid var(--ink); box-shadow: 0 5px 0 var(--ink);
+}
+.hero-row { display: grid; grid-template-columns: 44px 80px 1fr; align-items: center; gap: 8px; padding: 11px 0; }
+.hero-row + .hero-row { border-top: 1px solid var(--line); }
+.hero-time { font: 700 .9rem var(--head); white-space: nowrap; }
+.hero-pill { justify-self: stretch; text-align: center; padding: 3px 4px; border-radius: 999px; font: 800 .72rem/1.3 var(--head); letter-spacing: .04em; text-transform: uppercase; }
+.lvl-low .hero-pill { background: var(--r-low); color: var(--ink); }
+.lvl-high .hero-pill { background: var(--r-high); color: var(--ink); }
+.lvl-extreme .hero-pill { background: var(--r-extreme); color: #fff; }
+.hero-do { font-weight: 700; font-size: .9rem; line-height: 1.25; }
+
+/* Landing graphic: the sun's path over a day, in heat colors, above what sombra helps with */
+.hero-graphic {
+  margin: 26px 4px 20px; padding: 16px 14px 14px; border-radius: 10px;
+  background: var(--card); border: 2px solid var(--ink); box-shadow: 0 5px 0 var(--ink);
+}
+.hero-graphic svg { display: block; width: 100%; height: auto; }
+.sun-path path { fill: none; stroke-width: 13; }
+.arc-low { stroke: var(--r-low); } .arc-caution { stroke: var(--r-caution); } .arc-elevated { stroke: var(--r-elevated); }
+.arc-high { stroke: var(--r-high); } .arc-veryhigh { stroke: var(--r-veryhigh); } .arc-extreme { stroke: var(--r-extreme); }
+.hero-graphic .sun { fill: var(--sun); stroke: var(--ink); stroke-width: 3; }
+.hero-graphic .ground { stroke: var(--ink); stroke-width: 2; }
+.hero-graphic .tick { font: 700 11px var(--head); fill: var(--ink-soft); }
+.hero-jobs { list-style: none; margin: 10px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.hero-jobs li { display: grid; justify-items: center; gap: 6px; text-align: center; font: 700 .82rem/1.2 var(--head); }
+.hero-graphic .sun-rays { stroke: var(--sun); stroke-width: 3.5; stroke-linecap: square; }

@@ -38,7 +38,7 @@ const privacy: Record<Lang, LegalDoc> = {
         'sombra has no ads and no analytics, and it does not use tracking cookies.',
       ] },
       { id: 'delete', h: 'Deleting your data', p: [
-        'In Settings, Delete account removes your account and everything stored with it from our server. Turning off closed-app reminders removes your push address. To remove guest data, clear this site\'s data in your browser.',
+        'In Settings, Delete my account and data removes your account and everything stored with it from our server. Turning off closed-app reminders removes your push address. To remove guest data, clear this site\'s data in your browser.',
       ] },
       { id: 'children', h: 'Children', p: [
         'School mode is meant for coaches and teams. Students can use sombra as guests without giving any personal information. We do not knowingly create accounts for children under 13. If you believe a child under 13 has made an account, contact us and we will delete it.',
@@ -79,7 +79,7 @@ const privacy: Record<Lang, LegalDoc> = {
         'sombra no tiene anuncios ni analíticas, y no usa cookies de rastreo.',
       ] },
       { id: 'delete', h: 'Borrar tus datos', p: [
-        'En Configuración, Eliminar cuenta borra tu cuenta y todo lo guardado con ella en nuestro servidor. Si apagas los recordatorios con la app cerrada, se borra tu dirección de notificaciones. Para borrar los datos de invitado, borra los datos de este sitio en tu navegador.',
+        'En Ajustes, Eliminar mi cuenta y mis datos borra tu cuenta y todo lo guardado con ella en nuestro servidor. Si apagas los recordatorios con la app cerrada, se borra tu dirección de notificaciones. Para borrar los datos de invitado, borra los datos de este sitio en tu navegador.',
       ] },
       { id: 'children', h: 'Niños', p: [
         'El modo Escuela es para entrenadores y equipos. Los estudiantes pueden usar sombra como invitados sin dar información personal. No creamos a sabiendas cuentas para menores de 13 años. Si crees que un menor de 13 años creó una cuenta, contáctanos y la borraremos.',
@@ -143,7 +143,7 @@ const terms: Record<Lang, LegalDoc> = {
         'Los horarios y lugares vienen de la Red de Alivio del Calor y de OpenStreetMap, y pueden cambiar sin aviso. Llama antes cuando puedas.',
       ] },
       { id: 'account', h: 'Tu cuenta', p: [
-        'Protege tu inicio de sesión. Puedes borrar tu cuenta cuando quieras en Configuración. Podemos quitar cuentas que abusen del servicio.',
+        'Protege tu inicio de sesión. Puedes borrar tu cuenta cuando quieras en Ajustes. Podemos quitar cuentas que abusen del servicio.',
       ] },
       { id: 'use', h: 'Uso justo', p: [
         'No intentes sobrecargar ni dañar el servicio, y no lo uses para reunir información sobre otras personas.',

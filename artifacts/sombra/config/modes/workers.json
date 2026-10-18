@@ -501,7 +501,7 @@
         "priv1": "Your heat profile and the people you check on stay on this phone. They are never sent anywhere.",
         "priv2": "Photos of your spot are analyzed on your phone and never uploaded or stored.",
         "priv3": "Heat alerts and nearby cool spots use your location rounded to about half a mile; your exact spot never leaves your phone. With closed-app reminders on, the server keeps reminder times and that area, never names.",
-        "p2": "Guest data stays in this browser; accounts store it privately on our server. Non-emergency check-ins send your name, symptoms and notes to our server and Google Gemini to word the reply. Delete it all in Settings.",
+        "p2": "Guest data stays in this browser; accounts store it privately on our server. Non-emergency check-ins send your name, symptoms and notes to our server to word the reply. The Privacy Policy lists every service that receives data. Delete it all in Settings.",
         "srcRelief": "official cooling centers and hydration stations"
       },
       "extras": {
@@ -1059,7 +1059,7 @@
         "priv1": "Tu perfil de calor y las personas que revisas se quedan en este teléfono. Nunca se envían a ningún lado.",
         "priv2": "Las fotos de tu lugar se analizan en tu teléfono y nunca se suben ni se guardan.",
         "priv3": "Las alertas de calor y los lugares frescos cercanos usan tu ubicación redondeada a como media milla; tu ubicación exacta nunca sale de tu teléfono. Con los recordatorios activados, el servidor guarda las horas y esa zona, nunca nombres.",
-        "p2": "Los datos como invitado se quedan en este navegador; las cuentas los guardan de forma privada en nuestro servidor. Los registros que no son emergencias envían tu nombre, síntomas y notas a nuestro servidor y a Google Gemini para redactar la respuesta. Bórralo todo en Ajustes.",
+        "p2": "Los datos como invitado se quedan en este navegador; las cuentas los guardan de forma privada en nuestro servidor. Los registros que no son emergencias envían tu nombre, síntomas y notas a nuestro servidor para redactar la respuesta. La Política de privacidad indica cada servicio que recibe datos. Bórralo todo en Ajustes.",
         "srcRelief": "centros oficiales para refrescarse y estaciones de hidratación"
       },
       "extras": {

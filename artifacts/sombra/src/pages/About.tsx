@@ -25,7 +25,6 @@ export default function About() {
     ['TB MED 507', 'https://hprc-online.org/resources/tb-med-507-heat-stress-control-and-heat-casualty-management-pdf', c.srcRest],
     ['CDC', 'https://www.cdc.gov/heat-health/', c.srcFirstAid],
     ['Transformers.js', 'https://huggingface.co/docs/transformers.js', c.srcPhoto],
-    ['Google Gemini', 'https://ai.google.dev/', c.srcCheckin],
   ];
   return (
     <div className="shell" style={{ paddingBottom: 'calc(32px + var(--safe-b))' }}>
