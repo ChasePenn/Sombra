@@ -1,7 +1,4 @@
-/*
-  Every way a browser can fail to find someone, and what sombra does about it.
-  The browser's geolocation is replaced by a script for each case.
-*/
+// Every way a browser can fail to find someone, and what sombra does about it.
 import assert from "node:assert/strict";
 import test, { beforeEach } from "node:test";
 
@@ -9,7 +6,7 @@ const store = new Map();
 globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) };
 globalThis.window = { isSecureContext: true };
 
-/** A fake navigator.geolocation; each call to getCurrentPosition takes the next scripted answer. */
+// A fake navigator.geolocation.
 function fakeGeo(script) {
   const calls = [];
   const geo = {

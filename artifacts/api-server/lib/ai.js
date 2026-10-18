@@ -75,7 +75,7 @@ export async function personalize(input, options = {}) {
     if (!parsed) options.onFailure?.({kind:"validation",status:null});
     return parsed ? {level,...parsed,source:"ai"} : fallback;
   } catch (error) {
-    // Never log the error, note, prompt, key or reply. They can hold health details.
+    // Never log the error, note, prompt, key or reply.
     const codes = [
       ["API_KEY_BLOCKED", /API_KEY_(?:LEAKED|BLOCKED)|API key.*(?:leak|revoke|block)/i],
       ["API_KEY_EXPIRED", /API_KEY_EXPIRED|API key.*expired/i],

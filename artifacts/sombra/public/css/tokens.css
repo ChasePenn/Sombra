@@ -4,7 +4,7 @@
   --line: #F0DCCB;
   --canvas: #FFF6EE;
   --card: #FFFDFA;
-  /* One accent. White text on it, and it as text on paper or sand, both pass WCAG AA (4.5:1). */
+  /* One accent. */
   --mesquite: #A63B0B;
   --mesquite-dark: #7F2E06;
   --mesquite-tint: #FBE6D8;
@@ -33,7 +33,7 @@
   --body: 'Atkinson Hyperlegible', system-ui, sans-serif;
 }
 
-/* Older names the planner styles still use. They point at the colors above. */
+/* Older names the planner styles still use. */
 :root {
   --mesquite-soft: var(--mesquite-tint);
   --prickly-pear: var(--pear);

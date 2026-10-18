@@ -375,8 +375,7 @@ router.post("/weather/shift", async (req, res): Promise<void> => {
       requestedHours.push(new Date(timestamp).toISOString().slice(0, 16));
     }
 
-    // A physically impossible reading means the provider's data is broken. Don't turn it into
-    // advice, even for the hours that look fine: say the forecast is unavailable instead.
+    // A physically impossible reading means the provider's data is broken.
     const implausible = data.hourly.time.some(
       (time, index) => time >= startAt && time < endAt && !isPlausibleWeatherReading(data.hourly!, index),
     );

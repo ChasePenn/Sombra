@@ -1,8 +1,6 @@
 name: Release gate
 
-# Everything that can run without the internet: type check, build, all unit tests,
-# the account and data isolation tests against a throwaway Postgres, and the planner
-# browser test. The live-data workflow covers the real outside services.
+# Everything that can run without the internet.
 on:
   push:
     branches: [main]

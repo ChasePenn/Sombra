@@ -1,8 +1,4 @@
-/*
-  Back buttons should stay inside the app. We count screen changes since the app
-  loaded; with none, "back" would leave sombra (or land on a blank tab), so we go
-  to a sensible screen instead.
-*/
+// Back buttons should stay inside the app.
 let screensVisited = 0;
 
 export function noteScreenChange() {
@@ -14,11 +10,7 @@ export function goBack(navigate: (to: string) => void, fallback: string) {
   else navigate(fallback);
 }
 
-/*
-  A new screen opens at the top. Going back (browser or phone back button) leaves the
-  scroll alone so you return to where you were. Links to a section (#privacy) handle
-  their own scrolling.
-*/
+// A new screen opens at the top.
 let cameBack = false;
 if (typeof window !== 'undefined') window.addEventListener('popstate', () => { cameBack = true; });
 

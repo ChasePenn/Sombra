@@ -1,11 +1,6 @@
 name: Send due reminders
 
-# Wakes sombra's server every 5 minutes so push reminders go out even when nobody has the
-# app open (the server sleeps between visits). GitHub may run scheduled jobs a
-# few minutes late, so a reminder can arrive roughly 5-15 minutes after its time.
-#
-# The only setting: the deployed site's address, in .github/sombra-url (one line, e.g.
-# https://sombraheat.com). Until it's filled in, this job does nothing.
+# Wakes sombra's server every 5 minutes so push reminders go out even when nobody has the app open.
 on:
   schedule:
     - cron: "*/5 * * * *"
@@ -29,9 +24,6 @@ jobs:
             exit 0
           fi
           # The secret header is optional; the endpoint is safe to call without it.
-          # A sleeping server can take a while to wake, so try three times. A miss only
-          # delays reminders to the next run 5 minutes later, so it's a warning, not a
-          # failure (a failure would email the owner every 5 minutes).
           for try in 1 2 3; do
             if curl -fsS --max-time 60 -X POST "${site%/}/api/push/run" ${PUSH_CRON_SECRET:+-H "x-push-cron: $PUSH_CRON_SECRET"}; then
               echo

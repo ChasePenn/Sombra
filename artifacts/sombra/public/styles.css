@@ -946,10 +946,7 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 /* The location field has its own clear button; hide the browser's duplicate one. */
 #location-search::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; display: none; }
 
-/* Polish pass: fewer competing elements on the plan.
-   - Every field is required, so the "Required" tags are gone (inputs keep `required`).
-   - The hour chips repeated the hourly list right below them.
-   - Print is an icon next to Edit, so the two never stack into full-width bars. */
+/* Polish pass: fewer competing elements on the plan. */
 .hour-strip-panel { display: none; }
 .results-top { flex-direction: row !important; align-items: center !important; flex-wrap: nowrap; }
 .results-actions { width: auto !important; }
@@ -958,7 +955,7 @@ button.condition-tile[aria-expanded="true"] { outline: 3px solid var(--mesquite)
 .print-button span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .summary-hottest[hidden] { display: none; }
 
-/* Fewer words: the plan speaks for itself. Sources live on the About page. */
+/* Fewer words: the plan speaks for itself. */
 .schedule-policy-notes, .condition-hint { display: none !important; }
 
 /* sombra look, v3 (planner): bold orange, chunky buttons, 8px boxes, 10px buttons. */

@@ -14,7 +14,7 @@ function Glyph({ name, size = 24 }: { name: string; size?: number }) {
   return <Icon name={name} size={size} strokeWidth={name === 'check' ? 3 : 2.2} />;
 }
 
-/** Saves the chosen mode and reloads into it. Shared by the top bar chip and the Today switch. */
+// Saves the chosen mode and reloads into it.
 export function useSelectMode() {
   const { profile, setProfile } = useSession();
   const [busy, setBusy] = useState(false);

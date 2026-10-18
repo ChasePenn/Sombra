@@ -1,9 +1,6 @@
 name: Cool spots data
 
-# Refreshes the saved list of cool spots (src/data/places.json) from OpenStreetMap once a
-# week. If the map servers are busy it keeps the saved copy and only fails (and emails)
-# when that copy is over 40 days old. The app answers from that file, so it doesn't depend
-# on the busy public map servers while people are using it. Run it by hand to get a copy without committing.
+# Refreshes the saved list of cool spots.
 on:
   schedule:
     - cron: "17 11 * * 1" # Mondays, early morning in Phoenix

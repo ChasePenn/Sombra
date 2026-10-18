@@ -1,10 +1,4 @@
-/*
-  Reminders that arrive while sombra is closed (Web Push).
-
-  The server only learns a push address, reminder times and random keys. Names stay on this
-  phone: they're copied into a small on-device database that the service worker reads when it
-  shows a notification, so "Time to check on Grandma Rosa" is assembled on the phone itself.
-*/
+// Reminders that arrive while sombra is closed (Web Push).
 import { getCareContacts, getLastPlace, getWindowReminders } from './local';
 import { shouldShowIosInstallTip } from './pwa';
 
@@ -161,7 +155,7 @@ async function saveLabels(lang: string) {
   });
 }
 
-/** Sends the current schedule. Called whenever contacts, Best time reminders or the language change. */
+// Sends the current schedule.
 export async function syncPush(lang: string) {
   const state = getPushState();
   if (!state) return 'off';

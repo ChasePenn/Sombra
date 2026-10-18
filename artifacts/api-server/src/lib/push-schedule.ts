@@ -1,7 +1,4 @@
-/*
-  Decides which push reminders are due. Pure functions with no database or network, so
-  every rule is easy to test. All times are Arizona time (UTC-7, no daylight saving).
-*/
+// Decides which push reminders are due.
 
 export type PushReminder = {
   kind: "care" | "window";

@@ -1,12 +1,8 @@
 import { doublePrecision, index, integer, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
-/*
-  Push reminders that arrive while sombra is closed. Nothing here names a person:
-  reminders carry a random key made on the phone, and the phone's service worker swaps
-  the key for the name it keeps locally when it shows the notification.
-*/
+// Push reminders that arrive while sombra is closed.
 
-/** One row per phone that turned on push reminders. Works without an account. */
+// One row per phone that turned on push reminders.
 export const pushSubscriptionsTable = pgTable(
   "push_subscriptions",
   {
@@ -45,7 +41,7 @@ export const pushRemindersTable = pgTable(
   ],
 );
 
-/** What has already been sent, so a reminder never goes out twice. Pruned after a few days. */
+// What has already been sent, so a reminder never goes out twice.
 export const pushSentTable = pgTable(
   "push_sent",
   {

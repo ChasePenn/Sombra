@@ -41,10 +41,7 @@ function popupHtml(spot: MapSpot, labels: { directions: string; call: string }) 
   return `<div class="map-pop"><strong>${escape(spot.label)}</strong><span>${escape(spot.detail)}</span><div class="map-pop-actions"><a href="${escape(spot.directions)}" target="_blank" rel="noreferrer">${escape(labels.directions)}</a>${call}</div></div>`;
 }
 
-/**
- * The cool spots map. Created once and updated in place, so following someone as they
- * walk never rebuilds it.
- */
+// The cool spots map.
 export default function SpotMap({ center, me, following, spots, selected, selectTick = 0, labels, onSelect, onLocate, onUserMove }: {
   center: Point;
   me: Me | null;
@@ -135,7 +132,7 @@ export default function SpotMap({ center, me, following, spots, selected, select
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // A new search point (picked a different place): go there, unless we're following the person.
+  // A new search point (picked a different place).
   useEffect(() => {
     if (map.current && !followRef.current) map.current.setView([center.lat, center.lon], Math.max(map.current.getZoom(), 14));
   }, [center.lat, center.lon]);

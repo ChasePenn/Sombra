@@ -1,6 +1,4 @@
-// sombra service worker: keeps the app shell available offline and shows reminders,
-// including push reminders that arrive while the app is closed.
-// API calls (/api/...) are never cached, so heat data and check-ins are always live.
+// sombra service worker: keeps the app shell available offline and shows reminders, including push reminders that arrive while the app is closed.
 const CACHE = 'sombra-v4';
 const SHELL = ['/', '/app', '/planner.html', '/manifest.webmanifest', '/brand/sombra-icon.svg', '/favicon-32.png'];
 
@@ -48,9 +46,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// --- Push reminders (arrive while sombra is closed) ---------------------------------------
-// The server sends only a type and a random key. Names live on this phone, in the small
-// database the app keeps for the service worker, and are filled in here.
+// Push reminders (arrive while sombra is closed)   The server sends only a type and a random key.
 
 const TEXT = {
   en: {
@@ -98,7 +94,7 @@ function readLabels() {
   });
 }
 
-/** Turns a push message into the notification people see. Exposed for tests. */
+// Turns a push message into the notification people see.
 function renderPush(data, labels) {
   const lang = (labels && labels.lang) || data.lang || 'en';
   const t = TEXT[lang] || TEXT.en;

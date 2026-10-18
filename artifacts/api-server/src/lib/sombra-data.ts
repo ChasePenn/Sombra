@@ -42,7 +42,7 @@ export type CheckinInput = {
 };
 
 function safeCheckin(input: CheckinInput, sessions: WorkerSession[]) {
-  // Older check-ins only recorded attendance; keep them. New ones always go through the safety rules.
+  // Older check-ins only recorded attendance; keep them.
   if (!["OK","CAUTION","DANGER"].includes(input.level) && input.symptomsJson.length === 0) return input;
   const at = Date.parse(input.time);
   const session = sessions.find((s)=>s.workerName === input.workerName && s.date === phoenixDate(at)) ?? emptySession(input.workerName,phoenixDate(at));

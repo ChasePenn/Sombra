@@ -11,8 +11,7 @@ const LOCAL_KEYS = {
   welcomeDismissed: "sombra.welcome-dismissed",
 };
 
-// Guests are the default and never touch the network. Account storage is
-// used only after Clerk has confirmed who is signed in.
+// Guests are the default and never touch the network.
 let accountUserId = null;
 
 export function setAccountSession(userId) {

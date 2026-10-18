@@ -10,10 +10,7 @@ export function registerServiceWorker() {
   });
 }
 
-/**
- * Show a reminder through the service worker when possible. iPhones (installed app)
- * and Android only allow notifications this way; plain `new Notification` is the fallback.
- */
+// Show a reminder through the service worker when possible.
 export async function showReminder(body: string, tag: string) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return false;
   try {

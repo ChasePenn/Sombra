@@ -5,7 +5,7 @@ import { disablePush, enablePush, needsHomeScreen, pushAvailable, pushIsOn, push
 import { Switch } from './Controls';
 import { Bell, BellOff } from './Icon';
 
-/** Turn closed-app reminders on or off. "settings" is a settings row; "inline" sits on Check on someone. */
+// Turn closed-app reminders on or off.
 export function PushControl({ variant }: { variant: 'settings' | 'inline' }) {
   const { lang } = useSession();
   const f = featureCopy[lang];
@@ -65,7 +65,7 @@ export function PushControl({ variant }: { variant: 'settings' | 'inline' }) {
     );
   }
 
-  // Settings row. Hidden entirely if this server has no push keys yet.
+  // Settings row.
   if (available === false) return null;
   return (
     <>

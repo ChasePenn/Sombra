@@ -13,7 +13,7 @@ export default function Welcome({ onDismiss }: { onDismiss: () => void }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(false);
   const track = useRef<HTMLDivElement>(null);
-  // Two steps only: what you're planning for, then your name. The app explains itself once it's open.
+  // Two steps only: what you're planning for, then your name.
   const slides = [
     { title: currentMode(previewLang).welcomeQuestion ?? '' },
     { title: t.aboutYou },

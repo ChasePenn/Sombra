@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSession } from '../lib/session';
 import { getPushState, syncPush } from '../lib/push';
 
-/** Mounted once. Keeps the server's reminder schedule in step with what's saved on this phone. */
+// Mounted once.
 export function PushHost() {
   const { lang } = useSession();
   useEffect(() => {

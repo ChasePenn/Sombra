@@ -1,10 +1,6 @@
 import saved from "../data/places.json";
 
-/*
-  The saved copy of cool spots for metro Phoenix and Tucson (scripts/fetch-places.mjs,
-  refreshed weekly). Answering from it means Cool spots doesn't depend on the busy public
-  OpenStreetMap servers while someone is standing in the heat waiting for it.
-*/
+// The saved copy of cool spots for metro Phoenix and Tucson.
 
 export type Snapshot = {
   updated: string;
@@ -34,11 +30,7 @@ function boxAround(lat: number, lon: number) {
   return { south: lat - dLat, north: lat + dLat, west: lon - dLon, east: lon + dLon };
 }
 
-/**
- * Places from the saved copy near a point, shaped like Overpass elements.
- * `complete` is false when the 3 km box reaches past the saved area, so the caller
- * knows a live lookup could find more.
- */
+// Places from the saved copy near a point, shaped like Overpass elements.
 export function snapshotElements(lat: number, lon: number, snapshot: Snapshot = savedPlaces) {
   const b = boxAround(lat, lon);
   const complete = snapshot.regions.some(({ box: [s, w, n, e] }) => b.south >= s && b.north <= n && b.west >= w && b.east <= e);

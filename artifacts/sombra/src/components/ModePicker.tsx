@@ -31,7 +31,7 @@ export function ModePicker({
   );
 }
 
-/** Always-visible switch on Today, so nobody mistakes sombra for a school-only (or work-only) app. */
+// Always-visible switch on Today, so nobody mistakes sombra for a school-only.
 export function ModeBar({
   lang,
   label,

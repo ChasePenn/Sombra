@@ -5,7 +5,7 @@ export type LegalDoc = { title: string; updated: string; intro: string; sections
 const CONTACT_URL = 'https://github.com/ChasePenn/Sombra/issues';
 export const legalContactUrl = CONTACT_URL;
 
-// Keep these in step with what the app really does. If a data flow changes, update the page and the date.
+// Keep these in step with what the app really does.
 const privacy: Record<Lang, LegalDoc> = {
   en: {
     title: 'Privacy Policy',

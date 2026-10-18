@@ -15,8 +15,7 @@ const requestedModeId = new URLSearchParams(window.location.search).get("mode") 
 const selectedModeId = requestedModeId === "workers" ? "work" : requestedModeId;
 const selectedMode = resolveAudienceMode(modeModules, selectedModeId);
 
-// Forecast hours and the sun angle use Arizona time (no daylight saving). Outside Arizona that
-// can differ from local time, so the planner says so instead of quietly showing shifted hours.
+// Forecast hours and the sun angle use Arizona time (no daylight saving).
 const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 && lon <= -109.0;
 
 (() => {
@@ -200,8 +199,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     for (const [element, { key, values }] of localizedMessages) {
       element.textContent = key ? translate(key, values) : "";
     }
-    // Only reformat the existing dates: a language switch must not change the
-    // user's chosen date (including when the page has stayed open overnight).
+    // Only reformat the existing dates.
     for (const input of dateInputs) {
       if (input.value) {
         document.querySelector(`#${input.id}-label`).textContent = formatDate(input.value);
@@ -610,9 +608,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
   };
   refreshShiftDates();
   applyPrefill();
-  // Someone arriving cold shouldn't have to fix the form before it's useful:
-  // - once today's default hours are over, plan for tomorrow instead of hours already gone;
-  // - if they already shared where they are elsewhere in sombra (the map), start from there.
+  // Someone arriving cold shouldn't have to fix the form before it's useful.
   const applyColdStartDefaults = () => {
     if (prefill || formTouched) return;
     const nowParts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: "America/Phoenix", hour: "2-digit", minute: "2-digit", hourCycle: "h23" })
@@ -800,8 +796,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
       strings: activeModeLocale(),
       formatTime: (time) => formatTime(time, timezone),
     });
-    // During the plan: the heat right now. Before it starts: the hottest it will get, so a
-    // cool 7 AM start never makes an Extreme afternoon look like a "Low heat" day.
+    // During the plan: the heat right now.
     const started = summary.currentHourIndex >= 0;
     const heroCategory = started ? summary.activeCategory : summary.peakCategory;
     const heroRisk = started ? summary.activeRisk : summary.peakRisk;
@@ -825,7 +820,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     summaryWbgt.textContent = Number.isFinite(activeWeather?.airTempF)
       ? translate("extras.readingLine", { air: Math.round(activeWeather.airTempF), wbgt: wbgtRounded })
       : translate("extras.readingWbgt", { wbgt: wbgtRounded });
-    // Plans can be for today or tomorrow; say which, so tomorrow's heat is never read as today's.
+    // Plans can be for today or tomorrow.
     const dayWord = started ? "" : `${translate(summary.isToday ? "ui.today" : "ui.tomorrow")} · `;
     todayMeta.textContent = dayWord + translate(
       started ? "results.currentAt" : "results.peakAt",
@@ -1076,7 +1071,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     });
     latestSchedule = schedule;
     if (window.parent !== window) {
-      // Lets the Today screen suggest the right tool (for example, Best time when it gets very hot).
+      // Lets the Today screen suggest the right tool.
       window.parent.postMessage({ type: "sombra:summary", maxCategory: Math.max(...schedule.hours.map((hour) => hour.category)) }, window.location.origin);
     }
     profileCaution.hidden = personalRiskFactors().length === 0;
@@ -1084,7 +1079,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     renderBringList();
   };
 
-  // --- Outdoor conditions (official alerts, UV, air quality) and what to bring ---
+  // Outdoor conditions (official alerts, UV, air quality) and what to bring
   let latestSchedule = null;
   let latestConditions = null;
   let conditionsRequest = 0;
@@ -1108,7 +1103,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
       return;
     }
     conditionsAlerts.replaceChildren();
-    // Inside the app, heat warnings already have their own card at the top of Today; don't repeat them here.
+    // Inside the app, heat warnings already have their own card at the top of Today.
     const embedded = window.parent !== window;
     const alerts = Array.isArray(data.alerts) ? data.alerts.filter((alert) => !(embedded && alert.kind === "heat")) : null;
     const heatShownAbove = Array.isArray(data.alerts) && alerts.length < data.alerts.length;
@@ -1242,7 +1237,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     if (site ? site.shade === "full_sun" : maxCategory >= 3) items.push(translate("extras.bringShade"));
     if (site && ["dark_roof", "asphalt"].includes(site.surface)) items.push(translate("extras.bringGloves"));
     if (air && ((air.aqi?.peak ?? 0) > 100 || (air.dustPeak ?? 0) >= 100)) items.push(translate("extras.bringMask"));
-    // Tap an item to tick it off while packing. Ticks are remembered for this plan on this device.
+    // Tap an item to tick it off while packing.
     const planKey = `sombra.bring:${activeShiftPayload?.date ?? ""}:${activeShiftPayload?.latitude ?? ""},${activeShiftPayload?.longitude ?? ""}`;
     let ticked = [];
     try { ticked = JSON.parse(localStorage.getItem(planKey) || "[]"); } catch { ticked = []; }

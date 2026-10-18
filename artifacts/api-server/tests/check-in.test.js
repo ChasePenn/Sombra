@@ -9,8 +9,7 @@ import { build } from "esbuild";
 import { personalize, validatePersonalization } from "../lib/ai.js";
 import { emptySession, phoenixDate, sessionContext } from "@workspace/heat-safety/session";
 
-// This file swaps in a fake store, so no database is used. The database module still checks
-// for a connection string when it loads (it is bundled and imported further down); a placeholder satisfies that without connecting.
+// This file swaps in a fake store, so no database is used.
 process.env.DATABASE_URL ??= "postgres://unused:unused@127.0.0.1:1/unused";
 
 const context = {...sessionContext(emptySession("Luis")),hoursWorked:2,waterCups:3,recommendedCups:6};

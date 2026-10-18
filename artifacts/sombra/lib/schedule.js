@@ -44,10 +44,7 @@ function categoryFor(wbgtF, categories) {
   return selected;
 }
 
-/**
- * One work, rest and water recommendation per forecast hour.
- * Each hour needs wbgtF, already adjusted for sun and the site.
- */
+// One work, rest and water recommendation per forecast hour.
 export function buildWorkRestSchedule({
   hours, intensity, newToHeat, table, categoryIncrease = 0, stopAtExtreme = false,
 }) {

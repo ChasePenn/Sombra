@@ -1,9 +1,4 @@
-/**
- * Minimal reader for OpenStreetMap opening_hours, covering the common forms:
- *   "24/7"   "Mo-Fr 09:00-17:00; Sa 10:00-14:00; Su off"   "Tu,Th 10:00-12:00,13:00-18:00"   "09:00-21:00"
- * Returns true (open), false (closed), or null when the format isn't understood,
- * so the app never claims a place is open unless it is sure.
- */
+// Minimal reader for OpenStreetMap opening_hours, covering the common forms.
 const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 function expandDays(spec) {

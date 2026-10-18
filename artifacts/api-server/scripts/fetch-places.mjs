@@ -1,11 +1,4 @@
-/*
-  Downloads every cool spot sombra lists (water fountains, libraries, community centers,
-  malls, shade shelters) for metro Phoenix and Tucson from OpenStreetMap, and saves them to
-  src/data/places.json. The server answers from this file, so Cool spots works even when the
-  shared OpenStreetMap servers are busy. A weekly GitHub workflow runs this again.
-
-  node scripts/fetch-places.mjs [out-file]
-*/
+// Downloads every cool spot sombra lists.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -65,11 +58,7 @@ async function download(box) {
   throw last;
 }
 
-/*
-  The public map servers are often busy. A failed download keeps the current file (the app
-  keeps working with it) and only fails the run, which emails the owner, once the saved
-  copy is getting old. The workflow runs weekly, so one bad week is harmless.
-*/
+// The public map servers are often busy.
 const STALE_DAYS = 40;
 async function giveUp(error) {
   let ageDays = Infinity;

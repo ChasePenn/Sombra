@@ -86,10 +86,7 @@ export const pushStore = {
     }));
   },
 
-  /**
-   * Claims a message before sending it. Only one server (or one overlapping round) can
-   * claim a given reminder, so nobody gets the same notification twice.
-   */
+  // Claims a message before sending it.
   async claim(id: string, dedupeKey: string) {
     const rows = await db.insert(pushSentTable).values({ subscriptionId: id, dedupeKey }).onConflictDoNothing().returning({ key: pushSentTable.dedupeKey });
     return rows.length > 0;

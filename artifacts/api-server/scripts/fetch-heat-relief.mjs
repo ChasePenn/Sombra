@@ -1,10 +1,4 @@
-/*
-  Saves the official Heat Relief Network sites (Maricopa Association of Governments) to
-  src/data/heat-relief.json. The server asks the live feed first; this copy is what it
-  uses if the feed can't be reached. Run weekly by the "Cool spots data" workflow.
-
-  node scripts/fetch-heat-relief.mjs [out-file]
-*/
+// Saves the official Heat Relief Network sites.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

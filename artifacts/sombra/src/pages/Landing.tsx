@@ -7,7 +7,7 @@ import { featureCopy } from '../lib/features-copy';
 
 const modeTone: Record<string, string> = { work: 'tone-orange', school: 'tone-blue', everyday: 'tone-green' };
 
-/** Colors the last two words of the headline ("Phoenix heat."), the one bit of color in the hero. */
+// Colors the last two words of the headline.
 function headline(text: string) {
   const words = text.split(' ');
   if (words.length < 4) return text;

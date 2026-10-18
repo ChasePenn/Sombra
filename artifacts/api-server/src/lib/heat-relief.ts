@@ -1,14 +1,6 @@
 import saved from "../data/heat-relief.json";
 
-/*
-  The official Heat Relief Network for metro Phoenix: cooling centers, hydration stations
-  and respite centers run by cities, nonprofits and churches, published by the Maricopa
-  Association of Governments (https://azmag.gov/Programs/Heat-Relief-Network).
-
-  The public map's data feed is queried directly (it's hosted by Esri and reliable), kept
-  for 6 hours, and backed by a saved copy (scripts/fetch-heat-relief.mjs, refreshed weekly)
-  for when it can't be reached.
-*/
+// The official Heat Relief Network for metro Phoenix.
 
 export const HRN_URL = "https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/HRN_Public_view/FeatureServer/0/query";
 const FIELDS = [
