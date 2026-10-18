@@ -84,12 +84,11 @@ export default function Crew() {
   return (
     <AppShell>
       <div className="page">
-        <PageHead story="others" title={t.crew} lead={t.crewSub}
+        <PageHead story="others" title={t.crew}
           action={crew && crew.length > 0 ? <button type="button" className="btn btn-secondary" style={{ minHeight: 48, padding: '0 14px' }} onClick={openNew}><Plus size={20} aria-hidden="true" />{t.addPerson}</button> : undefined} />
         {rings.length > 0 && (
           <section className="rings-wrap" aria-labelledby="rings-h">
             <h2 id="rings-h" className="group-label" style={{ marginTop: 0 }}>{ci.crewToday}</h2>
-            <p className="seg-hint" style={{ margin: '0 4px 10px' }}>{ci.crewTap}</p>
             <ul className="rings">
               {rings.map(({ name, last }) => {
                 const lvl = last && isLevel(last.level) ? last.level : null;

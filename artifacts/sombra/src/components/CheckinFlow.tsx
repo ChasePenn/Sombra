@@ -70,7 +70,7 @@ export function ResultSheet({ lang, result, ctx, name, saveError, onClose, close
   return (
     <Sheet title={lvl === 'CAUTION' ? c.resultTitle_CAUTION : c.resultTitle_OK} onClose={onClose} closeLabel={closeLabel}>
       <div className={`result lvl-${lvl.toLowerCase()}`}>
-        <span className="lvl-pill">{c[`level_${lvl}`]}</span>
+        <span className={`lvl-pill${lvl === 'OK' ? ' lvl-ok-stamp' : ''}`}>{c[`level_${lvl}`]}</span>
         <NumbersLine ctx={ctx} lang={lang} />
         {aid && (
           <section className="aid" aria-labelledby="aid-title">

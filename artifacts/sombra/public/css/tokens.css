@@ -1,21 +1,23 @@
 :root {
   --ink: #2A1206;
   --ink-soft: #6B5243;
-  --line: #E3D6C8;
-  --canvas: #F5EFE7;
-  --card: #FCF9F4;
+  --line: #F0DCCB;
+  --canvas: #FFF6EE;
+  --card: #FFFDFA;
   /* One accent. White text on it, and it as text on paper or sand, both pass WCAG AA (4.5:1). */
   --mesquite: #A63B0B;
   --mesquite-dark: #7F2E06;
-  --mesquite-tint: #ECE1D3;
-  --sand: #ECE1D3;
-  --edge: #D9C8B6;
+  --mesquite-tint: #FBE6D8;
+  --sand: #FBE6D8;
+  --edge: #E5CBB6;
+  --sun: #E8591A;
+  --sun-dark: #A63B0B;
   --danger-tint: #F3DDD4;
   --pear: #3A1607;
   --pear-dark: #1A0902;
   --monsoon: #1D5F8F;
   --monsoon-dark: #164B72;
-  --monsoon-tint: #ECE1D3;
+  --monsoon-tint: #E3EEF6;
 
   --r-low: #2FA36B;
   --r-caution: #9BC53D;

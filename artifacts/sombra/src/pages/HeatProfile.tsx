@@ -41,7 +41,7 @@ export default function HeatProfile() {
           })}
         </div>
         {failed && <p className="error" role="alert">{f.saveFailed}</p>}
-        <p className={selected.length ? 'status-on' : 'notice'} role="status">{selected.length ? f.profileActive : f.profileNone}</p>
+        {selected.length > 0 && <p className="status-on" role="status">{f.profileActive}</p>}
         <p className="fine-print">{f.profileNote}</p>
         <NextStep href="/app" story="before" Icon={Calendar}>{f.nextProfile}</NextStep>
         {/* Sliders and About live here, so the top bar stays simple. */}

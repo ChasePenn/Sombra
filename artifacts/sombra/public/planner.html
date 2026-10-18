@@ -39,7 +39,6 @@
       <main>
         <section class="intro" aria-labelledby="page-title">
           <h1 id="page-title" data-mode-copy="pageTitle"></h1>
-          <p class="intro-lede" data-mode-copy="introDescription"></p>
         </section>
 
         <section class="planner" data-mode-aria="plannerLabel">
@@ -58,7 +57,7 @@
                     <span class="field-icon pin-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><path d="M10.5 7.5h3v3h-3z"/></svg>
                     </span>
-                    <input id="location-search" type="search" autocomplete="off" data-mode-placeholder="locationPlaceholder" aria-describedby="location-help location-status" aria-controls="location-options" aria-autocomplete="list" required>
+                    <input id="location-search" type="search" autocomplete="off" data-mode-placeholder="locationPlaceholder" aria-describedby="location-status" aria-controls="location-options" aria-autocomplete="list" required>
                     <button id="clear-location" class="clear-location" type="button" data-mode-aria="clearLocation" hidden>×</button>
                     <input id="latitude" type="hidden">
                     <input id="longitude" type="hidden">
@@ -70,7 +69,6 @@
                     <span data-mode-copy="useLocation"></span>
                   </button>
                 </div>
-                <p class="field-help" id="location-help" data-mode-copy="locationHelp"></p>
                 <p class="inline-status" id="location-status" role="status" aria-live="polite"></p>
                 <p class="arizona-note" id="arizona-note" role="note" data-i18n="extras.outsideArizona" hidden></p>
               </div>
@@ -123,7 +121,6 @@
                   <label class="choice-pill"><input type="radio" name="newToHeat" value="yes" required><span data-mode-copy="yes"></span></label>
                   <label class="choice-pill"><input type="radio" name="newToHeat" value="no"><span data-mode-copy="no"></span></label>
                 </div>
-                <p class="field-help" data-mode-copy="newToHeatHelp"></p>
               </fieldset>
               </div>
 
@@ -225,7 +222,6 @@
             <div class="site-check-heading">
               <div>
                 <h3 id="site-check-title" data-i18n="results.siteHeading"></h3>
-                <p data-i18n="results.sitePrivacy"></p>
               </div>
             </div>
             <div class="site-check-actions">
