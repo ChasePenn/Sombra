@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
 import { Link } from 'wouter';
-import { ChevronRight } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
+import { ChevronRight, type IconComponent } from './Icon';
 
 /*
   sombra follows one day in the heat: before you go, while you're out, looking out for
@@ -34,7 +33,7 @@ export function PageHead({ story, title, lead, action }: { story: Story; title: 
 }
 
 /** The natural next step after this screen, in the color of the part of the day it leads to. */
-export function NextStep({ href, story, Icon, children }: { href: string; story: Story; Icon: LucideIcon; children: ReactNode }) {
+export function NextStep({ href, story, Icon, children }: { href: string; story: Story; Icon: IconComponent; children: ReactNode }) {
   return (
     <Link href={href} className={`next-step ${storyTone[story]}`}>
       <span className="quick-icon"><Icon size={20} strokeWidth={2.2} aria-hidden="true" /></span>

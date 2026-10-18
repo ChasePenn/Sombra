@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { roundedQuery } from '../../public/js/geo.js';
-import { Phone, Check } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { fill } from '../lib/copy';
 import { featureCopy } from '../lib/features-copy';
@@ -11,6 +10,7 @@ import { showReminder } from '../lib/pwa';
 import { pushIsOn } from '../lib/push';
 import { phoenixNow } from '../lib/time';
 import { Sheet } from './Sheet';
+import { Check, Phone } from './Icon';
 
 const NOTIFIED = 'sombra.care-notified';
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
-import { TriangleAlert } from 'lucide-react';
 import { getLastPlace } from '../lib/local';
+import { Alert } from './Icon';
 
 type Alert = { event: string; kind: string };
 
@@ -47,7 +47,7 @@ export function HeatBanner() {
   return (
     <div role="status">
       <Link href="/app" className="heat-banner">
-        <TriangleAlert size={18} aria-hidden="true" />
+        <Alert size={18} aria-hidden="true" />
         <span>{alert.event}</span>
       </Link>
     </div>

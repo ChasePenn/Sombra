@@ -8,6 +8,8 @@ import CheckIn from './pages/CheckIn';
 import Crew from './pages/Crew';
 import Settings from './pages/Settings';
 import About from './pages/About';
+import { Privacy, Terms } from './pages/Legal';
+import { legalUi } from './lib/legal-copy';
 import BestTime from './pages/BestTime';
 import CoolSpots from './pages/CoolSpots';
 import CareCheck from './pages/CareCheck';
@@ -42,12 +44,12 @@ const appearance = {
     colorNeutral: ink,
     fontFamily: "'Atkinson Hyperlegible', system-ui, sans-serif",
     fontFamilyButtons: "'Rubik', system-ui, sans-serif",
-    borderRadius: '12px',
+    borderRadius: '4px',
     fontSize: '16px',
   },
   elements: {
     rootBox: { width: '100%' },
-    cardBox: { width: '100%', maxWidth: '100%', background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '16px', boxShadow: 'none' },
+    cardBox: { width: '100%', maxWidth: '100%', background: 'var(--card)', border: '1px solid var(--line)', borderRadius: '6px', boxShadow: 'none' },
     card: { boxShadow: 'none', border: 0, background: 'transparent' },
     footer: { background: 'transparent', boxShadow: 'none' },
     header: { display: 'none' },
@@ -107,6 +109,8 @@ function usePageTitle(location: string) {
       '/app/profile': f.profileTitle,
       '/settings': t.settings,
       '/about': aboutCopy[lang].title,
+      '/privacy': legalUi[lang].privacy,
+      '/terms': legalUi[lang].terms,
     };
     const path = location.replace(/\/+$/, '') || '/';
     let name = titles[path];
@@ -147,6 +151,8 @@ function Routes() {
       <Route path="/app/profile" component={HeatProfile} />
       <Route path="/settings" component={Settings} />
       <Route path="/about" component={About} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
       <Route path="/sign-in/*?" component={SignInPage} />
       <Route path="/sign-up/*?" component={SignUpPage} />
       <Route component={NotFound} />

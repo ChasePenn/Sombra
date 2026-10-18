@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { LocateFixed, MapPin, Search } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { fill } from '../lib/copy';
 import { getLastPlace, setLastPlace, type Place } from '../lib/local';
 import { useLocate } from '../lib/location';
+import { Locate, Pin, Search } from './Icon';
 
 type Result = { name: string; admin1?: string | null; latitude: number; longitude: number };
 
@@ -69,7 +69,7 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
     return (
       <>
         <div className="place-row">
-          <span className="place-icon" aria-hidden="true"><MapPin size={18} /></span>
+          <span className="place-icon" aria-hidden="true"><Pin size={18} /></span>
           <span className="place-name">{isMyLocation(value.name) ? f.nearYou : fill(f.near, { place: value.name })}</span>
           <button type="button" className="btn-quiet place-change" onClick={() => setEditing(true)}>{f.change}</button>
         </div>
@@ -99,7 +99,7 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
         </ul>
       )}
       <button type="button" className="btn btn-secondary btn-block" onClick={locate} disabled={finder.state.kind === 'busy'} aria-busy={finder.state.kind === 'busy'}>
-        <LocateFixed size={18} aria-hidden="true" />{f.useMyLocation}
+        <Locate size={18} aria-hidden="true" />{f.useMyLocation}
       </button>
       {finder.state.kind === 'busy' && <p className="place-status" role="status">{finder.state.text}</p>}
       {finder.state.kind === 'failed' && <p className="place-status place-problem" role="alert">{finder.state.text}</p>}

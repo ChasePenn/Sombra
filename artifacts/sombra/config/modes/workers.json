@@ -3,7 +3,7 @@
   "locales": {
     "en": {
       "ui": {
-        "documentTitle": "sombra — Heat plan",
+        "documentTitle": "sombra · Heat plan",
         "metaDescription": "Hourly heat guidance with a simple plan for breaks and water.",
         "aboutLabel": "About sombra",
         "desktopTitle": "Hourly forecasts for your jobsite",
@@ -561,7 +561,7 @@
     },
     "es": {
       "ui": {
-        "documentTitle": "sombra — Plan para el calor",
+        "documentTitle": "sombra · Plan para el calor",
         "metaDescription": "Guía de calor por hora con un plan sencillo de descansos y agua.",
         "aboutLabel": "Acerca de sombra",
         "desktopTitle": "Pronóstico por hora para tu área de trabajo",

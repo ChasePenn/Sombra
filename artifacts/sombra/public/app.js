@@ -548,7 +548,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
 
   const formatTime = (value, timezone = "America/Phoenix") => {
     const raw = safeText(value);
-    if (!raw) return "—";
+    if (!raw) return "–";
     const clock = raw.match(/^(\d{1,2}):(\d{2})$/);
     if (clock) {
       try {
@@ -633,11 +633,11 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
   applyColdStartDefaults();
   const formatValue = (value, suffix = "") => {
     const number = Number(value);
-    return Number.isFinite(number) ? `${Math.round(number)}${suffix}` : "—";
+    return Number.isFinite(number) ? `${Math.round(number)}${suffix}` : "–";
   };
   const formatWbgt = (value) => {
     const number = Number(value);
-    if (!Number.isFinite(number)) return "—";
+    if (!Number.isFinite(number)) return "–";
     return `${Number.isInteger(number) ? number : number.toFixed(1)}°F`;
   };
 
@@ -760,7 +760,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
       const drop = document.createElementNS("http://www.w3.org/2000/svg", "svg");
       drop.setAttribute("viewBox", "0 0 24 24");
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", "M12 2C10 6 5 10 5 15a7 7 0 0 0 14 0c0-5-5-9-7-13Z");
+      path.setAttribute("d", "M12 3l-5.4 8.2a6.5 6.5 0 1 0 10.8 0z");
       drop.append(path);
       icons.append(drop);
     }

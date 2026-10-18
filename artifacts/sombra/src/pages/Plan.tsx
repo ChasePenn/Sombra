@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { X } from 'lucide-react';
 import * as store from '../../public/js/store.js';
 import { useSession } from '../lib/session';
 import { AppShell, useSelectMode } from '../components/AppShell';
@@ -8,9 +7,9 @@ import { ModeBar } from '../components/ModePicker';
 import Welcome from './Welcome';
 import { audienceModeId, modeQuery } from '../lib/copy';
 import { ContextCards } from '../components/ContextCards';
-import { Clock } from 'lucide-react';
 import { NextStep } from '../components/Story';
 import { featureCopy } from '../lib/features-copy';
+import { Clock, X } from '../components/Icon';
 
 const PREFILL_KEYS = ['lat', 'lon', 'place', 'date', 'start', 'end', 'intensity'];
 

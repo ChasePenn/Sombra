@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useLocation } from 'wouter';
-import { Pencil, Plus, Users } from 'lucide-react';
 import * as store from '../../public/js/store.js';
 import type { Checkin, CrewMember } from '../../public/js/store.js';
 import { checkInCopy, fill } from '../lib/copy';
@@ -12,6 +11,7 @@ import { PageHead } from '../components/Story';
 import { setGroupEnabled } from '../lib/local';
 import { Sheet } from '../components/Sheet';
 import { IntensityPicker, Switch } from '../components/Controls';
+import { Pencil, Plus, Users } from '../components/Icon';
 
 type Draft = { index: number | null; name: string; intensity: Intensity; newToHeat: boolean };
 

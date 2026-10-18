@@ -1,7 +1,7 @@
 // sombra service worker: keeps the app shell available offline and shows reminders,
 // including push reminders that arrive while the app is closed.
 // API calls (/api/...) are never cached, so heat data and check-ins are always live.
-const CACHE = 'sombra-v3';
+const CACHE = 'sombra-v4';
 const SHELL = ['/', '/app', '/planner.html', '/manifest.webmanifest', '/brand/sombra-icon.svg', '/favicon-32.png'];
 
 self.addEventListener('install', (event) => {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Share, X } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { shouldShowIosInstallTip } from '../lib/pwa';
+import { Share, X } from './Icon';
 
 const KEY = 'sombra.install-tip-dismissed';
 

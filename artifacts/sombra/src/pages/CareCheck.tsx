@@ -1,7 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { roundedQuery } from '../../public/js/geo.js';
 import { Link } from 'wouter';
-import { Check, ChevronRight, Droplet, Lock, Phone, Plus, Trash2, TriangleAlert, Users } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { NextStep, PageHead } from '../components/Story';
 import { Sheet } from '../components/Sheet';
@@ -12,6 +11,7 @@ import { featureCopy } from '../lib/features-copy';
 import { getCareContacts, getLastPlace, isGroupEnabled, saveCareContacts, type CareContact } from '../lib/local';
 import { checkedTodayAt, markChecked, overdueMinutes } from '../lib/care';
 import { clock } from '../lib/time';
+import { Alert, Check, ChevronRight, Drop, Lock, Phone, Plus, Trash, Users } from '../components/Icon';
 
 const initials = (name: string) => name.trim().split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
 
@@ -83,7 +83,7 @@ export default function CareCheck() {
         <p className="privacy-note"><Lock size={16} aria-hidden="true" />{f.carePrivacy}</p>
         {/* Reminder and heat-warning notes only matter once someone is on the list. */}
         {contacts.length > 0 && <PushControl variant="inline" />}
-        {heatWarning && contacts.length > 0 && <p className="alert-strip" role="status"><TriangleAlert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
+        {heatWarning && contacts.length > 0 && <p className="alert-strip" role="status"><Alert size={18} aria-hidden="true" />{f.careWarnOn}</p>}
 
         {msg && (
           <p className={msg.error ? 'error' : 'notice success-msg'} role={msg.error ? 'alert' : 'status'}>
@@ -103,7 +103,7 @@ export default function CareCheck() {
                     <strong>{c.name}</strong>
                     <small className={!at && overdueMinutes(c) > 0 ? 'care-late' : undefined}>{at ? fill(f.careCheckedAt, { time: clock(at, lang) }) : overdueMinutes(c) > 0 ? fill(f.careOverdue, { mins: overdueMinutes(c) }) : fill(f.careNotYet, { time: clock(c.time, lang) })}</small>
                   </span>
-                  <button type="button" className="icon-btn" aria-label={`${f.careRemove} ${c.name}`} onClick={() => remove(c.id)}><Trash2 size={18} /></button>
+                  <button type="button" className="icon-btn" aria-label={`${f.careRemove} ${c.name}`} onClick={() => remove(c.id)}><Trash size={18} /></button>
                 </div>
                 <div className="care-actions">
                   {c.phone && <a className="btn btn-secondary" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}><Phone size={18} aria-hidden="true" />{f.careCall}</a>}
@@ -127,7 +127,7 @@ export default function CareCheck() {
           </span>
           <ChevronRight size={20} aria-hidden="true" className="landing-mode-arrow" />
         </Link>
-        <NextStep href="/app/cool-spots" story="out" Icon={Droplet}>{f.nextCare}</NextStep>
+        <NextStep href="/app/cool-spots" story="out" Icon={Drop}>{f.nextCare}</NextStep>
       </div>
 
       {adding && (

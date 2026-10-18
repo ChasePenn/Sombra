@@ -1,8 +1,7 @@
 import { Link, Redirect } from 'wouter';
-import { ChevronRight, Droplet } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { availableModes, modeQuery, modeWasChosen } from '../lib/copy';
-import { Icon } from '../components/Icon';
+import { ChevronRight, Icon } from '../components/Icon';
 import { DayStory } from '../components/DayStory';
 import { featureCopy } from '../lib/features-copy';
 
@@ -24,17 +23,11 @@ export default function Landing() {
         <p className="landing-sub">{modeWasChosen ? t.landingSub : featureCopy[lang].landingSubAll}</p>
       </section>
 
-      {/* A small, static preview of the real app so people see what they get before tapping anything. */}
-      <div className="preview" aria-hidden="true">
-        <div className="preview-today">
-          <span className="preview-time">{t.previewTime}</span>
-          <strong>{t.previewLevel}</strong>
-          <span className="preview-gauge"><i /><i /><i /><i /><i /><i className="off" /></span>
-          <span className="preview-advice">{t.previewAdvice}</span>
-        </div>
-        <div className="preview-chip preview-chip-check"><span className="preview-ring">AM</span>{t.previewCheck}</div>
-        <div className="preview-chip preview-chip-water"><Droplet size={18} fill="currentColor" />{t.previewWater}</div>
-      </div>
+      {/* A screenshot of the real planner, so people see the actual app before tapping anything. */}
+      <figure className="demo">
+        <img src={`${import.meta.env.BASE_URL}demo/plan-${lang}.webp`} width={390} height={560} alt={featureCopy[lang].demoAlt} loading="eager" />
+        <figcaption>{featureCopy[lang].demoCaption}</figcaption>
+      </figure>
 
       <div className="landing-actions">
         <Link href={`/app${modeQuery}`} className="btn btn-primary btn-block">{t.getStarted}</Link>
@@ -63,7 +56,8 @@ export default function Landing() {
         <span>{t.free}</span>
         <nav className="foot-links" aria-label={t.about}>
           <Link href="/about">{t.about}</Link>
-          <Link href="/about#privacy">{t.privacyLink}</Link>
+          <Link href="/privacy">{t.privacyLink}</Link>
+          <Link href="/terms">{featureCopy[lang].termsLink}</Link>
           <Link href="/about#sources">{t.sourcesLink}</Link>
         </nav>
         <small>© {new Date().getFullYear()} sombra</small>

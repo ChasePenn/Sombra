@@ -1,8 +1,7 @@
-import { Icon } from './Icon';
+import { ChevronDown, Icon } from './Icon';
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 import * as store from '../../public/js/store.js';
-import { ChevronDown } from 'lucide-react';
 import { audienceModeId, availableModes, currentMode, modeUi, navigateToMode, type AudienceModeId, type Lang } from '../lib/copy';
 import { useSession } from '../lib/session';
 import { Sheet } from './Sheet';

@@ -25,7 +25,7 @@ const en = {
 
   // Heat profile tips
   tips: {
-    age65: 'Older bodies sweat less and feel thirst later. Drink on a schedule, not just when thirsty.',
+    age65: 'Older bodies sweat less and feel thirst later. Drink on a schedule, before you feel thirsty.',
     child: "Young kids heat up fast and can't tell you early. Never leave them in a car, and plan play for the coolest hours.",
     pregnant: 'Pregnancy raises body temperature. Take shade breaks often and stop at the first sign of dizziness.',
     heart: 'Heat makes your heart work harder. Keep exertion light during hot hours and know your warning signs.',
@@ -200,6 +200,9 @@ const en = {
   tabYou: 'You',
   todayBest: 'Find the coolest time today',
   modeBarLabel: 'Planning for',
+  demoAlt: 'sombra on a phone: an Extreme heat plan for Phoenix with 40-minute shade breaks every hour from 1 PM to 4 PM, then an hour-by-hour list of work and rest minutes and cups of water.',
+  demoCaption: 'A plan in sombra for a hot afternoon in Phoenix.',
+  termsLink: 'Terms',
   modeChipHint: 'Switch mode',
   nextCool: 'Cooled off? Check how you feel',
   nextCare: 'Need a cool place for them? See the map',
@@ -287,7 +290,7 @@ const es: FeatureCopy = {
   reminderCancel: 'Cancelar recordatorio',
 
   tips: {
-    age65: 'Con la edad se suda menos y la sed llega tarde. Toma agua con horario, no solo cuando tengas sed.',
+    age65: 'Con la edad se suda menos y la sed llega tarde. Toma agua con horario, antes de sentir sed.',
     child: 'Los niños pequeños se calientan rápido y no avisan a tiempo. Nunca los dejes en un auto y planea el juego en las horas más frescas.',
     pregnant: 'El embarazo sube la temperatura del cuerpo. Descansa en la sombra seguido y detente al primer mareo.',
     heart: 'El calor hace trabajar más al corazón. Haz poco esfuerzo en las horas calientes y conoce tus señales de alerta.',
@@ -456,6 +459,9 @@ const es: FeatureCopy = {
   tabYou: 'Tú',
   todayBest: 'Encuentra la hora más fresca de hoy',
   modeBarLabel: 'Planeando para',
+  demoAlt: 'sombra en un teléfono: un plan de calor extremo para Phoenix con descansos de 40 minutos a la sombra cada hora de 1 PM a 4 PM, y una lista por hora de minutos de trabajo y descanso y vasos de agua.',
+  demoCaption: 'Un plan de sombra para una tarde calurosa en Phoenix.',
+  termsLink: 'Términos',
   modeChipHint: 'Cambiar de modo',
   nextCool: '¿Ya te refrescaste? Revisa cómo te sientes',
   nextCare: '¿Necesitan un lugar fresco? Ve el mapa',

@@ -1,6 +1,4 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, Droplet, Droplets, House, Navigation, Phone, ShoppingBag, Building2, Snowflake, Umbrella, Stethoscope } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { NextStep, PageHead } from '../components/Story';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
@@ -14,6 +12,7 @@ import { follow, metersBetween, permission, platform, roundedQuery, type Fix } f
 import { isOpenNow } from '../../lib/opening-hours.js';
 import type { MapKind } from '../components/SpotMap';
 import { pickCoolDown, walkMinutes, type CoolPick } from '../../lib/cool-now.js';
+import { Bag, Book, Building, Drop, Drops, Go, House, Phone, Snowflake, Thermometer, Umbrella, type IconComponent } from '../components/Icon';
 
 const SpotMap = lazy(() => import('../components/SpotMap'));
 
@@ -35,9 +34,10 @@ type Item = {
   accessible: boolean | null; pets: boolean | null;
 };
 
-const kindIcon: Record<Kind, LucideIcon> = { water: Droplet, library: BookOpen, community: Building2, mall: ShoppingBag, shade: Umbrella, cooling: Snowflake, hydration: Droplets, respite: House };
+const kindIcon: Record<Kind, IconComponent> = { water: Drop, library: Book, community: Building, mall: Bag, shade: Umbrella, cooling: Snowflake, hydration: Drops, respite: House };
 const kindTone: Record<Kind, string> = { water: 'tone-blue', library: 'tone-orange', community: 'tone-green', mall: 'tone-brown', shade: 'tone-green', cooling: 'tone-blue', hydration: 'tone-blue', respite: 'tone-green' };
-const kindColor: Record<Kind, string> = { water: '#2F86C9', library: '#FF6A2B', community: '#2FA36B', mall: '#3A1607', shade: '#2FA36B', cooling: '#1F5FA8', hydration: '#1F5FA8', respite: '#23805A' };
+// Three pin colors: blue for water, the accent for official cooling sites, dark brown for everything else.
+const kindColor: Record<Kind, string> = { water: '#1D5F8F', library: '#3A1607', community: '#3A1607', mall: '#3A1607', shade: '#3A1607', cooling: '#A63B0B', hydration: '#1D5F8F', respite: '#A63B0B' };
 const filterKinds: Record<Filter, Kind[]> = {
   all: ['water', 'library', 'community', 'mall', 'shade', 'cooling', 'hydration', 'respite'],
   official: ['cooling', 'hydration', 'respite'],
@@ -414,7 +414,7 @@ export default function CoolSpots() {
                   {pick.hoursUnknown && <p className="cool-now-note">{f.coolNowHoursUnknown}</p>}
                   {(pick.best as Item).note && <p className="cool-now-note">{(pick.best as Item).note}</p>}
                   <div className="cool-now-actions">
-                    <a className="btn btn-primary" href={directionsUrl(pick.best, pick.best.distanceM)} target="_blank" rel="noreferrer"><Navigation size={20} aria-hidden="true" />{f.coolNowGo}</a>
+                    <a className="btn btn-primary" href={directionsUrl(pick.best, pick.best.distanceM)} target="_blank" rel="noreferrer"><Go size={20} aria-hidden="true" />{f.coolNowGo}</a>
                     {pick.best.phone && <a className="btn btn-secondary" href={`tel:${pick.best.phone.replace(/[^\d+]/g, '')}`}><Phone size={20} aria-hidden="true" />{f.careCall}</a>}
                   </div>
                   {pick.others.length > 0 && (
@@ -425,7 +425,7 @@ export default function CoolSpots() {
                           <li key={o.id}>
                             <a href={directionsUrl(o, o.distanceM)} target="_blank" rel="noreferrer">
                               <span><strong>{label(o as Item)}</strong><small>{[o.name ? f[`kind_${o.kind}`] : null, fill(f.coolNowWalk, { min: walkMinutes(o.distanceM) })].filter(Boolean).join(' · ')}</small></span>
-                              <Navigation size={18} aria-hidden="true" />
+                              <Go size={18} aria-hidden="true" />
                             </a>
                           </li>
                         ))}
@@ -515,7 +515,7 @@ export default function CoolSpots() {
                   {/* Calling is on the map card and in Cool down now; one button keeps the row readable. */}
                   <a className="icon-btn spot-go" aria-label={`${f.directions}: ${label(s)}`}
                     href={directionsUrl(s, s.distanceM)} target="_blank" rel="noreferrer">
-                    <Navigation size={20} />
+                    <Go size={20} />
                   </a>
                 </li>
               );
@@ -523,7 +523,7 @@ export default function CoolSpots() {
           </ul>
         )}
 
-        <NextStep href="/app/check-in" story="out" Icon={Stethoscope}>{f.nextCool}</NextStep>
+        <NextStep href="/app/check-in" story="out" Icon={Thermometer}>{f.nextCool}</NextStep>
 
         <aside className="relief-card">
           {/* What the official network says about its own season, not a guess from the calendar. */}

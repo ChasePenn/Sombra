@@ -46,7 +46,7 @@
         "signUpSub": "Save your plans and team. Guest mode still works without an account."
       },
       "ui": {
-        "documentTitle": "sombra — School heat safety",
+        "documentTitle": "sombra · School heat safety",
         "metaDescription": "Heat safety for school sports and outdoor activities.",
         "desktopTitle": "Heat guidance for your team",
         "desktopDescription": "Plan practice around the hourly heat, with shade breaks built in.",
@@ -158,7 +158,7 @@
         "signUpSub": "Guarda tus planes y equipo. También puedes usar sombra sin cuenta."
       },
       "ui": {
-        "documentTitle": "sombra — Seguridad escolar contra el calor",
+        "documentTitle": "sombra · Seguridad escolar contra el calor",
         "metaDescription": "Orientación contra el calor para deportes y actividades escolares al aire libre.",
         "desktopTitle": "Orientación para tu equipo",
         "desktopDescription": "Planea la práctica según el calor de cada hora, con descansos a la sombra incluidos.",

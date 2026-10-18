@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Bell, BellOff } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { disablePush, enablePush, needsHomeScreen, pushAvailable, pushIsOn, pushSupported, sendTestPush, type EnableResult } from '../lib/push';
 import { Switch } from './Controls';
+import { Bell, BellOff } from './Icon';
 
 /** Turn closed-app reminders on or off. "settings" is a settings row; "inline" sits on Check on someone. */
 export function PushControl({ variant }: { variant: 'settings' | 'inline' }) {

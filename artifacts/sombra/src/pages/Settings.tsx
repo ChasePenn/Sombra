@@ -1,7 +1,6 @@
 import { showReminder } from '../lib/pwa';
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useClerk, useUser } from '@clerk/react';
 import * as store from '../../public/js/store.js';
 import type { SombraProfile } from '../../public/js/store.js';
@@ -13,6 +12,8 @@ import { PushControl } from '../components/PushControl';
 import { ModePicker } from '../components/ModePicker';
 import { audienceModeId, currentMode, navigateToMode } from '../lib/copy';
 import type { AudienceModeId } from '../lib/copy';
+import { ChevronLeft, ChevronRight } from '../components/Icon';
+import { legalUi } from '../lib/legal-copy';
 
 const blank: SombraProfile = { name: '', language: 'en', mode: audienceModeId, usualIntensity: 'moderate', newToHeat: false, notificationsEnabled: false };
 
@@ -150,6 +151,8 @@ export default function Settings() {
         <h2 className="group-label">{t.about}</h2>
         <div className="group">
           <Link href="/about" className="row"><span className="row-main">{t.aboutSombra}<small>{t.sourcesPrivacy}</small></span><ChevronRight size={20} aria-hidden="true" /></Link>
+          <Link href="/privacy" className="row"><span className="row-main">{legalUi[lang].privacy}</span><ChevronRight size={20} aria-hidden="true" /></Link>
+          <Link href="/terms" className="row"><span className="row-main">{legalUi[lang].terms}</span><ChevronRight size={20} aria-hidden="true" /></Link>
         </div>
       </main>
       {confirm && (

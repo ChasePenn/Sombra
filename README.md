@@ -8,7 +8,7 @@ sombra turns the forecast for your exact spot into an hour-by-hour plan that say
 
 ## What it does
 
-- **Real heat stress, not just temperature.** Calculates outdoor wet-bulb globe temperature (WBGT) hour by hour with the Liljegren model, the method behind OSHA's outdoor WBGT calculator.
+- **Heat stress from sun, humidity and wind.** Calculates outdoor wet-bulb globe temperature (WBGT) hour by hour with the Liljegren model, the method behind OSHA's outdoor WBGT calculator.
 - **Hour-by-hour work and rest plan** from the U.S. Army TB MED 507 work/rest and water table, color-coded from Low to Extreme.
 - **Site check.** Take a photo and an on-device model recognizes the surface (dark roof, asphalt, grass…) and shade, then adjusts the plan. Photos never leave the phone. You can also pick the surface yourself.
 - **Check-ins.** Quick symptom check-ins with fixed safety rules: signs of heat stroke always open first-aid steps and a Call 911 button. Non-emergency messages are personalized with the worker's real numbers.

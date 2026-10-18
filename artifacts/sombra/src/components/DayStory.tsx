@@ -1,11 +1,10 @@
 import { Link } from 'wouter';
-import { CalendarClock, Clock, Droplet, HeartPulse, PhoneCall, Stethoscope } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { storyTone, useStoryLabel, type Story } from './Story';
+import { Calendar, Clock, Drop, Heart, Phone, Thermometer, type IconComponent } from './Icon';
 
-type Tool = { href: string; Icon: LucideIcon; label: string; line: string };
+type Tool = { href: string; Icon: IconComponent; label: string; line: string };
 
 /**
  * Everything sombra does, laid out as one day: before you go, while you're out, looking
@@ -17,15 +16,15 @@ export function DayStory() {
   const label = useStoryLabel();
   const steps: Array<{ story: Story; tools: Tool[] }> = [
     { story: 'before', tools: [
-      { href: '/app', Icon: CalendarClock, label: f.quickPlan, line: f.quickPlanLine },
+      { href: '/app', Icon: Calendar, label: f.quickPlan, line: f.quickPlanLine },
       { href: '/app/best-time', Icon: Clock, label: f.quickBest, line: f.quickBestLine },
     ] },
     { story: 'out', tools: [
-      { href: '/app/check-in', Icon: Stethoscope, label: f.quickCheck, line: f.quickCheckLine },
-      { href: '/app/cool-spots', Icon: Droplet, label: f.quickCool, line: f.quickCoolLine },
+      { href: '/app/check-in', Icon: Thermometer, label: f.quickCheck, line: f.quickCheckLine },
+      { href: '/app/cool-spots', Icon: Drop, label: f.quickCool, line: f.quickCoolLine },
     ] },
-    { story: 'others', tools: [{ href: '/app/check-on', Icon: PhoneCall, label: f.quickCare, line: f.quickCareLine }] },
-    { story: 'you', tools: [{ href: '/app/profile', Icon: HeartPulse, label: f.quickProfile, line: f.quickProfileLine }] },
+    { story: 'others', tools: [{ href: '/app/check-on', Icon: Phone, label: f.quickCare, line: f.quickCareLine }] },
+    { story: 'you', tools: [{ href: '/app/profile', Icon: Heart, label: f.quickProfile, line: f.quickProfileLine }] },
   ];
   return (
     <ol className="day-story">
