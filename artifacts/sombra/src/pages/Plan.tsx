@@ -3,9 +3,10 @@ import { Link, useLocation } from 'wouter';
 import { X } from 'lucide-react';
 import * as store from '../../public/js/store.js';
 import { useSession } from '../lib/session';
-import { AppShell } from '../components/AppShell';
+import { AppShell, useSelectMode } from '../components/AppShell';
+import { ModeBar } from '../components/ModePicker';
 import Welcome from './Welcome';
-import { modeQuery } from '../lib/copy';
+import { audienceModeId, modeQuery } from '../lib/copy';
 import { ContextCards } from '../components/ContextCards';
 import { Clock } from 'lucide-react';
 import { NextStep } from '../components/Story';
@@ -100,6 +101,7 @@ export default function Plan() {
   const [dismissed, setDismissed] = useState(store.isWelcomeDismissed);
   const [skipError, setSkipError] = useState(false);
   const [maxCategory, setMaxCategory] = useState<number | null>(null);
+  const modeSwitch = useSelectMode();
   if (!profileLoaded) return <AppShell><div className="skel" aria-busy="true"><span style={{ height: 34, width: '55%' }} /><span style={{ height: 56 }} /><span style={{ height: 160 }} /></div></AppShell>;
   if (profileError) return <AppShell><div className="page"><div className="error" role="alert">{t.somethingWrong}<button className="btn btn-quiet" onClick={reloadProfile}>{t.retry}</button></div></div></AppShell>;
   if (!profile && !dismissed) return <Welcome onDismiss={() => {
@@ -107,6 +109,8 @@ export default function Plan() {
     setDismissed(true);
   }} />;
   return <AppShell>{skipError && <p className="error" role="alert">{t.somethingWrong}</p>}<ContextCards maxCategory={maxCategory} />
-    <div className="today-next"><NextStep href="/app/best-time" story="before" Icon={Clock}>{featureCopy[lang].todayBest}</NextStep></div>
+    <div className="today-next">
+      <ModeBar lang={lang} label={featureCopy[lang].modeBarLabel} selected={profile?.mode ?? audienceModeId} busy={modeSwitch.busy} onSelect={modeSwitch.select} />
+      <NextStep href="/app/best-time" story="before" Icon={Clock}>{featureCopy[lang].todayBest}</NextStep></div>
     <PlannerFrame onSummary={setMaxCategory} /></AppShell>;
 }

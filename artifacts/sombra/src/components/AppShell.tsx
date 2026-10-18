@@ -2,7 +2,8 @@ import { Icon } from './Icon';
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 import * as store from '../../public/js/store.js';
-import { audienceModeId, currentMode, modeUi, navigateToMode, type AudienceModeId, type Lang } from '../lib/copy';
+import { ChevronDown } from 'lucide-react';
+import { audienceModeId, availableModes, currentMode, modeUi, navigateToMode, type AudienceModeId, type Lang } from '../lib/copy';
 import { useSession } from '../lib/session';
 import { Sheet } from './Sheet';
 import { ModePicker } from './ModePicker';
@@ -14,12 +15,34 @@ function Glyph({ name, size = 24 }: { name: string; size?: number }) {
   return <Icon name={name} size={size} strokeWidth={name === 'check' ? 3 : 2.2} />;
 }
 
+/** Saves the chosen mode and reloads into it. Shared by the top bar chip and the Today switch. */
+export function useSelectMode() {
+  const { profile, setProfile } = useSession();
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const select = async (id: AudienceModeId) => {
+    if (id === (profile?.mode ?? audienceModeId)) return;
+    setBusy(true);
+    setFailed(false);
+    try {
+      if (profile) setProfile(await store.saveProfile({ ...profile, mode: id }));
+      else store.setModePreference(id);
+      navigateToMode(id);
+    } catch {
+      setFailed(true);
+      setBusy(false);
+    }
+  };
+  return { select, busy, failed };
+}
+
 export function TopBar({ title }: { title?: string }) {
   const { t, lang, profile, setProfile, setPreviewLang } = useSession();
   const ui = modeUi(lang);
+  const f = featureCopy[lang];
   const [error, setError] = useState(false);
   const [modeOpen, setModeOpen] = useState(false);
-  const [modeBusy, setModeBusy] = useState(false);
+  const { select: selectMode, busy: modeBusy, failed: modeFailed } = useSelectMode();
   const selectLanguage = async (language: Lang) => {
     setError(false);
     try {
@@ -27,18 +50,7 @@ export function TopBar({ title }: { title?: string }) {
       else setPreviewLang(language);
     } catch { setError(true); }
   };
-  const selectMode = async (id: AudienceModeId) => {
-    setModeBusy(true);
-    setError(false);
-    try {
-      if (profile) setProfile(await store.saveProfile({ ...profile, mode: id }));
-      else store.setModePreference(id);
-      navigateToMode(id);
-    } catch {
-      setError(true);
-      setModeBusy(false);
-    }
-  };
+  const mode = availableModes(lang).find((m) => m.id === (profile?.mode ?? audienceModeId));
   return (
     <>
     <header className="topbar">
@@ -54,10 +66,14 @@ export function TopBar({ title }: { title?: string }) {
         ) : (
           <button type="button" className="lang-toggle" lang="en" aria-label={ui.englishLanguage} onClick={() => selectLanguage('en')}>English</button>
         )}
-        <button type="button" className="mode-chip" aria-label={currentMode(lang).name} aria-haspopup="dialog" onClick={() => setModeOpen(true)}>{currentMode(lang).shortName}</button>
+        <button type="button" className="mode-chip" aria-label={`${currentMode(lang).name}. ${f.modeChipHint}`} aria-haspopup="dialog" onClick={() => setModeOpen(true)}>
+          {mode && <Icon name={mode.icon} size={16} />}
+          <span>{currentMode(lang).shortName}</span>
+          <ChevronDown size={15} strokeWidth={2.6} aria-hidden="true" />
+        </button>
       </div>
     </header>
-    {error && <p className="error" role="alert">{t.somethingWrong}</p>}
+    {(error || modeFailed) && <p className="error" role="alert">{t.somethingWrong}</p>}
     {modeOpen && <Sheet title={currentMode(lang).welcomeQuestion ?? t.settings} onClose={() => !modeBusy && setModeOpen(false)} closeLabel={t.close}>
       <ModePicker lang={lang} selected={profile?.mode ?? audienceModeId} onSelect={selectMode} />
     </Sheet>}

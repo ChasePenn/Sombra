@@ -6,8 +6,8 @@
     "es": "¿Qué vas a planear?"
   },
   "taglines": {
-    "en": "Heat safety for every crew, team and family.",
-    "es": "Seguridad contra el calor para cuadrillas, equipos y familias."
+    "en": "Stay safe outside in the Phoenix heat.",
+    "es": "Mantente a salvo afuera en el calor de Phoenix."
   },
   "rules": {
     "categoryIncrease": 0,
@@ -29,8 +29,8 @@
         "stopBanner": "Stop work and move to a cool place."
       },
       "app": {
-        "tagline": "Heat safety for every crew, team and family.",
-        "landingSub": "Plan for heat, shade, breaks, and water before heading outside.",
+        "tagline": "Stay safe outside in the Phoenix heat.",
+        "landingSub": "Plan breaks and water around the heat before the shift starts.",
         "crew": "Crew",
         "crewSub": "People you plan work and check-ins for.",
         "noCrew": "No crew added yet",
@@ -43,7 +43,7 @@
         "deleteBody": "Deletes everything sombra saved for you and signs you out. This can't be undone.",
         "importBody": "Copy what's saved on this phone into your account?",
         "signInTitle": "Sign in to save your plans and crew",
-        "signInSub": "Your account keeps your profile, crew, and saved shifts on every device.",
+        "signInSub": "Your account keeps your crew and saved shifts on all your devices.",
         "signUpSub": "Save your plans and crew. Guest mode still works without one.",
         "plannerTitle": "Shift planner",
         "workType": "Work type",
@@ -55,11 +55,11 @@
         "documentTitle": "sombra — Heat plan for work",
         "metaDescription": "Hourly heat guidance for outdoor work.",
         "desktopTitle": "Heat guidance for your work site",
-        "desktopDescription": "Choose a place and shift hours to plan work, shade breaks, and water.",
+        "desktopDescription": "Choose a place and shift hours to plan breaks around the heat.",
         "crewStatus": "Your crew",
         "crewStatusUnavailable": "Crew information is temporarily unavailable.",
         "pageTitle": "Plan your shift",
-        "introDescription": "Pick your work site and hours. You'll get an hour-by-hour plan for water, shade breaks, and when to stop.",
+        "introDescription": "Pick your work site and hours. You'll get an hour-by-hour plan that says when to rest in the shade and how much to drink.",
         "locationLabel": "Work location",
         "locationHelp": "Choose the jobsite or delivery area, not your home address.",
         "workerName": "Worker name",
@@ -92,7 +92,7 @@
           "value": "hard",
           "label": "Hard",
           "forecastLabel": "Hard work",
-          "example": "Digging, carrying shingles, laying sod or concrete"
+          "example": "Digging or carrying shingles"
         }
       ],
       "checkIn": {
@@ -123,14 +123,14 @@
           },
           {
             "id": "fainted",
-            "label": "Fainted, passed out, or had a seizure"
+            "label": "Fainted or had a seizure"
           }
         ],
         "pickWorker": "Who is checking in?",
         "pickWorkerSub": "Choose a person, or type a name.",
         "changeWorker": "Change person",
         "noWorkers": "Add your name in Settings or add crew to check in quickly.",
-        "pageSub": "Track work time, breaks, and water. Check how you feel.",
+        "pageSub": "Log your breaks and water, then check how you feel.",
         "startWork": "Start work",
         "finishWork": "Finish work",
         "working": "Working",
@@ -209,8 +209,8 @@
         "stopBanner": "Deja de trabajar y ve a un lugar fresco."
       },
       "app": {
-        "tagline": "Seguridad contra el calor para cuadrillas, equipos y familias.",
-        "landingSub": "Prepárate para el calor, la sombra, los descansos y el agua antes de salir.",
+        "tagline": "Mantente a salvo afuera en el calor de Phoenix.",
+        "landingSub": "Planea los descansos y el agua según el calor antes de empezar el turno.",
         "crew": "Cuadrilla",
         "crewSub": "Personas para quienes planeas trabajo y registros.",
         "noCrew": "Aún no hay personas",
@@ -223,7 +223,7 @@
         "deleteBody": "Borra todo lo que sombra guardó para ti y cierra tu sesión. No se puede deshacer.",
         "importBody": "¿Copiar a tu cuenta lo que está guardado en este teléfono?",
         "signInTitle": "Inicia sesión para guardar tus planes y cuadrilla",
-        "signInSub": "Tu cuenta guarda tu perfil, cuadrilla y turnos en todos tus dispositivos.",
+        "signInSub": "Tu cuenta guarda tu cuadrilla y tus turnos en todos tus dispositivos.",
         "signUpSub": "Guarda tus planes y cuadrilla. También puedes usar sombra sin una cuenta.",
         "plannerTitle": "Planificador de turnos",
         "workType": "Tipo de trabajo",
@@ -235,11 +235,11 @@
         "documentTitle": "sombra — Plan de calor para el trabajo",
         "metaDescription": "Orientación por hora para trabajar al aire libre con calor.",
         "desktopTitle": "Orientación para tu lugar de trabajo",
-        "desktopDescription": "Elige un lugar y horario para planear el trabajo, los descansos a la sombra y el agua.",
+        "desktopDescription": "Elige un lugar y horario para planear los descansos según el calor.",
         "crewStatus": "Tu cuadrilla",
         "crewStatusUnavailable": "La información de la cuadrilla no está disponible ahora.",
         "pageTitle": "Planea tu turno",
-        "introDescription": "Elige tu lugar de trabajo y horario. Recibirás un plan hora por hora de agua, descansos a la sombra y cuándo parar.",
+        "introDescription": "Elige tu lugar de trabajo y horario. Recibirás un plan hora por hora que dice cuándo descansar a la sombra y cuánto tomar.",
         "locationLabel": "Lugar de trabajo",
         "locationHelp": "Elige la obra o el área de entrega, no tu domicilio.",
         "workerName": "Nombre del trabajador",
@@ -272,7 +272,7 @@
           "value": "hard",
           "label": "Intenso",
           "forecastLabel": "Trabajo intenso",
-          "example": "Cavar, cargar tejas, colocar césped o concreto"
+          "example": "Cavar o cargar tejas"
         }
       ],
       "checkIn": {
@@ -303,14 +303,14 @@
           },
           {
             "id": "fainted",
-            "label": "Se desmayó, perdió el conocimiento o tuvo convulsiones"
+            "label": "Se desmayó o tuvo convulsiones"
           }
         ],
         "pickWorker": "¿Quién va a hacer el registro?",
         "pickWorkerSub": "Elige a una persona o escribe un nombre.",
         "changeWorker": "Cambiar persona",
         "noWorkers": "Agrega tu nombre en Ajustes o agrega personas para hacer registros rápidamente.",
-        "pageSub": "Lleva la cuenta del trabajo, los descansos y el agua. Revisa cómo te sientes.",
+        "pageSub": "Anota tus descansos y el agua, y luego revisa cómo te sientes.",
         "startWork": "Empezar a trabajar",
         "finishWork": "Terminar el trabajo",
         "working": "Trabajando",

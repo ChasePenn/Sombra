@@ -65,7 +65,7 @@ export async function personalize(input, options = {}) {
       client.models.generateContent({
         model,contents:JSON.stringify(modelContext),
         config:{
-          systemInstruction: `${templates.systemInstruction} Write 2–3 sentences in message, one follow-up question or an empty string, at most 3 short actions, and a recheck time between 15 and 60 minutes (at most 30 for CAUTION). Do not invent quantities or missing weather readings.`,
+          systemInstruction: `${templates.systemInstruction} Write 2–3 sentences in message, one follow-up question or an empty string, at most 3 short actions, and a recheck time between 15 and 60 minutes (at most 30 for CAUTION). Do not invent quantities or missing weather readings. Write plainly, like a coworker talking: no lists of three in a sentence and no em dashes.`,
           responseMimeType:"application/json",responseJsonSchema:personalizationSchema,
           abortSignal:controller.signal,httpOptions:{timeout:5000},maxOutputTokens:1024,
         },

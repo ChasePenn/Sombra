@@ -6,8 +6,8 @@
     "es": "¿Qué vas a planear?"
   },
   "taglines": {
-    "en": "Heat safety for every crew, team and family.",
-    "es": "Seguridad contra el calor para cuadrillas, equipos y familias."
+    "en": "Stay safe outside in the Phoenix heat.",
+    "es": "Mantente a salvo afuera en el calor de Phoenix."
   },
   "rules": {
     "categoryIncrease": 0,
@@ -20,7 +20,7 @@
       "mode": {
         "name": "Everyday outdoors",
         "shortName": "Outdoors",
-        "description": "For families, walks, hikes, and outdoor events.",
+        "description": "For family outings and time outdoors.",
         "group": "Group",
         "member": "Person",
         "leader": "Organizer",
@@ -30,7 +30,7 @@
         "stopBanner": "Avoid being active in extreme heat."
       },
       "app": {
-        "landingSub": "Plan a walk, hike, errand, or event with heat, shade, and water in mind.",
+        "landingSub": "Plan a walk or a day out around the heat, with water and shade breaks built in.",
         "crew": "Group",
         "crewSub": "People joining your outdoor activity.",
         "noCrew": "No group added yet",
@@ -43,18 +43,18 @@
         "deleteBody": "Deletes everything sombra saved for you and signs you out. This can't be undone.",
         "importBody": "Copy what's saved on this phone into your account?",
         "signInTitle": "Sign in to save your plans and group",
-        "signInSub": "Your account keeps your profile, group, and saved outings on every device.",
+        "signInSub": "Your account keeps your group and saved outings on all your devices.",
         "signUpSub": "Save your plans and group. Guest mode still works without an account."
       },
       "ui": {
         "documentTitle": "sombra — Everyday outdoor heat safety",
-        "metaDescription": "Plan a walk, hike, outing, or event around the heat.",
+        "metaDescription": "Plan a walk or a day out around the heat.",
         "desktopTitle": "Heat guidance for your outing",
         "desktopDescription": "Choose your activity location and time window to plan for shade and water.",
         "crewStatus": "Your group",
         "crewStatusUnavailable": "Group information is temporarily unavailable.",
         "pageTitle": "Plan an activity",
-        "introDescription": "Pick where and when you'll be out. You'll get an hour-by-hour plan for water, shade breaks, and when to stop.",
+        "introDescription": "Pick where and when you'll be out. You'll get an hour-by-hour plan that says when to rest in the shade and how much to drink.",
         "locationLabel": "Activity location",
         "locationHelp": "Choose the place you plan to visit.",
         "workerName": "Activity lead",
@@ -114,7 +114,7 @@
           },
           {
             "id": "fainted",
-            "label": "Fainted, passed out, or had a seizure"
+            "label": "Fainted or had a seizure"
           }
         ],
         "pickWorker": "Who is checking in?",
@@ -136,7 +136,7 @@
       "mode": {
         "name": "Actividades al aire libre",
         "shortName": "Afuera",
-        "description": "Para familias, caminatas, excursiones y eventos.",
+        "description": "Para salidas en familia y tiempo al aire libre.",
         "group": "Grupo",
         "member": "Persona",
         "leader": "Organizador",
@@ -146,7 +146,7 @@
         "stopBanner": "Evita la actividad física durante el calor extremo."
       },
       "app": {
-        "landingSub": "Planea una caminata, diligencia o evento pensando en el calor, la sombra y el agua.",
+        "landingSub": "Planea una caminata o una salida según el calor, con agua y sombra incluidas.",
         "crew": "Grupo",
         "crewSub": "Personas que te acompañan en la actividad al aire libre.",
         "noCrew": "Aún no hay grupo",
@@ -159,18 +159,18 @@
         "deleteBody": "Borra todo lo que sombra guardó para ti y cierra tu sesión. No se puede deshacer.",
         "importBody": "¿Copiar a tu cuenta lo que está guardado en este teléfono?",
         "signInTitle": "Inicia sesión para guardar tus planes y grupo",
-        "signInSub": "Tu cuenta guarda tu perfil, grupo y salidas en todos tus dispositivos.",
+        "signInSub": "Tu cuenta guarda tu grupo y tus salidas en todos tus dispositivos.",
         "signUpSub": "Guarda tus planes y grupo. También puedes usar sombra sin cuenta."
       },
       "ui": {
         "documentTitle": "sombra — Seguridad al aire libre",
-        "metaDescription": "Planea una caminata, excursión o evento según el calor.",
+        "metaDescription": "Planea una caminata o una salida según el calor.",
         "desktopTitle": "Orientación para tu salida",
         "desktopDescription": "Elige el lugar y horario de tu actividad para planear la sombra y el agua.",
         "crewStatus": "Tu grupo",
         "crewStatusUnavailable": "La información del grupo no está disponible ahora.",
         "pageTitle": "Planea una actividad",
-        "introDescription": "Elige dónde y cuándo vas a estar afuera. Recibirás un plan hora por hora de agua, descansos a la sombra y cuándo parar.",
+        "introDescription": "Elige dónde y cuándo vas a estar afuera. Recibirás un plan hora por hora que dice cuándo descansar a la sombra y cuánto tomar.",
         "locationLabel": "Lugar de la actividad",
         "locationHelp": "Elige el lugar que planeas visitar.",
         "workerName": "Responsable de la actividad",
