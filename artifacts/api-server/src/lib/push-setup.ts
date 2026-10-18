@@ -74,7 +74,7 @@ export function ensurePushSchema() {
 }
 
 let configPromise: Promise<PushConfig> | null = null;
-const SUBJECT = () => process.env.VAPID_SUBJECT?.trim() || "https://github.com/ChasePenn/sombra";
+const SUBJECT = () => process.env.VAPID_SUBJECT?.trim() || "https://sombraheat.com";
 
 /** The server's push signing keys: from the environment if set, otherwise made once and kept in the database. */
 export function getPushConfig(): Promise<PushConfig> {

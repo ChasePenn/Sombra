@@ -2,6 +2,8 @@
 
 **Stay safe outside in the Phoenix heat.**
 
+Try it at **[sombraheat.com](https://sombraheat.com)**. It's free and works in English and Spanish.
+
 Every summer, people in Phoenix get sick or die from heat because nobody knew how dangerous a specific place was at a specific hour. A weather app says "108°F." It doesn't tell a roofer on a black roof to rest 40 minutes of every hour by 2 PM.
 
 sombra turns the forecast for your exact spot into an hour-by-hour plan that says how long to rest in the shade and how much water to drink. Through the day it checks in on you and the people you look after.
