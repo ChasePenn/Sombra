@@ -13,7 +13,7 @@
     "modes": {
       "workers": {
         "OK": {
-          "message": "{name}, you've been active outdoors for {hours} hours and logged {water} cups of water. {recommendation} Keep following your activity, shade, and rest plan.",
+          "message": "{name}, you've been active outdoors for {hours} hours and logged {water} cups of water. {recommendation} Keep following your rest plan.",
           "unavailable_message": "No symptoms reported, but your activity records are unavailable right now. Follow your shade and water plan, and reconnect to restore your recorded numbers.",
           "follow_up_question": "How are you feeling now?",
           "actions": [
@@ -63,7 +63,7 @@
     "modes": {
       "workers": {
         "OK": {
-          "message": "{name}, has estado al aire libre durante {hours} horas y has registrado {water} vasos de agua. {recommendation} Sigue tu plan de actividad, sombra y descanso.",
+          "message": "{name}, has estado al aire libre durante {hours} horas y has registrado {water} vasos de agua. {recommendation} Sigue tu plan de descansos.",
           "unavailable_message": "No reportaste síntomas, pero tus registros de actividad no están disponibles ahora. Sigue tu plan de sombra y agua y vuelve a conectarte para recuperar tus datos.",
           "follow_up_question": "¿Cómo te sientes ahora?",
           "actions": [

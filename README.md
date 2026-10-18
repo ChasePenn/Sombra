@@ -1,10 +1,10 @@
 # sombra
 
-**Heat safety for every crew, team and family.**
+**Stay safe outside in the Phoenix heat.**
 
 Every summer, people in Phoenix get sick or die from heat because nobody knew how dangerous a specific place was at a specific hour. A weather app says "108°F." It doesn't tell a roofer on a black roof to rest 40 minutes of every hour by 2 PM.
 
-sombra turns the forecast for your exact spot into an hour-by-hour plan: when to work, how long to rest in the shade, how much water to drink, and when to stop. It then checks in on everyone through the day.
+sombra turns the forecast for your exact spot into an hour-by-hour plan that says how long to rest in the shade and how much water to drink. Through the day it checks in on you and the people you look after.
 
 ## What it does
 
@@ -12,14 +12,14 @@ sombra turns the forecast for your exact spot into an hour-by-hour plan: when to
 - **Hour-by-hour work and rest plan** from the U.S. Army TB MED 507 work/rest and water table, color-coded from Low to Extreme.
 - **Site check.** Take a photo and an on-device model recognizes the surface (dark roof, asphalt, grass…) and shade, then adjusts the plan. Photos never leave the phone. You can also pick the surface yourself.
 - **Check-ins.** Quick symptom check-ins with fixed safety rules: signs of heat stroke always open first-aid steps and a Call 911 button. Non-emergency messages are personalized with the worker's real numbers.
-- **Official alerts, UV and air quality.** National Weather Service heat and dust alerts, plus today's UV and air-quality peak for your spot.
+- **Official alerts and air quality.** National Weather Service heat and dust alerts, plus today's UV and air-quality peak for your spot.
 - **What to bring.** A packing checklist built from your plan: how much water, sun protection, gloves for hot roofs, a mask on dusty days.
 - **Best time to go.** Pick an activity and how long it takes; sombra finds the safest window in the next two days and the hours to avoid.
 - **My heat profile.** Optional health factors (age, pregnancy, heart conditions, certain medicines) add extra caution. Saved only on the phone.
-- **Cool spots nearby, and Cool down now.** A live map of water refills, libraries, malls and shade (OpenStreetMap) plus the official Heat Relief Network cooling centers and hydration stations, with today's hours. One tap on *Cool down now* picks the nearest open place with AC (else water or shade) and opens walking directions.
+- **Cool spots nearby, and Cool down now.** A live map of places to refill water or get out of the sun (OpenStreetMap), plus the official Heat Relief Network cooling centers and hydration stations, with today's hours. One tap on *Cool down now* picks the nearest open place with AC (else water or shade) and opens walking directions.
 - **Check on someone.** Daily reminders to check on an older relative or neighbor, with a call button and a stronger nudge during heat warnings.
-- **Reminders when the app is closed.** Web Push notifications for check-ins on loved ones, Best time windows and official heat warnings. The server never receives names; the phone fills them in.
-- **Solo or group.** Works for one person by default; turn on a crew, team or group when you need it.
+- **Reminders when the app is closed.** Web Push notifications for check-in reminders and official heat warnings. The server never receives names; the phone fills them in.
+- **Solo or group.** Works for one person by default; turn on a group when you need one (it's called a crew or a team in those modes).
 - **Three modes:** Work crew, School & sports, and Everyday outdoors, with wording, activity examples and rules for each.
 - **English and Spanish.** Works without an account; sign in to sync your plans and group across devices.
 

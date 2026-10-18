@@ -379,3 +379,19 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .story-tag.tone-red, .tone-red .story-tag { color: #C0312F; }
 .story-tag::before { background: currentColor; }
 .spot-open { color: #1C7A4C !important; }
+
+/* Mode switch on Today: all three modes always visible, the current one filled in. */
+.mode-bar { display: flex; flex-direction: column; gap: 4px; margin: 6px 0 2px; }
+.mode-bar-label { flex: none; color: var(--ink-soft); font: 700 .82rem var(--head); }
+.mode-bar-options { display: grid; min-width: 0; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--card, #fff); border: 2px solid var(--line); border-radius: 14px; }
+.mode-bar-option { min-width: 0; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; padding: 0 6px; border: 2px solid transparent; border-radius: 10px; background: transparent; color: var(--ink); font: 700 .85rem var(--head); cursor: pointer; }
+.mode-bar-option svg { flex: none; color: var(--tone); }
+.mode-bar-option.tone-blue { --tone: var(--tone-blue); --tint: var(--tone-blue-tint); }
+.mode-bar-option.tone-green { --tone: var(--tone-green); --tint: var(--tone-green-tint); }
+.mode-bar-option[aria-checked="true"] { background: var(--tint); border-color: var(--tone); }
+.mode-bar-option:not([aria-checked="true"]):hover { background: var(--bg); }
+.mode-bar-option:disabled { cursor: progress; opacity: .7; }
+.mode-bar-option:focus-visible { outline: 3px solid var(--ink); outline-offset: 1px; }
+@media (max-width: 340px) { .mode-bar-option { font-size: .78rem; gap: 4px; } }
+.mode-chip { display: inline-flex; align-items: center; gap: 5px; }
+.mode-chip svg:first-child { color: var(--mesquite, #B8430E); }
