@@ -264,3 +264,22 @@ test("the planner starts from your place, and from tomorrow once today's hours a
     }
   }
 });
+
+test("a new screen opens at the top, and going back returns to where you were", { skip }, async () => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 700 } });
+  const page = await context.newPage();
+  await page.route("**/api/**", (route) => route.fulfill({ status: 404, body: "{}" }));
+  await page.route(/^https:\/\/(fonts|clerk)/, (route) => route.abort());
+  await page.goto(`${origin}/`);
+  await page.getByRole("link", { name: "Heat profile" }).waitFor();
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  const scrolled = await page.evaluate(() => window.scrollY);
+  assert.ok(scrolled > 200, "the landing page should be long enough to scroll");
+  await page.getByRole("link", { name: "Heat profile" }).click();
+  await page.waitForURL(/\/app\/profile/);
+  assert.equal(await page.evaluate(() => window.scrollY), 0);
+  await page.goBack();
+  await page.waitForURL(`${origin}/`);
+  await page.waitForFunction(() => window.scrollY > 200);
+  await context.close();
+});
