@@ -52,7 +52,7 @@
         "previewAdvice": "Work 20 min, then rest 40 in the shade."
       },
       "ui": {
-        "documentTitle": "sombra — Heat plan for work",
+        "documentTitle": "sombra · Heat plan for work",
         "metaDescription": "Hourly heat guidance for outdoor work.",
         "desktopTitle": "Heat guidance for your work site",
         "desktopDescription": "Choose a place and shift hours to plan breaks around the heat.",
@@ -232,7 +232,7 @@
         "previewAdvice": "Trabaja 20 min y descansa 40 en la sombra."
       },
       "ui": {
-        "documentTitle": "sombra — Plan de calor para el trabajo",
+        "documentTitle": "sombra · Plan de calor para el trabajo",
         "metaDescription": "Orientación por hora para trabajar al aire libre con calor.",
         "desktopTitle": "Orientación para tu lugar de trabajo",
         "desktopDescription": "Elige un lugar y horario para planear los descansos según el calor.",

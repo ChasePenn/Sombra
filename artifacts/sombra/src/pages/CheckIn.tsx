@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation, useSearch } from 'wouter';
-import { ClipboardCheck, Coffee, Droplet, Play, Square, UserRound } from 'lucide-react';
 import { emptySession } from '@workspace/heat-safety/session';
 import type { WorkerSession, SessionContext } from '@workspace/heat-safety/session';
 import * as store from '../../public/js/store.js';
@@ -15,6 +14,7 @@ import { pushIsOn } from '../lib/push';
 import { PageHead } from '../components/Story';
 import { Sheet } from '../components/Sheet';
 import { DangerScreen, FINE, ResultSheet, SymptomSheet } from '../components/CheckinFlow';
+import { Clipboard, Cup, Drop, Play, Stop, User } from '../components/Icon';
 
 type Outcome = { result: CheckinResult; ctx: SessionContext; saveError?: string };
 
@@ -217,7 +217,7 @@ export default function CheckIn() {
 
         <section className="work-card" aria-labelledby="wc-name">
           <div className="wc-head">
-            <span className={`avatar wc-av st-${state}`} aria-hidden="true">{who ? initial(who) : <UserRound size={20} />}</span>
+            <span className={`avatar wc-av st-${state}`} aria-hidden="true">{who ? initial(who) : <User size={20} />}</span>
             <div className="row-main">
               <h2 id="wc-name">{who || c.pickWorker}</h2>
               {who && <small className={`wc-state st-${state}`}>{c[state]}{openBreak ? ` · ${fill(c.breakOpen, { time: fmtTime(openBreak.start, lang) })}` : ''}</small>}
@@ -257,16 +257,16 @@ export default function CheckIn() {
               )}
               <div className="track">
                 {state === 'notStarted' && <button type="button" className="btn btn-primary btn-block" disabled={trackBusy} onClick={() => track('start')}><Play size={20} aria-hidden="true" />{c.startWork}</button>}
-                {state === 'working' && <button type="button" className="btn btn-secondary" disabled={trackBusy} onClick={() => track('start-break')}><Coffee size={20} aria-hidden="true" />{c.startBreak}</button>}
+                {state === 'working' && <button type="button" className="btn btn-secondary" disabled={trackBusy} onClick={() => track('start-break')}><Cup size={20} aria-hidden="true" />{c.startBreak}</button>}
                 {state === 'onBreak' && <button type="button" className="btn btn-secondary" disabled={trackBusy} onClick={() => track('end-break')}><Play size={20} aria-hidden="true" />{c.endBreak}</button>}
-                 <button type="button" className={`btn btn-water${state === 'notStarted' || state === 'finished' ? ' btn-block' : ''}`} disabled={trackBusy} onClick={() => track('water')}><Droplet size={20} aria-hidden="true" />{c.addCup}</button>
-                {(state === 'working' || state === 'onBreak') && <button type="button" className="btn btn-quiet btn-block" disabled={trackBusy} onClick={() => track('end')}><Square size={18} aria-hidden="true" />{c.finishWork}</button>}
+                 <button type="button" className={`btn btn-water${state === 'notStarted' || state === 'finished' ? ' btn-block' : ''}`} disabled={trackBusy} onClick={() => track('water')}><Drop size={20} aria-hidden="true" />{c.addCup}</button>
+                {(state === 'working' || state === 'onBreak') && <button type="button" className="btn btn-quiet btn-block" disabled={trackBusy} onClick={() => track('end')}><Stop size={18} aria-hidden="true" />{c.finishWork}</button>}
               </div>
               {trackErr && <p className="error" role="alert">{c.trackError}</p>}
             </>
            ) : sessionLoadError ? <div className="error" role="alert">{c.trackError}<button className="btn btn-quiet" onClick={reload}>{t.retry}</button></div> : <div className="skel" style={{ padding: 0 }} aria-hidden="true"><span style={{ height: 72 }} /><span style={{ height: 54 }} /></div>)}
 
-          <button type="button" className="btn btn-bark btn-block" onClick={openSymptoms}><ClipboardCheck size={22} aria-hidden="true" />{c.openSheet}</button>
+          <button type="button" className="btn btn-bark btn-block" onClick={openSymptoms}><Clipboard size={22} aria-hidden="true" />{c.openSheet}</button>
           {/* Only worth saying when closed-app reminders are off. */}
           {!pushIsOn() && <p className="seg-hint">{c.remindersOpen}</p>}
         </section>
@@ -276,7 +276,7 @@ export default function CheckIn() {
         {!err && items === null && <div className="skel" style={{ padding: 0 }} aria-hidden="true"><span style={{ height: 64 }} /><span style={{ height: 64 }} /></div>}
         {!err && items?.length === 0 && (
           <div className="empty">
-            <span className="feat-icon" aria-hidden="true"><ClipboardCheck size={22} /></span>
+            <span className="feat-icon" aria-hidden="true"><Clipboard size={22} /></span>
             <h2>{c.noHistory}</h2><p style={{ marginBottom: 0 }}>{c.noHistorySub}</p>
           </div>
         )}

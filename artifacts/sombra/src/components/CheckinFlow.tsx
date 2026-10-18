@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'wouter';
-import { Check, Mic, MicOff, Phone, Snowflake } from 'lucide-react';
 import { firstAid } from '@workspace/heat-safety/templates';
 import type { SessionContext } from '@workspace/heat-safety/session';
 import type { CheckinResult } from '../../public/js/checkin-service.js';
@@ -9,6 +8,7 @@ import { useSpeech } from '../lib/speech';
 import { fmtDuration, waterText } from '../lib/activity';
 import { Sheet } from './Sheet';
 import { featureCopy } from '../lib/features-copy';
+import { Check, Mic, MicOff, Phone, Snowflake } from './Icon';
 
 export const FINE = 'fine';
 

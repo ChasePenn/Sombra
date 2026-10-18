@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'wouter';
-import { BellRing, CalendarClock, Droplet, Ban } from 'lucide-react';
 import { AppShell } from '../components/AppShell';
 import { PageHead } from '../components/Story';
 import { LocationPicker, useInitialPlace } from '../components/LocationPicker';
@@ -13,6 +12,7 @@ import { clock, nextDate, phoenixNow } from '../lib/time';
 import { pushIsOn } from '../lib/push';
 import { findBestWindows } from '../../lib/best-window.js';
 import table from '../../config/work_rest_table.json';
+import { Ban, BellRing, Calendar, Drop } from '../components/Icon';
 
 type Hour = { time: string; wbgtSunF: number };
 type Window = ReturnType<typeof findBestWindows>['best'];
@@ -128,11 +128,11 @@ export default function BestTime() {
             {result.best ? (
               <>
                 <div className={`best-card ${riskClass(result.best.category)}`}>
-                  <span className="best-kicker"><CalendarClock size={18} aria-hidden="true" />{f.bestLabel} · {activity}</span>
+                  <span className="best-kicker"><Calendar size={18} aria-hidden="true" />{f.bestLabel} · {activity}</span>
                   <strong className="best-span">{span(result.best)}</strong>
                   <span className="best-risk">{fill(f.bestRisk, { risk: f.riskWords[result.best.category] })}</span>
                   <p className="best-advice">{advice(result.best)}</p>
-                  <p className="best-water"><Droplet size={16} aria-hidden="true" fill="currentColor" />{fill(f.bringWater, { cups: cups(result.best.waterQt) })}</p>
+                  <p className="best-water"><Drop size={16} aria-hidden="true" fill="currentColor" />{fill(f.bringWater, { cups: cups(result.best.waterQt) })}</p>
                   {result.best.category >= 4 && <p className="best-warn">{f.noSafe}</p>}
                 </div>
                 {result.alternatives.length > 0 && (

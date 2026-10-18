@@ -1,9 +1,10 @@
-import { ChevronLeft } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { useSession } from '../lib/session';
 import { goBack } from '../lib/nav';
 import { aboutCopy, modeUi } from '../lib/copy';
+import { ChevronLeft } from '../components/Icon';
+import { legalUi } from '../lib/legal-copy';
 
 export default function About() {
   const { lang, t } = useSession();
@@ -51,6 +52,7 @@ export default function About() {
           <li>{c.priv3}</li>
         </ul>
         <p style={{ marginTop: 10 }}>{c.p2}</p>
+        <p style={{ marginTop: 10 }}><Link href="/privacy">{legalUi[lang].privacy}</Link> · <Link href="/terms">{legalUi[lang].terms}</Link></p>
 
         <h2 id="sources">{c.sources}</h2>
         <ul className="source-list">

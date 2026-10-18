@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { CalendarClock, Check, ChevronRight, Info, Lock, Settings } from 'lucide-react';
 import { Link } from 'wouter';
 import { AppShell } from '../components/AppShell';
 import { NextStep, PageHead } from '../components/Story';
 import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { getRiskFactors, RISK_FACTORS, setRiskFactors, type RiskFactor } from '../lib/local';
+import { Calendar, Check, ChevronRight, Info, Lock, Sliders } from '../components/Icon';
 
 export default function HeatProfile() {
   const { lang, t } = useSession();
@@ -43,10 +43,10 @@ export default function HeatProfile() {
         {failed && <p className="error" role="alert">{f.saveFailed}</p>}
         <p className={selected.length ? 'status-on' : 'notice'} role="status">{selected.length ? f.profileActive : f.profileNone}</p>
         <p className="fine-print">{f.profileNote}</p>
-        <NextStep href="/app" story="before" Icon={CalendarClock}>{f.nextProfile}</NextStep>
-        {/* Settings and About live here, so the top bar stays simple. */}
+        <NextStep href="/app" story="before" Icon={Calendar}>{f.nextProfile}</NextStep>
+        {/* Sliders and About live here, so the top bar stays simple. */}
         <nav className="link-list" aria-label={t.settings}>
-          <Link href="/settings"><Settings size={20} aria-hidden="true" /><span>{t.settings}</span><ChevronRight size={20} aria-hidden="true" /></Link>
+          <Link href="/settings"><Sliders size={20} aria-hidden="true" /><span>{t.settings}</span><ChevronRight size={20} aria-hidden="true" /></Link>
           <Link href="/about"><Info size={20} aria-hidden="true" /><span>{t.aboutSombra}</span><ChevronRight size={20} aria-hidden="true" /></Link>
         </nav>
       </div>

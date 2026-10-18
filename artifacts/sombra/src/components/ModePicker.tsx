@@ -24,7 +24,7 @@ export function ModePicker({
         >
           <span className="mode-choice-icon"><Icon name={mode.icon} size={26} /></span>
           <span className="mode-choice-copy"><strong>{mode.name}</strong><small>{mode.description}</small></span>
-          <span className="mode-choice-mark" aria-hidden="true">{selected === mode.id ? '✓' : ''}</span>
+          <span className="mode-choice-mark" aria-hidden="true" />
         </button>
       ))}
     </div>

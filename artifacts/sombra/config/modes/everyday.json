@@ -47,7 +47,7 @@
         "signUpSub": "Save your plans and group. Guest mode still works without an account."
       },
       "ui": {
-        "documentTitle": "sombra — Everyday outdoor heat safety",
+        "documentTitle": "sombra · Everyday outdoor heat safety",
         "metaDescription": "Plan a walk or a day out around the heat.",
         "desktopTitle": "Heat guidance for your outing",
         "desktopDescription": "Choose your activity location and time window to plan for shade and water.",
@@ -163,7 +163,7 @@
         "signUpSub": "Guarda tus planes y grupo. También puedes usar sombra sin cuenta."
       },
       "ui": {
-        "documentTitle": "sombra — Seguridad al aire libre",
+        "documentTitle": "sombra · Seguridad al aire libre",
         "metaDescription": "Planea una caminata o una salida según el calor.",
         "desktopTitle": "Orientación para tu salida",
         "desktopDescription": "Elige el lugar y horario de tu actividad para planear la sombra y el agua.",
