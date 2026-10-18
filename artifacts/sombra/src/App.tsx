@@ -15,10 +15,10 @@ import CoolSpots from './pages/CoolSpots';
 import CareCheck from './pages/CareCheck';
 import HeatProfile from './pages/HeatProfile';
 import { SignInPage, SignUpPage } from './pages/Auth';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { aboutCopy, audienceModeId, currentMode, modeQuery } from './lib/copy';
 import { featureCopy } from './lib/features-copy';
-import { noteScreenChange } from './lib/nav';
+import { noteScreenChange, scrollForNewScreen } from './lib/nav';
 import { ImportOffer } from './components/ImportOffer';
 import { ReminderHost } from './components/ReminderHost';
 import { CareReminderHost } from './components/CareReminderHost';
@@ -126,6 +126,7 @@ function Routes() {
   const { profile, profileLoaded } = useSession();
   usePageTitle(location);
   useEffect(() => { noteScreenChange(); }, [location]);
+  useLayoutEffect(() => { scrollForNewScreen(); }, [location]);
   useEffect(() => {
     const url = new URL(window.location.href);
     if (profileLoaded && profile?.mode && profile.mode !== audienceModeId) {
