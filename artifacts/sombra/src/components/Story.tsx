@@ -4,11 +4,7 @@ import { useSession } from '../lib/session';
 import { featureCopy } from '../lib/features-copy';
 import { ChevronRight, type IconComponent } from './Icon';
 
-/*
-  sombra follows one day in the heat: before you go, while you're out, looking out for
-  others, and your own body. Every screen says which part of the day it belongs to, with
-  the same color everywhere (landing page, page headers, tool icons).
-*/
+// sombra follows one day in the heat.
 export type Story = 'before' | 'out' | 'others' | 'you';
 
 export const storyTone: Record<Story, string> = { before: 'tone-orange', out: 'tone-blue', others: 'tone-green', you: 'tone-red' };

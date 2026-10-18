@@ -5,14 +5,7 @@ import { getRelief, inSeason, type ReliefData } from "../lib/heat-relief";
 
 export { snapshotElements };
 
-/*
-  Outdoor conditions beyond heat:
-  - GET /conditions   official National Weather Service alerts + UV index and air quality
-  - GET /places/cool  nearby water refill spots, libraries, malls and shelters (OpenStreetMap).
-                      Metro Phoenix and Tucson answer from a saved copy refreshed weekly; elsewhere asks
-                      the live map servers and falls back to the last good answer.
-  Each upstream source is optional: if one fails, the others are still returned.
-*/
+// Outdoor conditions beyond heat.
 
 const router: IRouter = Router();
 const REQUEST_TIMEOUT_MS = 8_000;
@@ -21,9 +14,7 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 export const NWS_ALERTS_URL = "https://api.weather.gov/alerts/active";
 export const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-// The main Overpass server has been overloaded since spring 2026 and sometimes turns
-// requests away; two community servers are the backup.
-// List from https://wiki.openstreetmap.org/wiki/Overpass_API (public instances).
+// The main Overpass server has been overloaded since spring 2026 and sometimes turns requests away.
 export const OVERPASS_MIRRORS = [
   OVERPASS_URL,
   "https://overpass.private.coffee/api/interpreter",
@@ -56,7 +47,7 @@ export function parseCoordinates(req: Request): { lat: number; lon: number } | n
   return { lat: Math.round(lat * 100) / 100, lon: Math.round(lon * 100) / 100 };
 }
 
-// --- Official alerts -------------------------------------------------------
+// Official alerts
 
 interface NwsFeature {
   properties?: {
@@ -116,7 +107,7 @@ async function loadAlerts(lat: number, lon: number) {
   throw lastError;
 }
 
-// --- UV and air quality ----------------------------------------------------
+// UV and air quality
 
 interface AirQualityHourly {
   time: string[];
@@ -144,7 +135,7 @@ export function uvLevel(uv: number | null) {
   return "extreme";
 }
 
-/** Reduce hourly air data to what the app shows: now, today's peak, and when the peak happens. */
+// Reduce hourly air data to what the app shows.
 export function summarizeAirQuality(hourly: AirQualityHourly, nowIso: string) {
   const today = nowIso.slice(0, 10);
   const nowHour = nowIso.slice(0, 13);
@@ -194,7 +185,7 @@ async function loadAirQuality(lat: number, lon: number) {
   return summarizeAirQuality(data.hourly, phoenixNowIso());
 }
 
-/** The current official heat alert for a point (rounded to about 1 km), or null. Used by push reminders. */
+// The current official heat alert for a point (rounded to about 1 km), or null.
 export async function heatAlertFor(lat: number, lon: number) {
   const point = { lat: Math.round(lat * 100) / 100, lon: Math.round(lon * 100) / 100 };
   const alerts = await cached(`alerts:${point.lat},${point.lon}`, () => loadAlerts(point.lat, point.lon));
@@ -221,7 +212,7 @@ router.get("/conditions", async (req, res): Promise<void> => {
   });
 });
 
-// --- Cool spots ------------------------------------------------------------
+// Cool spots
 
 interface OverpassElement {
   id: number;
@@ -283,7 +274,7 @@ export function summarizePlaces(elements: OverpassElement[], origin: { lat: numb
     .slice(0, 30);
 }
 
-/** A box about 3 km around the point. Box filters cost the Overpass server far less than radius searches. */
+// A box about 3 km around the point.
 export function placesQuery(lat: number, lon: number) {
   const dLat = 3000 / 111_320;
   const dLon = 3000 / (111_320 * Math.cos((lat * Math.PI) / 180));
@@ -296,7 +287,6 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 async function loadPlaces(lat: number, lon: number) {
   const query = placesQuery(lat, lon);
   // The main server is busy but usually answers on a second try a few seconds later.
-  // Overpass asks clients to back off for 30 s after a 429, so that case skips straight to the next server.
   const attempts: Array<{ url: string; delay: number }> = [
     { url: OVERPASS_URL, delay: 0 },
     { url: OVERPASS_URL, delay: 5_000 },

@@ -1,5 +1,4 @@
-// sombra's own icon set. 24px grid, 2px strokes, square ends and sharp corners,
-// drawn to read like the stencil signs on a job site. Each value is the inside of an <svg>.
+// sombra's own icon set.
 export const GLYPHS = {
   // Navigation and actions
   x: '<path d="M6 6l12 12M18 6L6 18"/>',

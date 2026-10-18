@@ -16,19 +16,12 @@ const DEFAULT_JSON_ACCEPT = "application/json, application/problem+json";
 let _baseUrl: string | null = null;
 let _authTokenGetter: AuthTokenGetter | null = null;
 
-/**
- * Put a server address in front of every path that starts with `/`.
- * Pass `null` to go back to same-origin requests.
- */
+// Put a server address in front of every path that starts with `/`.
 export function setBaseUrl(url: string | null): void {
   _baseUrl = url ? url.replace(/\/+$/, "") : null;
 }
 
-/**
- * Supply a token for an `Authorization: Bearer` header on each request.
- * Pass `null` to stop. The web app doesn't need this: the browser sends the
- * session cookie on its own.
- */
+// Supply a token for an `Authorization: Bearer` header on each request.
 export function setAuthTokenGetter(getter: AuthTokenGetter | null): void {
   _authTokenGetter = getter;
 }
@@ -99,8 +92,7 @@ function isTextMediaType(mediaType: string | null): boolean {
   );
 }
 
-// Browsers use `null` for an empty body. Some runtimes always report
-// `undefined` even when there is content, so only `null` means empty.
+// Browsers use `null` for an empty body.
 function hasNoBody(response: Response, method: string): boolean {
   if (method === "HEAD") return true;
   if (NO_BODY_STATUS.has(response.status)) return true;

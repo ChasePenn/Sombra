@@ -24,7 +24,7 @@ function rememberNotified(id: string, today: string) {
   } catch { /* the reminder may show again; harmless */ }
 }
 
-/** Mounted once. While sombra is open, reminds you to check on the people you added. */
+// Mounted once.
 export function CareReminderHost() {
   const { lang, t } = useSession();
   const f = featureCopy[lang];
@@ -33,7 +33,7 @@ export function CareReminderHost() {
   const [dueKind, setDueKind] = useState<'first' | 'overdue' | 'afternoon'>('first');
   const [heatWarning, setHeatWarning] = useState(false);
 
-  // Watch for National Weather Service heat warnings at the last planned place (every 30 minutes).
+  // Watch for National Weather Service heat warnings at the last planned place.
   useEffect(() => {
     const check = () => {
       const place = getLastPlace();

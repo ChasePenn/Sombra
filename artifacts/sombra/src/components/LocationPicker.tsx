@@ -23,7 +23,7 @@ export function LocationPicker({ value, onChange }: { value: Place | null; onCha
   const [status, setStatus] = useState('');
   const timer = useRef<number | undefined>(undefined);
 
-  // No place: ask for one. A place arriving from elsewhere (live location on the map) closes the search.
+  // No place: ask for one.
   const hadValue = useRef(Boolean(value));
   useEffect(() => {
     if (!value) setEditing(true);
@@ -113,7 +113,7 @@ export function useInitialPlace() {
   return useState<Place | null>(() => getLastPlace());
 }
 
-/** Hours are Arizona time (no daylight saving); outside Arizona that may not match local time. */
+// Hours are Arizona time (no daylight saving).
 export function isInArizona(lat: number, lon: number) {
   return lat >= 31.3 && lat <= 37.0 && lon >= -114.9 && lon <= -109.0;
 }

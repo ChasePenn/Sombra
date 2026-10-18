@@ -1,18 +1,4 @@
-/*
-  Finding where someone is, as reliably as a browser allows. Used by every "Use my
-  location" button and by the live dot on the map.
-
-  Browsers fail in a few known ways, and each one is handled here:
-  - A quick, low-power fix usually works in a second or two (Wi-Fi or cell towers). If it
-    times out or isn't available, try again with GPS, which is slower but works outdoors.
-  - Some browsers never answer at all when the permission prompt is dismissed, so our own
-    timer gives up instead of spinning forever.
-  - If both tries fail, a fix from the last 30 minutes is used (and marked as older).
-  - "Blocked" is reported separately, so the screen can say how to turn location back on.
-
-  The exact position stays on the phone. Only a rounded point (about 1 km) is ever sent
-  to sombra's server.
-*/
+// Finding where someone is, as reliably as a browser allows.
 
 const LAST_FIX = "sombra.last-fix";
 const STALE_OK_MS = 30 * 60 * 1000;
@@ -140,8 +126,7 @@ export function follow(onFix, onProblem) {
   const id = geo.watchPosition(
     (position) => {
       const fix = toFix(position);
-      // A rough network fix arriving after a good GPS fix would make the dot jump; skip it
-      // unless the good one is getting old.
+      // A rough network fix arriving after a good GPS fix would make the dot jump.
       if (best && fix.accuracy > best.accuracy * 4 && fix.at - best.at < 60_000) return;
       best = fix;
       if (fix.at - lastSaved > 30_000) { remember(fix); lastSaved = fix.at; }

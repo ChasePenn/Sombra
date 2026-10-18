@@ -32,7 +32,7 @@ export function findBestWindows({ hours, durationHours, intensity, newToHeat, ca
     categoryIncrease,
   }).hours.map((entry, index) => ({ ...entry, date: sorted[index].date, time: sorted[index].time }));
 
-  // Only hours that haven't started yet (the current hour counts if it began under 30 minutes ago).
+  // Only hours that haven't started yet.
   const nowKey = now.slice(0, 16);
   const upcoming = scheduled.filter((hour) => {
     const startKey = `${hour.date}T${hour.time}`;
@@ -73,7 +73,7 @@ export function findBestWindows({ hours, durationHours, intensity, newToHeat, ca
     if (alternatives.length >= 2) break;
     const overlaps = [best, ...alternatives].some((chosen) => chosen && chosen.date === candidate.date &&
       hourNumber(candidate.start) < hourNumber(chosen.end) && hourNumber(chosen.start) < hourNumber(candidate.end));
-    // "Other good times" must still be good: never High heat or worse unless nothing better exists.
+    // "Other good times" must still be good.
     const goodEnough = candidate.category <= best?.category + 1 && (candidate.category < 3 || candidate.category <= best?.category);
     if (!overlaps && best && goodEnough) alternatives.push(candidate);
   }

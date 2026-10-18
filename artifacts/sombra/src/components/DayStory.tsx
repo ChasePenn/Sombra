@@ -5,7 +5,7 @@ import { Calendar, Clock, Drop, Heart, Phone, Thermometer, type IconComponent } 
 
 type Tool = { href: string; Icon: IconComponent; label: string; tone: 'orange' | 'ink' };
 
-/** Everything sombra does, in the order of a day outside. The titles say enough on their own. */
+// Everything sombra does, in the order of a day outside.
 export function DayStory() {
   const f = featureCopy[useSession().lang];
   const tools: Tool[] = [

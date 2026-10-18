@@ -1,7 +1,4 @@
-/**
- * Device-only settings. Health details and the people someone checks on stay on
- * this phone: they are never sent to the server or synced to an account.
- */
+// Device-only settings.
 
 function read<T>(key: string, fallback: T): T {
   try {

@@ -1,14 +1,10 @@
-/*
-  sombra UI layer: the final say on the app's look.
-  Loaded after styles.css. Brand: orange + dark brown on a warm canvas,
-  chunky "pressable" buttons, bordered cards, Rubik headings, Atkinson body.
-*/
+/* sombra UI layer: the final say on the app's look. */
 :root {
   --bark: var(--brown);
   --bark-dark: #1A0902;
   --line: #F0DCCB;
   --edge: #E5CBB6;
-  /* Parts of the day used to have their own colors. Now everything shares one accent. */
+  /* Parts of the day used to have their own colors. */
   --tone-orange: var(--mesquite); --tone-orange-tint: var(--sand);
   --tone-blue: var(--mesquite); --tone-blue-tint: var(--sand);
   --tone-green: var(--mesquite); --tone-green-tint: var(--sand);
@@ -31,7 +27,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 .brand img { border-radius: 6px; }
 .wordmark { font-weight: 800; letter-spacing: -0.03em; }
 
-/* ---------- Landing ---------- */
+/* Landing */
 .landing { max-width: 440px; padding: calc(18px + var(--safe-t)) 20px calc(24px + var(--safe-b)); gap: 0; }
 .landing-top { display: flex; align-items: center; justify-content: space-between; }
 .landing-top .brand img { width: 40px; height: 40px; }
@@ -75,7 +71,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 .mode-choice-mark { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #fff; background: transparent; border: 2px solid var(--line); }
 .mode-choice[aria-pressed='true'] .mode-choice-mark, .mode-choice[aria-checked='true'] .mode-choice-mark { background: var(--card); border-color: var(--mesquite); box-shadow: inset 0 0 0 5px var(--card), inset 0 0 0 14px var(--mesquite); }
 
-/* ---------- Welcome ---------- */
+/* Welcome */
 .slide { padding-top: 5vh; }
 .slide-icon { background: var(--mesquite-tint); color: var(--mesquite); border-radius: 8px; }
 .slide h1 { font-size: 2rem; line-height: 1.08; }
@@ -91,7 +87,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 .input { min-height: 54px; border-radius: 8px; border: 2px solid var(--edge); }
 .input:focus-visible { outline: 3px solid var(--mesquite); outline-offset: 1px; border-color: var(--mesquite); }
 
-/* ---------- App shell ---------- */
+/* App shell */
 .topbar { background: var(--canvas); }
 .lang-switch { border: 2px solid var(--line); }
 .lang-switch button[aria-pressed='true'] { color: var(--mesquite-dark); background: transparent; }
@@ -122,7 +118,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; }
 .install-tip p { color: var(--ink-soft); font-size: .92rem; margin-top: 2px; }
 .install-tip > div { flex: 1; }
 
-/* ---------- Tools ---------- */
+/* Tools */
 :root { --tone-brown: #3A1607; --tone-brown-tint: var(--sand); }
 .tone-red .mode-choice-icon { background: var(--tone-red-tint); color: var(--tone-red); }
 .tone-brown .mode-choice-icon { background: var(--tone-brown-tint); color: var(--tone-brown); }
@@ -263,8 +259,7 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .text-btn { background: none; border: 0; padding: 8px 4px; min-height: 44px; font: 700 .95rem var(--head); color: var(--mesquite-dark); cursor: pointer; text-decoration: underline; }
 .arizona-note { margin: 8px 0 12px; padding: 10px 12px; border-radius: 6px; background: var(--sand); color: var(--ink); font-size: .92rem; line-height: 1.4; }
 
-/* One day in the heat: every screen belongs to a part of the day, with one color each.
-   before = orange, out = blue, others = green, you = red. */
+/* One day in the heat: every screen belongs to a part of the day, with one color each. */
 .tone-orange { --tone: var(--tone-orange); --tint: var(--tone-orange-tint); }
 .tone-blue { --tone: var(--tone-blue); --tint: var(--tone-blue-tint); }
 .tone-green { --tone: var(--tone-green); --tint: var(--tone-green-tint); }
@@ -394,10 +389,7 @@ a.brand.wordmark { text-decoration: none; color: inherit; }
 .spot .mode-choice-icon, .quick-icon { width: auto; height: auto; min-width: 28px; background: none; color: var(--ink); border-radius: 0; }
 .next-step .quick-icon { color: var(--mesquite); }
 
-/* =====================================================================
-   sombra look, v3: bold sunset orange, chunky press-down buttons,
-   8px boxes and 10px buttons. Only things you tap get a raised edge.
-   ===================================================================== */
+/* ===================================================================== sombra look, v3. */
 body { background: var(--canvas); }
 
 /* Buttons */
@@ -408,7 +400,7 @@ body { background: var(--canvas); }
 .btn-primary:active, .btn-secondary:active, .btn-white:active { transform: translateY(3px); box-shadow: none; }
 .btn[disabled], .btn-primary[disabled] { background: var(--edge); color: var(--ink-soft); box-shadow: none; transform: none; }
 
-/* Tappable cards get a raised bottom edge and press down. Plain info boxes stay flat. */
+/* Tappable cards get a raised bottom edge and press down. */
 .quick-tool, .tool-card, .next-step, .landing-mode, .mode-choice, .sym, .spot-main, .care-card .btn, .row-link {
   border-radius: 8px;
 }
@@ -472,7 +464,7 @@ body { background: var(--canvas); }
 /* No dot labels anywhere */
 .story-tag, .map-live::before, .day-step::before { display: none !important; }
 
-/* Moments that confirm something happened. Off for people who ask for less motion. */
+/* Moments that confirm something happened. */
 @keyframes sombra-stamp { 0% { transform: scale(1.35); opacity: 0; } 60% { transform: scale(.95); opacity: 1; } 100% { transform: scale(1); } }
 @keyframes sombra-pop { 0% { transform: scale(1); } 40% { transform: scale(1.25); } 100% { transform: scale(1); } }
 .lvl-ok-stamp { display: inline-block; animation: sombra-stamp .38s ease-out both; }

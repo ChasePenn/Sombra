@@ -13,7 +13,6 @@ const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const workspaceRoot = path.resolve(testDirectory, "../../..");
 const browserPath = process.env.CHROME_BIN || "/repl/tools/bin/chromium";
 // The planner opens in Work mode, which layers work.json over the shared workers.json copy.
-// Resolve it the same way the app does, so the test checks the text people actually see.
 const readMode = async (id) => JSON.parse(await readFile(new URL(`../config/modes/${id}.json`, import.meta.url), "utf8"));
 const workerMode = resolveAudienceMode({
   "../config/modes/workers.json": await readMode("workers"),
@@ -269,8 +268,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
       input.value = ${JSON.stringify(value)};
       input.dispatchEvent(new Event("input", { bubbles: true }));
     })()`);
-    // Validation and location feedback must translate immediately, not only
-    // after the worker repeats the failed action.
+    // Validation and location feedback must translate immediately, not only after the worker repeats the failed action.
     for (const locale of ["en", "es"]) {
       const other = locale === "en" ? "es" : "en";
       const copy = workerMode.locales[locale];
@@ -281,8 +279,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
       await chooseLanguage(other);
       assert.equal(await page.evaluate(`document.querySelector("#form-error").textContent`), workerMode.locales[other].validation.location);
       await chooseLanguage(locale);
-      // Blocked shows how to turn location back on (this is a desktop browser). A remembered
-      // recent position would be used instead of an error, so it's cleared first.
+      // Blocked shows how to turn location back on (this is a desktop browser).
       for (const [code, key] of [[1, "permissionDeclinedDesktop"], [3, "timeout"], [2, "failed"]]) {
         await page.evaluate(`localStorage.removeItem("sombra.last-fix"); window.__geoError = ${code}; document.querySelector("#use-location").click()`);
         await waitForCondition(page, `document.querySelector("#location-status").textContent === ${JSON.stringify(copy.location[key])}`);
@@ -573,8 +570,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     const spanishPartialNotice = await page.evaluate(`document.querySelector("#forecast-partial-notice").textContent`);
     assert.match(spanishPartialNotice, /^Sin pronóstico para 2 horas/);
 
-    // Compare actual requests and numeric rendered schedule data across both
-    // languages and phone widths, including applied site adjustments.
+    // Compare actual requests and numeric rendered schedule data across both languages and phone widths, including applied site adjustments.
     const formValues = () => page.evaluate(`({
       name: document.querySelector("#worker-name").value,
       location: document.querySelector("#location-search").value,
@@ -633,7 +629,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
         assert.deepEqual(adjusted, referenceAdjusted, "English and Spanish send identical site factors");
         assert.deepEqual(adjustedSchedule, referenceAdjustedSchedule, "site-adjusted schedule values are language-independent");
         await page.evaluate(`document.querySelector("#site-edit-adjustment").click()`);
-        // The form is folded away while a plan is showing; open it the way a person would before measuring it.
+        // The form is folded away while a plan is showing.
         await page.evaluate(`document.querySelector("#edit-shift").click()`);
         const layout = await page.evaluate(`({
           viewport: document.documentElement.clientWidth,

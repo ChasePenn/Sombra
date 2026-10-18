@@ -1,2 +1,2 @@
-// Entry for the app shell. Vite serves from public/, so the React app is loaded from src/.
+// Entry for the app shell.
 import "../src/main.tsx";

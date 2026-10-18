@@ -118,7 +118,7 @@ export default function CareCheck() {
         <button type="button" className="btn btn-secondary btn-block" onClick={() => setAdding(true)}><Plus size={18} aria-hidden="true" />{f.careAdd}</button>
         {contacts.length > 0 && <p className="fine-print care-tips">{f.careTips}</p>}
 
-        {/* The group (crew, team) is the other half of looking out for people. It stays off until someone is added. */}
+        {/* The group (crew, team) is the other half of looking out for people. */}
         <Link href="/app/crew" className="tool-card tone-green">
           <span className="mode-choice-icon"><Users size={24} strokeWidth={2.2} aria-hidden="true" /></span>
           <span className="tool-copy">

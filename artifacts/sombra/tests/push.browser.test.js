@@ -1,15 +1,4 @@
-/*
-  Push reminders in a real browser, against the production build:
-  1. the phone sends the server only reminder times and random keys (never names), and
-  2. when a push arrives with the app closed, the service worker fills in the name it keeps
-     on the phone and shows the notification, linked to the right screen.
-
-  A push is delivered with Chrome's DevTools protocol, the same event a real push service
-  triggers. Subscribing to Google's push service itself needs the internet and a real
-  phone, so that step is covered by the server's encrypted-delivery test instead.
-
-  Needs CHROME_BIN and a built app (pnpm run build).
-*/
+// Push reminders in a real browser, against the production build: 1.
 import assert from "node:assert/strict";
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";

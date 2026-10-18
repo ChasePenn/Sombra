@@ -6,20 +6,7 @@ import { createWebPushSender, runPushRound, type PushConfig, type Sender } from 
 import { ensurePushSchema, getPushConfig } from "../lib/push-setup";
 import { heatAlertFor as liveHeatAlertFor } from "./conditions";
 
-/*
-  Push reminders for phones, with or without an account. A phone subscribes and gets back
-  an id and a secret token; only that token can change or remove its schedule.
-
-  POST   /push/subscribe   { subscription, language }            -> { id, token }
-  PUT    /push/schedule    { id, token, language, lat, lon, reminders }
-  DELETE /push/subscribe   { id, token }
-  POST   /push/test        { id, token }                          sends a test notification now
-  POST   /push/run         sends everything that's due. Safe for anyone to call: each reminder
-                            is claimed once, so extra calls only cost a database read. If
-                            PUSH_CRON_SECRET is set, the x-push-cron header must match it.
-
-  No setup: the server makes its own push keys and tables on first use (see push-setup.ts).
-*/
+// Push reminders for phones, with or without an account.
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const BASE64URL = /^[A-Za-z0-9_-]{16,200}={0,2}$/;

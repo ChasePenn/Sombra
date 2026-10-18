@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
-# One command to check a release candidate. Prints PASS, FAIL or SKIPPED for every step,
-# and exits non-zero if anything failed. Skipped steps are listed so nothing is silently left out.
-#
-#   pnpm run release-check          # everything that runs offline
-#   DATABASE_URL=... pnpm run release-check   # also the account and data isolation tests
-#   pnpm run release-check -- --live          # also call the real weather, alert and map services
+# One command to check a release candidate.
 set -u
 cd "$(dirname "$0")/.."
 
@@ -22,7 +17,7 @@ step() {
     results+=("PASS     $name")
   else
     results+=("FAIL     $name"); failed=1
-    # On GitHub, put the end of the failing output on the run page (numbered so lines aren't merged).
+    # On GitHub, put the end of the failing output on the run page.
     if [ -n "${GITHUB_ACTIONS:-}" ]; then
       grep -vE "^\s*$" "$log" | grep -E "not ok|error:|expected|actual|Error|at .*browser.test" | head -n 25 | nl -ba | sed -E "s/^ *([0-9]+)\t/::error title=${name}::\1 /"
     fi

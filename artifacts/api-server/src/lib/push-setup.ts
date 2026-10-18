@@ -2,15 +2,7 @@ import webpush from "web-push";
 import { pool } from "@workspace/db";
 import type { PushConfig } from "./push-send";
 
-/*
-  Push works with zero setup. On first use the server creates its push tables (if a schema
-  push hasn't already) and makes its own signing keys (VAPID), saving them in the database so
-  every server instance and every restart uses the same pair. Setting VAPID_PUBLIC_KEY and
-  VAPID_PRIVATE_KEY in the environment overrides this.
-
-  The SQL matches lib/db/src/schema/push.ts exactly (names included), so a later
-  `drizzle-kit push` finds nothing to change.
-*/
+// Push works with zero setup.
 export const PUSH_SCHEMA_SQL = [
   `CREATE TABLE IF NOT EXISTS "app_settings" (
     "key" text PRIMARY KEY NOT NULL,
@@ -54,7 +46,7 @@ export const PUSH_SCHEMA_SQL = [
 
 let schemaReady: Promise<void> | null = null;
 
-/** Creates the push tables once per process if they're missing. Safe to call often and from several servers. */
+// Creates the push tables once per process if they're missing.
 export function ensurePushSchema() {
   schemaReady ??= (async () => {
     const client = await pool.connect();
@@ -76,7 +68,7 @@ export function ensurePushSchema() {
 let configPromise: Promise<PushConfig> | null = null;
 const SUBJECT = () => process.env.VAPID_SUBJECT?.trim() || "https://sombraheat.com";
 
-/** The server's push signing keys: from the environment if set, otherwise made once and kept in the database. */
+// The server's push signing keys.
 export function getPushConfig(): Promise<PushConfig> {
   const publicKey = process.env.VAPID_PUBLIC_KEY?.trim();
   const privateKey = process.env.VAPID_PRIVATE_KEY?.trim();

@@ -16,7 +16,7 @@ export function nextDate(isoDate: string) {
   return d.toISOString().slice(0, 10);
 }
 
-/** "14:00" -> "2 PM" (English) or "2 p. m." style handled by Intl for Spanish. */
+// "14:00" -> "2 PM" (English) or "2 p.
 export function clock(time: string, lang: Lang) {
   const [h, m] = time.split(':').map(Number);
   const d = new Date(Date.UTC(2000, 0, 1, h, m));

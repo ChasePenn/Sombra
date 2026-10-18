@@ -1,4 +1,4 @@
-// Needs a TEST database: DATABASE_URL=postgres://... (the release check and GitHub provide one).
+// Needs a TEST database: DATABASE_URL=postgres://...
 import assert from "node:assert/strict";
 import { randomBytes } from "node:crypto";
 import { unlink } from "node:fs/promises";

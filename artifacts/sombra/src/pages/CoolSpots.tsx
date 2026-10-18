@@ -46,7 +46,7 @@ const filterKinds: Record<Filter, Kind[]> = {
   shade: ['shade'],
 };
 
-/** Open right now by the site's published hours. Sites that open only during heat warnings are "unknown". */
+// Open right now by the site's published hours.
 function reliefOpen(r: Relief, now: { day: number; minutes: number }) {
   if (r.status === 4) return { open: null, closesAt: null };
   const today = r.hours[now.day];
@@ -139,7 +139,6 @@ export default function CoolSpots() {
     let alive = true;
     const cached = readCache(cell);
     // Show what we had right away; replace it when the fresh answer arrives.
-    // Walking into a new area keeps the old list on screen (with live distances) until the new one arrives.
     if (cached) { setLoaded(cached); setState('done'); } else setState((s) => (s === 'done' ? 'done' : 'loading'));
     setOffline(false);
     const load = () => fetch(`/api/places/cool?${roundedQuery(place)}`, { headers: { Accept: 'application/json' } })
@@ -166,7 +165,7 @@ export default function CoolSpots() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cell, attempt]);
 
-  // --- Live location -------------------------------------------------------
+  // Live location
 
   const followingRef = useRef(following);
   followingRef.current = following;
@@ -177,8 +176,7 @@ export default function CoolSpots() {
     setMe(fix);
     setLive('on');
     setLiveProblem(null);
-    // Walked into a new 1 km cell while following: look up spots there. If the person
-    // searched for somewhere else or is looking around the map, their choice stays.
+    // Walked into a new 1 km cell while following: look up spots there.
     const current = placeRef.current;
     if (!current || (followingRef.current && cellOf(current) !== cellOf(fix))) setPlace({ lat: fix.lat, lon: fix.lon, name: f.myLocation });
   }, [f.myLocation, setPlace]);
@@ -186,12 +184,10 @@ export default function CoolSpots() {
   const stopLive = useCallback(() => { window.clearTimeout(waitTimer.current); stopRef.current?.(); stopRef.current = null; }, []);
   const startLive = useCallback(() => {
     stopLive();
-    // Allowed, but nothing arrives (Location Services off for the whole phone, or no signal
-    // indoors): say so instead of showing nothing. Following keeps trying in the background.
+    // Allowed, but nothing arrives (Location Services off for the whole phone, or no signal indoors).
     waitTimer.current = window.setTimeout(() => setLiveProblem(geoMessage('unavailable', lang)), 20_000);
     stopRef.current = follow(onFix, (problem) => {
-      // Phones lose GPS for a moment all the time (tunnels, buildings); the browser keeps
-      // trying on its own, so only a revoked permission actually stops following.
+      // Phones lose GPS for a moment all the time (tunnels, buildings).
       if (problem === 'timeout' || problem === 'unavailable') return;
       setLive('paused');
       setFollowing(false);
@@ -265,8 +261,7 @@ export default function CoolSpots() {
 
   // Arriving from "Cool down now" elsewhere (heat warning card, a caution check-in).
   useEffect(() => {
-    // The link is cleaned up once the answer shows, so a page reload on the way (switching
-    // to the person's mode) still ends in an answer.
+    // The link is cleaned up once the answer shows, so a page reload on the way.
     if (new URLSearchParams(window.location.search).get('now') !== '1') return;
     void startCoolNow();
     // Once, on arrival.
@@ -295,10 +290,9 @@ export default function CoolSpots() {
     return () => document.removeEventListener('visibilitychange', onVisible);
   }, [startLive, stopLive]);
 
-  // --- What to show --------------------------------------------------------
+  // What to show
 
-  // Distances from where the person really is (exact, on the phone) when we know it and it's
-  // near the search point; otherwise from the place they picked.
+  // Distances from where the person really is (exact, on the phone) when we know it and it's near the search point.
   const origin = useMemo(() => {
     if (me && place && metersBetween(me, place) < 5000) return me;
     return place;
@@ -329,7 +323,7 @@ export default function CoolSpots() {
   const shown = useMemo(() => {
     return items
       .filter((s) => filterKinds[filter].includes(s.kind))
-      // Water fountains and shade shelters are always available; buildings must be known to be open.
+      // Water fountains and shade shelters are always available.
       .filter((s) => !openOnly || s.open === true || ((s.kind === 'water' || s.kind === 'shade') && s.open !== false))
       .sort((a, b) => a.distanceM - b.distanceM);
   }, [items, filter, openOnly]);

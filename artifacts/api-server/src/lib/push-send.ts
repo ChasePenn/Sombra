@@ -2,11 +2,7 @@ import webpush from "web-push";
 import { dueMessages, type HeatAlert, type PushPayload } from "./push-schedule";
 import type { PushStore, StoredSubscription } from "./push-store";
 
-/*
-  Sends Web Push messages. The payload is encrypted for the one phone that subscribed
-  (RFC 8291) and signed with sombra's server key (VAPID, RFC 8292), so the push service
-  in between (Google, Apple, Mozilla) can deliver it but can't read it.
-*/
+// Sends Web Push messages.
 
 export type PushConfig = { publicKey: string; privateKey: string; subject: string };
 export type SendResult = "sent" | "gone" | "failed";
@@ -29,7 +25,7 @@ export function createWebPushSender(config: PushConfig, extra: { agent?: import(
   };
 }
 
-/** One pass over every subscription: send what's due, once. Safe to run from several places at once. */
+// One pass over every subscription: send what's due, once.
 export async function runPushRound({
   store,
   send,

@@ -1,10 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 
-/*
-  Basic protections for the API. This is not a full security review; it covers response
-  headers and a per-address request limit so one client can't flood the weather, map and
-  AI services sombra depends on.
-*/
+// Basic protections for the API.
 
 /** Standard safety headers for JSON API responses. */
 export function securityHeaders(req: Request, res: Response, next: NextFunction) {
@@ -14,7 +10,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
   res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
   res.setHeader("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'");
   res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
-  // Only promise HTTPS when the request actually arrived over HTTPS (the deployment's proxy says so).
+  // Only promise HTTPS when the request actually arrived over HTTPS.
   if (req.secure || req.headers["x-forwarded-proto"] === "https") {
     res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   }
@@ -23,10 +19,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
 
 type Window = { count: number; resetAt: number };
 
-/**
- * Fixed-window limit per client address. Memory-only, so each server instance counts on
- * its own; that's fine for protecting upstream services, not a hard quota.
- */
+// Fixed-window limit per client address.
 export function rateLimit({ limit, windowMs, now = Date.now }: { limit: number; windowMs: number; now?: () => number }) {
   const windows = new Map<string, Window>();
   return (req: Request, res: Response, next: NextFunction) => {

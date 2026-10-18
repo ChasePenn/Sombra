@@ -1,8 +1,4 @@
-/*
-  Live data check: calls the real weather, alert, air-quality and map services through
-  sombra's own routes and fails loudly if anything comes back missing or implausible.
-  Runs automatically every day on GitHub (see .github/workflows/live-data.yml).
-*/
+// Live data check: calls the real weather, alert, air-quality and map services through sombra's own routes and fails loudly if anything comes back missing or implausible.
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { unlink } from "node:fs/promises";
@@ -40,10 +36,7 @@ after(async () => {
   await Promise.all(bundles.map((file) => unlink(file).catch(() => {})));
 });
 
-/*
-  Outside services have brief outages that aren't sombra's fault. Each check gets three
-  tries a little apart; only a problem that lasts across all three fails the run.
-*/
+// Outside services have brief outages that aren't sombra's fault.
 async function withRetries(check, tries = 3, gapMs = 15_000) {
   for (let attempt = 1; ; attempt += 1) {
     try {
@@ -83,8 +76,7 @@ test("today's heat forecast is complete and physically plausible", () => withRet
     assert.ok(h.humidity >= 0 && h.humidity <= 100, `humidity ${h.humidity}`);
     assert.ok(h.wbgtSunF > 20 && h.wbgtSunF < 105, `WBGT sun ${h.wbgtSunF}`);
     assert.ok(h.wbgtShadeF <= h.wbgtSunF + 0.01, `shade ${h.wbgtShadeF} should not exceed sun ${h.wbgtSunF}`);
-    // In humid sun WBGT can sit a few degrees above the air temperature (Phoenix storm days
-    // do this), so only a large gap means the calculation went wrong.
+    // In humid sun WBGT can sit a few degrees above the air temperature.
     assert.ok(h.wbgtSunF <= h.airTempF + 10, `WBGT ${h.wbgtSunF} is far above air temp ${h.airTempF}`);
   }
 }));

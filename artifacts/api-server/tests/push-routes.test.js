@@ -16,8 +16,7 @@ const require = createRequire(import.meta.url);
 const webpush = require("web-push");
 const ece = createRequire(require.resolve("web-push"))("http_ece");
 
-// The routes import the database module, which only checks that a URL is set; this file uses
-// an in-memory store, so a placeholder is enough (nothing connects to it).
+// The routes import the database module, which only checks that a URL is set.
 process.env.DATABASE_URL ??= "postgres://unused:unused@127.0.0.1:1/unused";
 const dir = path.dirname(fileURLToPath(import.meta.url));
 const bundle = path.join(dir, ".push-routes.test-bundle.mjs");

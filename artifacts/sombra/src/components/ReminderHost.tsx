@@ -11,7 +11,7 @@ import { Sheet } from './Sheet';
 
 type Due = NonNullable<ReturnType<typeof dueReminder>>;
 
-/** Mounted once. Foreground-only reminders for active work sessions. */
+// Mounted once.
 export function ReminderHost() {
   const { lang, accountId, t } = useSession();
   const [loc, setLocation] = useLocation();

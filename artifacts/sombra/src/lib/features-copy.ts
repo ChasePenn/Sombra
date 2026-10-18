@@ -1,8 +1,7 @@
 import type { Lang } from './copy';
 import type { RiskFactor } from './local';
 
-// 2-1-1 facts: KJZZ, Apr 30 2026 (Heat Relief Network May 1 to Sept 30, live operators 9 AM to 7 PM,
-// free Lyft rides) and Jul 14 2026 (live operators funded through early 2027). Recheck each spring.
+// 2-1-1 facts: KJZZ, Apr 30 2026.
 /** Text for the Tools hub: best time finder, cool spots, check on someone, heat profile. */
 const en = {
   riskWords: ['Low', 'Caution', 'Elevated', 'High', 'Very high', 'Extreme'],
@@ -263,7 +262,7 @@ const en = {
   countsAs: 'Planned as {level} effort.',
 };
 
-/** How hard each preset activity is, in the same order as `activities` (same in every language). */
+// How hard each preset activity is, in the same order as `activities`.
 export const activityIntensity: Record<string, Array<'easy' | 'moderate' | 'hard'>> = {
   work: ['hard', 'moderate', 'moderate', 'easy'],
   school: ['hard', 'moderate', 'moderate', 'easy'],

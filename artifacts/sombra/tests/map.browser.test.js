@@ -1,15 +1,4 @@
-/*
-  The Map screen in a real browser, against the production build, with the phone's
-  location faked by the browser itself:
-  1. location already allowed: the blue dot appears without asking, spots load, and
-     distances are measured from exactly where the person is;
-  2. walking: the dot follows, and a new 1 km area loads new spots;
-  3. only rounded points (2 decimals) are ever sent to the server;
-  4. location blocked: the target button explains how to turn it back on;
-  5. map tiles down: a second map style loads instead.
-
-  Needs CHROME_BIN and a built app (pnpm run build).
-*/
+// The Map screen in a real browser, against the production build, with the phone's location faked by the browser itself.
 import assert from "node:assert/strict";
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
@@ -117,8 +106,7 @@ test("with location allowed, the dot shows, follows, and distances are exact", {
     await page.getByText("Following you as you move").waitFor({ timeout: 5000 });
     assert.ok(await page.locator(".map-pin").count() >= 3, "spot pins are on the map");
 
-    // The water spot is 0.002° north of the rounded point (33.45); the person is at 33.448376,
-    // so it's ~402 m (0.25 mi) away, not the server's 222 m.
+    // The water spot is 0.002° north of the rounded point (33.45).
     const first = await page.locator(".spot-list .spot").first().innerText();
     assert.match(first, /0\.[3-4] mi away/, first);
 
@@ -231,8 +219,7 @@ test("Cool down now points at the best open place with AC, with directions and a
     const card = page.locator(".cool-now-card");
     await card.waitFor({ timeout: 15_000 });
     const text = await card.innerText();
-    // The official center (about 0.6 mi) wins over the library (24/7) thanks to its head start,
-    // and both beat the closer fountain because they have AC.
+    // The official center (about 0.6 mi) wins over the library (24/7) thanks to its head start, and both beat the closer fountain because they have AC.
     assert.match(text, /Valley Cooling Center/, text);
     assert.match(text, /Official cooling center · \d+ min walk · Open until midnight/, text);
     assert.match(await card.locator("a.btn-primary").getAttribute("href"), /travelmode=walking/);

@@ -1,8 +1,6 @@
 name: Live data check
 
-# Calls the real weather, alert, air-quality and map services every morning and on
-# every push. If a service changes its format or returns impossible values, this fails
-# and GitHub emails you, so bad data never reaches people unnoticed.
+# Calls the real weather, alert, air-quality and map services every morning and on every push.
 on:
   push:
     branches: [main]
@@ -36,7 +34,6 @@ jobs:
           pnpm --filter @workspace/api-server run test:live 2>&1 | tee live.log
           status=${PIPESTATUS[0]}
           # Surface failures as annotations so they show up on the run page and in the API.
-          # GitHub merges identical annotation lines, so each line gets its line number.
           grep -n -E "try [0-9] failed|Unable to load|failed with" live.log | head -20 | sed -E 's/^([0-9]+):/::warning::L\1 /'
           grep -n -E -A12 "not ok|✖" live.log | grep -vE "^--$" | head -45 | sed -E 's/^([0-9]+)[:-]/::error::L\1 /'
           if [ "$status" -ne 0 ]; then tail -n 15 live.log | nl -ba | sed -E 's/^ *([0-9]+)\t/::error::tail\1 /'; fi

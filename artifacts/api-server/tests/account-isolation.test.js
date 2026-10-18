@@ -38,7 +38,7 @@ before(async () => {
     next();
   });
   app.use("/api", createMeRouter({
-    // Test-only verified identity adapter. Production uses Clerk getAuth.
+    // Test-only verified identity adapter.
     getUserId: (req) => req.headers["x-test-subject"],
     deleteAuthUser: async (userId) => { deletedAuthUsers.push(userId); },
   }));

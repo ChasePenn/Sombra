@@ -1,11 +1,4 @@
-/*
-  "Cool down now": the one place to head for right now.
-
-  Air conditioning beats shade: indoors is where the body actually cools off, so the pick is
-  the nearest indoor place known to be open (official cooling centers get a small head start
-  because staff there watch for heat illness). If nothing indoors is open within a reasonable
-  walk, it falls back to the nearest water or shade. Places marked closed are never picked.
-*/
+// "Cool down now": the one place to head for right now.
 
 const INDOOR = ['library', 'community', 'mall', 'cooling', 'respite'];
 export const isIndoor = (kind) => INDOOR.includes(kind);
@@ -16,8 +9,7 @@ const MAX_INDOOR_M = 3200;
 /** About 80 m a minute on foot, and streets add roughly 30% to the straight line. */
 export const walkMinutes = (meters) => Math.max(1, Math.round((meters * 1.3) / 80));
 
-// Cooling centers get a head start. Respite centers mainly serve people without housing, so
-// someone else is pointed there only when it's clearly the closer choice.
+// Cooling centers get a head start.
 const weight = (p) => p.distanceM * (p.kind === 'cooling' ? 0.8 : p.kind === 'respite' ? 1.3 : 1);
 
 /** @returns {{ best: object, hoursUnknown: boolean, others: object[] } | null} */
