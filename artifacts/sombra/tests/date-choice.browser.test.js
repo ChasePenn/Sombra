@@ -268,7 +268,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
       input.value = ${JSON.stringify(value)};
       input.dispatchEvent(new Event("input", { bubbles: true }));
     })()`);
-    // Validation and location feedback must translate immediately, not only after the worker repeats the failed action.
+    // Messages switch language right away.
     for (const locale of ["en", "es"]) {
       const other = locale === "en" ? "es" : "en";
       const copy = workerMode.locales[locale];
@@ -570,7 +570,7 @@ test("Tomorrow uses the Phoenix date, errors are shown, and saved details restor
     const spanishPartialNotice = await page.evaluate(`document.querySelector("#forecast-partial-notice").textContent`);
     assert.match(spanishPartialNotice, /^Sin pronóstico para 2 horas/);
 
-    // Compare actual requests and numeric rendered schedule data across both languages and phone widths, including applied site adjustments.
+    // Same requests and numbers in both languages and widths.
     const formValues = () => page.evaluate(`({
       name: document.querySelector("#worker-name").value,
       location: document.querySelector("#location-search").value,

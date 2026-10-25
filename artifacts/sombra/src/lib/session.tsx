@@ -24,7 +24,7 @@ const Ctx = createContext<Session | null>(null);
 export function SessionProvider({ children }: { children: ReactNode }) {
   const { isLoaded, isSignedIn, userId } = useAuth();
   const accountId = isLoaded && isSignedIn ? userId ?? null : null;
-  // If sign-in can't load (no signal, an ad blocker), carry on as a guest after a few seconds instead of leaving screens waiting.
+  // If sign-in can't load, continue as a guest.
   const [authGaveUp, setAuthGaveUp] = useState(false);
   useEffect(() => {
     if (isLoaded) return;
@@ -88,7 +88,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     return () => { stopped = true; window.clearTimeout(timer); };
   }, [accountId, storageAccountId, profile?.notificationsEnabled, lang]);
 
-  // While switching between guest and account, hide the screens so nothing loads or shows data from the previous account.
+  // Hide screens while switching accounts.
   if (storageAccountId !== accountId) {
     return <main className="shell" aria-busy="true"><p className="page">sombra</p></main>;
   }

@@ -1,4 +1,4 @@
-// sombra service worker: keeps the app shell available offline and shows reminders, including push reminders that arrive while the app is closed.
+// Offline app shell and push reminders.
 const CACHE = 'sombra-v4';
 const SHELL = ['/', '/app', '/planner.html', '/manifest.webmanifest', '/brand/sombra-icon.svg', '/favicon-32.png'];
 
@@ -46,7 +46,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Push reminders (arrive while sombra is closed)   The server sends only a type and a random key.
+// The server sends only a type and a random key.
 
 const TEXT = {
   en: {

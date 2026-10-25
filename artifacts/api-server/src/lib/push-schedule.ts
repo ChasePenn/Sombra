@@ -70,7 +70,7 @@ export function dueMessages({
       const afternoonDue = Boolean(heatAlert) && nowMin >= AFTERNOON_START && nowMin < DAY_END &&
         !(doneToday && done!.minutes >= CHECKED_AFTER_FOR_AFTERNOON);
 
-      // If the server woke up late, send only the most urgent stage and skip the ones it replaces.
+      // If the server woke late, send only the most urgent stage.
       if (overdueDue && !sent.has(key("overdue"))) {
         out.push({ dedupeKey: key("overdue"), payload: { type: "care", key: reminder.key, stage: "overdue" }, ttlSeconds: 2 * 3600, urgency: "high", alsoMarkSent: [key("first")] });
       } else if (firstDue && !sent.has(key("first")) && !sent.has(key("overdue"))) {

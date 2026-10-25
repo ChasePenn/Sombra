@@ -36,7 +36,7 @@ type Item = {
 
 const kindIcon: Record<Kind, IconComponent> = { water: Drop, library: Book, community: Building, mall: Bag, shade: Umbrella, cooling: Snowflake, hydration: Drops, respite: House };
 const kindTone: Record<Kind, string> = { water: 'tone-blue', library: 'tone-orange', community: 'tone-green', mall: 'tone-brown', shade: 'tone-green', cooling: 'tone-blue', hydration: 'tone-blue', respite: 'tone-green' };
-// Three pin colors: blue for water, the accent for official cooling sites, dark brown for everything else.
+// Pin colors: water, official sites, everything else.
 const kindColor: Record<Kind, string> = { water: '#1D5F8F', library: '#3A1607', community: '#3A1607', mall: '#3A1607', shade: '#3A1607', cooling: '#A63B0B', hydration: '#1D5F8F', respite: '#A63B0B' };
 const filterKinds: Record<Filter, Kind[]> = {
   all: ['water', 'library', 'community', 'mall', 'shade', 'cooling', 'hydration', 'respite'],
@@ -156,7 +156,7 @@ export default function CoolSpots() {
       .catch(() => {
         if (!alive) return;
         if (cached) { setOffline(true); return; }
-        // Still showing the last area's spots: say they may be out of date rather than hiding them.
+        // Old spots stay visible with an out-of-date note.
         if (stateRef.current === 'done') setOffline(true);
         else setState('error');
       });
@@ -184,7 +184,7 @@ export default function CoolSpots() {
   const stopLive = useCallback(() => { window.clearTimeout(waitTimer.current); stopRef.current?.(); stopRef.current = null; }, []);
   const startLive = useCallback(() => {
     stopLive();
-    // Allowed, but nothing arrives (Location Services off for the whole phone, or no signal indoors).
+    // Allowed, but no location arrives.
     waitTimer.current = window.setTimeout(() => setLiveProblem(geoMessage('unavailable', lang)), 20_000);
     stopRef.current = follow(onFix, (problem) => {
       // Phones lose GPS for a moment all the time (tunnels, buildings).
@@ -292,7 +292,7 @@ export default function CoolSpots() {
 
   // What to show
 
-  // Distances from where the person really is (exact, on the phone) when we know it and it's near the search point.
+  // Measure from the exact position when it's known and nearby.
   const origin = useMemo(() => {
     if (me && place && metersBetween(me, place) < 5000) return me;
     return place;

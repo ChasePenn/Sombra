@@ -37,7 +37,7 @@ export default function CareCheck() {
   }, []);
 
   useEffect(() => {
-    // Show a stronger nudge when the National Weather Service has a heat alert for the last planned place.
+    // Stronger nudge during a heat alert.
     const place = getLastPlace();
     if (!place) return;
     fetch(`/api/conditions?${roundedQuery(place)}`)

@@ -25,7 +25,7 @@ export default function BestTime() {
   const [place, setPlace] = useInitialPlace();
   const modeKey = f.activities[audienceModeId] ? audienceModeId : 'everyday';
   const presets = f.activities[modeKey];
-  // The activity decides how hard it is, so people don't have to answer the same question twice.
+  // The activity sets the intensity.
   const [activityIndex, setActivityIndex] = useState(0);
   const activity = presets[activityIndex] ?? presets[0];
   const intensity = activityIntensity[modeKey]?.[activityIndex] ?? profile?.usualIntensity ?? 'moderate';

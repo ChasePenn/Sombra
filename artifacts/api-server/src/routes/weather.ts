@@ -210,7 +210,7 @@ function estimateWindAtTwoMeters(wind10m: number, solarWm2: number): number {
   return Math.max(0.5, wind10m * Math.pow(2 / 10, exponent));
 }
 
-// NOAA's equation-of-time and declination equations provide the sun angle at the forecast's local time.
+// Sun angle from NOAA's solar equations.
 function solarZenithAtPhoenixTime(localDateTime: string, latitude: number, longitude: number): number {
   const [date, clock] = localDateTime.split("T");
   const [year, month, day] = date.split("-").map(Number);
@@ -394,7 +394,7 @@ router.post("/weather/shift", async (req, res): Promise<void> => {
       const hourly = data.hourly!;
       const requiredReading = getRequiredWeatherReading(hourly, index);
       if (requiredReading === null) {
-        // Keep this hour out of the response rather than estimating WBGT without required inputs.
+        // Skip hours missing the inputs WBGT needs.
         return [];
       }
       availableTimes.add(time);

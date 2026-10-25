@@ -1,4 +1,4 @@
-// The Map screen in a real browser, against the production build, with the phone's location faked by the browser itself.
+// Map screen in a real browser with a faked location.
 import assert from "node:assert/strict";
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
@@ -219,7 +219,7 @@ test("Cool down now points at the best open place with AC, with directions and a
     const card = page.locator(".cool-now-card");
     await card.waitFor({ timeout: 15_000 });
     const text = await card.innerText();
-    // The official center (about 0.6 mi) wins over the library (24/7) thanks to its head start, and both beat the closer fountain because they have AC.
+    // The official center beats the library, and both beat the fountain.
     assert.match(text, /Valley Cooling Center/, text);
     assert.match(text, /Official cooling center · \d+ min walk · Open until midnight/, text);
     assert.match(await card.locator("a.btn-primary").getAttribute("href"), /travelmode=walking/);

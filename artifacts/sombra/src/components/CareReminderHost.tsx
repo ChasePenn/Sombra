@@ -59,13 +59,13 @@ export function CareReminderHost() {
         saveWindowReminders(windows.filter((w) => w.id !== startedWindow.id));
         const late = `${startedWindow.date}T${startedWindow.start}` < phoenixNow(new Date(Date.now() - 30 * 60 * 1000));
         if (!late) {
-          // With push on, the server already sent this as a notification; just show it in the app.
+          // With push on, the server already sent it.
           if (!pushIsOn()) void showReminder(`${fill(f.reminderDue, { activity: startedWindow.activity })}. ${fill(f.reminderDueBody, { hours: startedWindow.hours })}`, `sombra-window-${startedWindow.id}`);
           setWindowDue(startedWindow);
         }
       }
       const contacts = getCareContacts();
-      // 1) first reminder, 2) escalation 2 hours later, 3) afternoon re-check during heat warnings
+      // First reminder, then 2 hours later, then 4 PM on warning days.
       const pick: [CareContact, 'first' | 'overdue' | 'afternoon'] | undefined =
         contacts.filter((c) => isDue(c, now) && !notifiedToday(c.id, today)).map((c) => [c, 'first'] as [CareContact, 'first'])[0] ??
         contacts.filter((c) => overdueMinutes(c, now) >= ESCALATE_AFTER_MIN && !notifiedToday(`${c.id}:overdue`, today)).map((c) => [c, 'overdue'] as [CareContact, 'overdue'])[0] ??

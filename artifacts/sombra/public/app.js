@@ -814,7 +814,7 @@ const isInArizona = (lat, lon) => lat >= 31.3 && lat <= 37.0 && lon >= -114.9 &&
     summaryHottest.textContent = started ? summary.hottest : "";
     summaryHottest.hidden = !started;
     const activeHour = schedule.hours[started ? summary.currentHourIndex : summary.peakIndex];
-    // Show the air temperature people know next to the heat-stress number, so 84°F isn't read as the weather.
+    // Show air temperature next to WBGT so the two aren't confused.
     const activeWeather = activeForecast?.hours?.find((weather) => weather.time === activeHour.time);
     const wbgtRounded = Math.round(Number(activeHour.wbgtF));
     summaryWbgt.textContent = Number.isFinite(activeWeather?.airTempF)

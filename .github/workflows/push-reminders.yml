@@ -1,6 +1,6 @@
 name: Send due reminders
 
-# Wakes sombra's server every 5 minutes so push reminders go out even when nobody has the app open.
+# Wakes the server every 5 minutes to send due reminders.
 on:
   schedule:
     - cron: "*/5 * * * *"

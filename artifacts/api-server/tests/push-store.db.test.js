@@ -27,7 +27,7 @@ test("zero setup: on a database without push tables, the server creates them and
   const [a, b] = await Promise.all([getPushConfig(), getPushConfig()]);
   assert.equal(a.publicKey, b.publicKey);
   assert.match(a.publicKey, /^[A-Za-z0-9_-]{80,90}$/, "a real P-256 public key");
-  // A restart (fresh process state) keeps the same keys, so existing subscriptions keep working.
+  // Keys survive a restart.
   resetPushSetupForTests();
   assert.equal((await getPushConfig()).publicKey, a.publicKey);
   const { rows } = await pool.query("select count(*)::int as n from app_settings where key = 'vapid'");

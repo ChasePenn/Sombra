@@ -14,7 +14,7 @@ const CACHE_TTL_MS = 10 * 60 * 1000;
 export const NWS_ALERTS_URL = "https://api.weather.gov/alerts/active";
 export const AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality";
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
-// The main Overpass server has been overloaded since spring 2026 and sometimes turns requests away.
+// The main Overpass server sometimes turns requests away.
 export const OVERPASS_MIRRORS = [
   OVERPASS_URL,
   "https://overpass.private.coffee/api/interpreter",
@@ -43,7 +43,7 @@ export function parseCoordinates(req: Request): { lat: number; lon: number } | n
   if (!Number.isFinite(lat) || !Number.isFinite(lon) || Math.abs(lat) > 90 || Math.abs(lon) > 180) {
     return null;
   }
-  // About 1 km precision is plenty and keeps exact locations out of cache keys and upstream calls.
+  // About 1 km precision keeps exact locations out of caches and upstream calls.
   return { lat: Math.round(lat * 100) / 100, lon: Math.round(lon * 100) / 100 };
 }
 

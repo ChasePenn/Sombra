@@ -37,7 +37,7 @@ app.use(
   }),
 );
 app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
-// The web app and API share an origin through artifact routing, so other websites get no cross-origin access at all.
+// The web app and API share one origin, so other sites get no cross-origin access.
 app.use(cors({ origin: false }));
 app.use(express.json({ limit: "200kb" }));
 app.use(

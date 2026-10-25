@@ -34,6 +34,7 @@ sombra turns the forecast for your exact spot into an hour-by-hour plan that say
 | `lib/heat-safety` | Shared safety rules, check-in templates and first-aid content |
 | `lib/db` | PostgreSQL schema (Drizzle) |
 | `lib/api-spec`, `lib/api-zod`, `lib/api-client-react` | OpenAPI contract and generated types |
+| `tools` | Work toward version 2.0 (below) |
 
 ## Run it
 
@@ -50,6 +51,16 @@ Environment: `DATABASE_URL`, `GEMINI_API_KEY`, `GEMINI_MODEL`. Secrets stay on t
 Push reminders need no setup: on first use the server creates its push tables and its own signing keys and keeps them in the database. They go out every minute while the server is awake; the `Send due reminders` GitHub workflow wakes it every 5 minutes once the deployed address is in `.github/sombra-url`. (Optional overrides: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `PUSH_CRON_SECRET`.)
 
 Tests: `pnpm run release-check` runs everything that works offline (add `DATABASE_URL` for a test database and `CHROME_BIN` for the browser tests, `-- --live` to call the real weather services).
+
+## Tools for version 2.0
+
+These run on their own and don't touch the live app.
+
+| Tool | Language | What it does | Run it |
+| --- | --- | --- | --- |
+| `tools/python/check_data.py` | Python | Checks the saved cooling center and cool spot data and the work/rest table for mistakes | `python3 tools/python/check_data.py` |
+| `tools/java/HeatPlan.java` | Java | The heat plan and safety rules, ready for a native Android app | `java tools/java/HeatPlan.java` |
+| `tools/cpp/cool_now.cpp` | C++ | The Cool down now ranking, ready for offline and native use | `g++ -std=c++17 tools/cpp/cool_now.cpp -o cool_now && ./cool_now` |
 
 ## Sources
 

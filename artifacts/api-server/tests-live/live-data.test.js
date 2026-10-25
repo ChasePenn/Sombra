@@ -1,4 +1,4 @@
-// Live data check: calls the real weather, alert, air-quality and map services through sombra's own routes and fails loudly if anything comes back missing or implausible.
+// Calls the real data services through sombra's routes and fails on missing or odd values.
 import assert from "node:assert/strict";
 import { once } from "node:events";
 import { unlink } from "node:fs/promises";

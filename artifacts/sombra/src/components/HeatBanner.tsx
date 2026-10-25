@@ -9,7 +9,7 @@ type Alert = { event: string; kind: string };
 // One lookup per place every 10 minutes, shared by every screen.
 const seen = new Map<string, { at: number; alert: Alert | null }>();
 
-// While the National Weather Service has a heat warning for your place, every screen shows it, so each tool reads as part of the same day.
+// Shown on every screen during a heat warning.
 export function HeatBanner() {
   const [alert, setAlert] = useState<Alert | null>(() => {
     const place = getLastPlace();
