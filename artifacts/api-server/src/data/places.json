@@ -1,4 +1,4 @@
-{"source":"OpenStreetMap contributors (ODbL)","updated":"2026-11-09","regions":[{"name":"Phoenix metro","box":[33.15,-112.65,33.95,-111.45]},{"name":"Tucson","box":[32,-111.2,32.5,-110.65]}],"kinds":["water","library","community","mall","shade"],"fields":["id","kind","lat","lon","name","openingHours"],"places":[[7978335742,4,32.05021,-110.7064,null,null],
+{"source":"OpenStreetMap contributors (ODbL)","updated":"2026-11-16","regions":[{"name":"Phoenix metro","box":[33.15,-112.65,33.95,-111.45]},{"name":"Tucson","box":[32,-111.2,32.5,-110.65]}],"kinds":["water","library","community","mall","shade"],"fields":["id","kind","lat","lon","name","openingHours"],"places":[[7978335742,4,32.05021,-110.7064,null,null],
 [13604226336,0,32.05981,-110.72481,null,null],
 [11495032643,0,32.08432,-110.80339,null,null],
 [14031733301,1,32.08574,-110.75872,"W. Anne Gibson-Esmond Station Library",null],
@@ -861,6 +861,7 @@
 [919357854,1,33.60699,-112.32426,"El Mirage Library","Mo-Sa 09:00-17:00; Su off; PH off"],
 [4831057719,0,33.60716,-112.0073,null,null],
 [257586085,1,33.60719,-112.15985,"Fletcher Library",null],
+[14365932191,0,33.60728,-112.28594,null,null],
 [1061167545,2,33.60846,-111.92136,"Scottsdale SDA Adventurers Club",null],
 [10776650135,3,33.60943,-112.41365,"Village at Prasada (East)",null],
 [10776650134,3,33.60948,-112.41416,"Village at Prasada (West)",null],
