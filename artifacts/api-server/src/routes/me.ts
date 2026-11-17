@@ -1,4 +1,5 @@
-import { clerkClient, getAuth } from "@clerk/express";
+import { clerkClient } from "@clerk/express";
+import { userIdOf } from "../lib/auth";
 import { Router, type Request, type Response } from "express";
 import {
   DeleteMyAccountResponse,
@@ -48,7 +49,7 @@ export function createMeRouter(dependencies: RouterDependencies = {}) {
   const store = dependencies.store ?? sombraData;
   const getUserId =
     dependencies.getUserId ??
-    ((req: Request) => getAuth(req).userId ?? undefined);
+    userIdOf;
   const deleteAuthUser =
     dependencies.deleteAuthUser ??
     (async (userId: string) => {

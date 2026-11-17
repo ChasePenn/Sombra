@@ -11,6 +11,7 @@ import {
   clerkProxyMiddleware,
   getClerkProxyHost,
 } from "./middlewares/clerkProxyMiddleware";
+import { authEnabled } from "./lib/auth";
 
 const app: Express = express();
 app.disable("x-powered-by");
@@ -40,14 +41,16 @@ app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 // The web app and API share one origin, so other sites get no cross-origin access.
 app.use(cors({ origin: false }));
 app.use(express.json({ limit: "200kb" }));
-app.use(
-  clerkMiddleware((req) => ({
-    publishableKey: publishableKeyFromHost(
-      getClerkProxyHost(req) ?? "",
-      process.env.CLERK_PUBLISHABLE_KEY,
-    ),
-  })),
-);
+if (authEnabled) {
+  app.use(
+    clerkMiddleware((req) => ({
+      publishableKey: publishableKeyFromHost(
+        getClerkProxyHost(req) ?? "",
+        process.env.CLERK_PUBLISHABLE_KEY,
+      ),
+    })),
+  );
+}
 
 app.use("/api", securityHeaders);
 // Per network address, per minute.

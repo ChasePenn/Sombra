@@ -1,6 +1,6 @@
 import { randomUUID, createHmac, timingSafeEqual } from "node:crypto";
 import { Router, type Request } from "express";
-import { getAuth } from "@clerk/express";
+import { userIdOf } from "../lib/auth";
 import { PersonalizeCheckinBody, PersonalizeCheckinResponse } from "@workspace/api-zod";
 import { evaluateSafety } from "@workspace/heat-safety/safety";
 import { phoenixDate, sessionContext } from "@workspace/heat-safety/session";
@@ -19,7 +19,7 @@ export function createCheckInRouter(dependencies: {
   const store = dependencies.store ?? sombraData;
   const ai = dependencies.personalize ?? personalize;
   const now = dependencies.now ?? Date.now;
-  const userIdFor = dependencies.getUserId ?? ((req:Request)=>getAuth(req).userId ?? undefined);
+  const userIdFor = dependencies.getUserId ?? userIdOf;
   const calls = new Map<string,number>();
   const guestSecret = randomUUID();
   const sign = (id:string) => createHmac("sha256",guestSecret).update(id).digest("hex");

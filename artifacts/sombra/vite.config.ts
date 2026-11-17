@@ -50,6 +50,7 @@ export default defineConfig({
     fs: {
       strict: true,
     },
+    proxy: process.env.API_URL ? { '/api': process.env.API_URL } : undefined,
   },
   preview: {
     port,
